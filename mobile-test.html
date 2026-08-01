@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobile dropdown test</title>
+<style>
+  body{margin:0;padding:16px;background:#fbf7ef;color:#22201e;line-height:1.5;
+       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+  h1{font-size:1.15rem;color:#6b1f2a;margin:0 0 4px}
+  .lead{font-size:.9rem;color:#5c5751;margin:0 0 18px}
+  .t{background:#fff;border:2px solid #e4ddd0;border-radius:10px;padding:14px;margin-bottom:14px}
+  .t h2{font-size:.95rem;margin:0 0 3px;color:#6b1f2a}
+  .t p{font-size:.83rem;color:#5c5751;margin:0 0 10px}
+  select{font:inherit;font-size:16px;padding:11px;width:100%;border:1px solid #cfc7b8;
+         border-radius:8px;background:#fff;color:#22201e}
+  .res{margin-top:9px;font-weight:700;font-size:.9rem}
+  .wait{color:#8a7a55} .ok{color:#2f6b4f} .pass{border-color:#2f6b4f;background:#eaf3ee}
+  iframe{width:100%;border:1px dashed #b9ae99;border-radius:8px;background:#fff;display:block}
+  .tall{height:600px;overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid #ddd;border-radius:8px}
+  .note{font-size:.78rem;color:#8a7a55;margin-top:6px}
+  #info{background:#22201e;color:#c9f0d2;font-family:ui-monospace,Menlo,Consolas,monospace;
+        font-size:.72rem;padding:12px;border-radius:8px;word-break:break-all;white-space:pre-wrap}
+  a.btn{display:block;text-align:center;background:#6b1f2a;color:#fff;text-decoration:none;
+        font-weight:700;padding:13px;border-radius:8px;margin-top:8px}
+</style>
+</head>
+<body>
+
+<h1>Mobile dropdown test</h1>
+<p class="lead">Tap <strong>every</strong> dropdown below and pick any option. Each box turns green
+when it works. Then screenshot this whole page — including the black box at the bottom — and send it back.</p>
+
+<div class="t" id="t1">
+  <h2>Test 1 — plain dropdown, no frame</h2>
+  <p>Baseline. If this fails, dropdowns are broken on your device generally.</p>
+  <select onchange="pass('t1','r1')">
+    <option>Tap me and pick something…</option>
+    <option>Option A</option><option>Option B</option><option>Option C</option>
+  </select>
+  <div class="res wait" id="r1">Not tried yet</div>
+</div>
+
+<div class="t" id="t2">
+  <h2>Test 2 — dropdown inside a SHORT frame</h2>
+  <p>A normal-height embedded frame, 300px.</p>
+  <iframe height="150" id="f2" srcdoc='
+    <body style="margin:0;padding:12px;font:16px -apple-system,Arial">
+    <select style="font-size:16px;padding:11px;width:100%"
+      onchange="parent.pass(&quot;t2&quot;,&quot;r2&quot;)">
+      <option>Tap me and pick something…</option>
+      <option>Option A</option><option>Option B</option>
+    </select></body>'></iframe>
+  <div class="res wait" id="r2">Not tried yet</div>
+</div>
+
+<div class="t" id="t3">
+  <h2>Test 3 — dropdown inside a VERY TALL frame</h2>
+  <p>4100px tall, exactly like the guidance page uses. <strong>This is my main suspect.</strong>
+     The dropdown is at the top of the frame; scroll past the empty space afterwards.</p>
+  <iframe height="4100" id="f3" srcdoc='
+    <body style="margin:0;padding:12px;font:16px -apple-system,Arial">
+    <select style="font-size:16px;padding:11px;width:100%"
+      onchange="parent.pass(&quot;t3&quot;,&quot;r3&quot;)">
+      <option>Tap me and pick something…</option>
+      <option>Option A</option><option>Option B</option>
+    </select>
+    <p style="color:#999">(a lot of empty space below, same as the real page)</p>
+    </body>'></iframe>
+  <div class="res wait" id="r3">Not tried yet</div>
+</div>
+
+<div class="t">
+  <h2>Test 4 — the real tool, opened directly</h2>
+  <p>Not embedded at all. Open it, try the <strong>Institution</strong> dropdown, then come back.</p>
+  <a class="btn" href="https://gvss-guidance.github.io/guidance-tools/finance-planner.html"
+     target="_blank" rel="noopener">Open the real tool &#8599;</a>
+  <p class="note">Tell me whether the Institution dropdown opened there. This is the single most
+     useful answer: if it works here but not on the school page, the problem is the embedding,
+     not the tool.</p>
+</div>
+
+<div class="t">
+  <h2>Device details</h2>
+  <p>Include this in the screenshot.</p>
+  <div id="info">loading…</div>
+</div>
+
+<script>
+function pass(box, res){
+  document.getElementById(box).className = "t pass";
+  var r = document.getElementById(res);
+  r.className = "res ok";
+  r.textContent = "✓ WORKED";
+}
+(function(){
+  var n = navigator, s = screen, d = [];
+  d.push("UA      : " + n.userAgent);
+  d.push("platform: " + (n.platform || "?"));
+  d.push("touch   : " + (("ontouchstart" in window) ? "yes" : "no")
+         + "  points=" + (n.maxTouchPoints || 0));
+  d.push("window  : " + window.innerWidth + " x " + window.innerHeight);
+  d.push("screen  : " + s.width + " x " + s.height + "  dpr=" + (window.devicePixelRatio || 1));
+  d.push("framed  : " + (window.self !== window.top));
+  var ls; try { localStorage.setItem("_t","1"); localStorage.removeItem("_t"); ls="ok"; }
+  catch(e){ ls = "BLOCKED (" + e.name + ")"; }
+  d.push("storage : " + ls);
+  d.push("container queries: " + (window.CSS && CSS.supports && CSS.supports("container-type:inline-size") ? "yes" : "NO"));
+  document.getElementById("info").textContent = d.join("\n");
+})();
+</script>
+</body>
+</html>
