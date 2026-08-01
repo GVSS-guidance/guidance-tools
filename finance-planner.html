@@ -109,7 +109,13 @@ html[dir="rtl"] .num, html[dir="rtl"] .bigbox .v, html[dir="rtl"] .bar .bv{direc
   border-radius:8px; background:var(--paper); color:var(--ink); width:100%; cursor:pointer;
 }
 .field select:focus-visible{outline:3px solid var(--gold-light); outline-offset:1px; border-color:var(--maroon)}
-.field select:disabled{background:#f4f1ec; color:#9a948c; cursor:not-allowed}
+/* Locked menus explain themselves rather than showing a bare dash — on mobile
+   the menus stack vertically, so a student can reach Faculty before
+   Institution and a silent disabled control reads as a broken dropdown. */
+.field select:disabled{
+  background:#f4f1ec; color:#8d867d; cursor:not-allowed;
+  border-style:dashed; font-style:italic;
+}
 .field .sub{font-size:.78rem; color:var(--ink-soft); min-height:1.1em}
 
 /* ==========================================================================
@@ -1162,6 +1168,8 @@ const STRINGS = {};
 
 STRINGS.en = {};
 STRINGS.en.std = {
+  lockInst:"Choose an institution first", lockFac:"Choose a faculty first",
+  lockSector:"Choose a sector first", lockTrade:"Choose a trade first",
   title:"Post-Secondary Cost Explorer",
   blurb:"Choose a pathway, then narrow down to a specific program to see what a year — and the whole credential — could cost. Built for students and families planning ahead.",
   langLabel:"Language", lvlStd:"Standard", lvlPlain:"Plain language",
@@ -1247,6 +1255,8 @@ STRINGS.en.std = {
 
 /* Plain-language English: shorter sentences, no jargon. Same meaning. */
 STRINGS.en.plain = Object.assign({}, STRINGS.en.std, {
+  lockInst:"Pick a school first", lockFac:"Pick an area of study first",
+  lockSector:"Pick a trade area first", lockTrade:"Pick a trade first",
   blurb:"Pick a path. Then pick a school and a program. The tool shows what one year could cost, and what the whole thing could cost.",
   s1h:"What are you looking at?",
   s1hint:"You can change this any time.",
@@ -1321,6 +1331,8 @@ STRINGS.en.plain = Object.assign({}, STRINGS.en.std, {
 
 /* ---- French ---- */
 STRINGS.fr = {
+  lockInst:"Choisissez d'abord un établissement", lockFac:"Choisissez d'abord une faculté",
+  lockSector:"Choisissez d'abord un secteur", lockTrade:"Choisissez d'abord un métier",
   title:"Explorateur des coûts postsecondaires",
   blurb:"Choisissez un parcours, puis un programme précis pour voir ce que pourraient coûter une année et l'ensemble des études.",
   langLabel:"Langue",
@@ -1401,6 +1413,8 @@ STRINGS.fr = {
 
 /* ---- Ukrainian ---- */
 STRINGS.uk = {
+  lockInst:"Спершу оберіть заклад", lockFac:"Спершу оберіть факультет",
+  lockSector:"Спершу оберіть галузь", lockTrade:"Спершу оберіть професію",
   title:"Калькулятор витрат на навчання",
   blurb:"Оберіть шлях навчання, потім конкретну програму — і побачите, скільки може коштувати один рік і весь курс.",
   langLabel:"Мова",
@@ -1482,6 +1496,8 @@ STRINGS.uk = {
 
 /* ---- Farsi (فارسی) ---- */
 STRINGS.fa = {
+  lockInst:"ابتدا یک مؤسسه انتخاب کنید", lockFac:"ابتدا یک دانشکده انتخاب کنید",
+  lockSector:"ابتدا یک بخش انتخاب کنید", lockTrade:"ابتدا یک حرفه انتخاب کنید",
   title:"برآورد هزینه تحصیلات پس از دبیرستان",
   blurb:"یک مسیر را انتخاب کنید، سپس یک رشته مشخص، تا ببینید هزینه یک سال و کل دوره چقدر می‌شود.",
   langLabel:"زبان",
@@ -1585,6 +1601,8 @@ STRINGS.prs = Object.assign({}, STRINGS.fa, {
 
 /* ---- Pashto (پښتو) ---- */
 STRINGS.ps = {
+  lockInst:"لومړی یوه مؤسسه وټاکئ", lockFac:"لومړی یو پوهنځی وټاکئ",
+  lockSector:"لومړی یوه برخه وټاکئ", lockTrade:"لومړی یو مسلک وټاکئ",
   title:"د لوړو زده‌کړو د لګښت اټکل",
   blurb:"یوه لاره وټاکئ، بیا یو ځانګړی څانګه، ترڅو وګورئ چې د یو کال او د ټولې دورې لګښت څومره دی.",
   langLabel:"ژبه",
@@ -1664,6 +1682,8 @@ STRINGS.ps = {
 
 /* ---- Mandarin / Simplified Chinese ---- */
 STRINGS.zhHans = {
+  lockInst:"请先选择院校", lockFac:"请先选择学院",
+  lockSector:"请先选择行业", lockTrade:"请先选择工种",
   title:"高等教育费用估算工具",
   blurb:"先选择一条升学路径，再选择具体专业，即可看到一年以及整个课程的大致费用。",
   langLabel:"语言",
@@ -1743,6 +1763,8 @@ STRINGS.zhHans = {
 
 /* ---- Cantonese / Traditional Chinese ---- */
 STRINGS.zhHant = {
+  lockInst:"請先揀院校", lockFac:"請先揀學院",
+  lockSector:"請先揀行業", lockTrade:"請先揀工種",
   title:"專上教育費用估算工具",
   blurb:"先揀一條升學路徑，再揀具體課程，就可以睇到一年同埋成個課程大約要幾多錢。",
   langLabel:"語言",
@@ -1971,8 +1993,8 @@ function loadA(){
   const set = currentSet();
   fill($("selA"), Object.keys(set).map(k => [k, set[k].name]),
        t(path === "apprenticeship" ? "chSector" : "chInst"));
-  fill($("selB"), [], "—");
-  fill($("selC"), [], "—");
+  fill($("selB"), [], t(path === "apprenticeship" ? "lockSector" : "lockInst"));
+  fill($("selC"), [], t(path === "apprenticeship" ? "lockSector" : "lockInst"));
   $("subA").textContent=""; $("subB").textContent=""; $("subC").textContent="";
   $("profile").classList.remove("on");
   hideResults();
@@ -1981,9 +2003,9 @@ function loadA(){
 function loadB(){
   const set = currentSet();
   const a = set[$("selA").value];
-  fill($("selC"), [], "—");
+  fill($("selC"), [], t(path === "apprenticeship" ? "lockTrade" : "lockFac"));
   $("subB").textContent=""; $("subC").textContent="";
-  if(!a){ fill($("selB"), [], "—"); $("subA").textContent=""; $("profile").classList.remove("on"); hideResults(); return; }
+  if(!a){ fill($("selB"), [], t(path === "apprenticeship" ? "lockSector" : "lockInst")); $("subA").textContent=""; $("profile").classList.remove("on"); hideResults(); return; }
 
   if(path === "apprenticeship"){
     $("subA").textContent = t("nTrades", {n: Object.keys(a.trades).length});
@@ -2001,7 +2023,8 @@ function loadC(){
   const a = set[$("selA").value];
   const bKey = $("selB").value;
   $("subC").textContent = "";
-  if(!a || !bKey){ fill($("selC"), [], "—"); renderProfile(); hideResults(); return; }
+  if(!a || !bKey){ fill($("selC"), [], t(path === "apprenticeship" ? "lockTrade" : "lockFac"));
+    renderProfile(); hideResults(); return; }
 
   if(path === "apprenticeship"){
     const tr = a.trades[bKey];
