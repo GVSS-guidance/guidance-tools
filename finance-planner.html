@@ -32,6 +32,51 @@ body{
 .masthead h1{margin:0; font-size:1.85rem; font-weight:700; color:#fff; letter-spacing:-.01em}
 .masthead p{margin:8px 0 0; max-width:64ch; color:#f0e6e8; font-size:.98rem}
 
+/* ---------- masthead layout with the language controls ---------- */
+.mhead{display:flex; gap:24px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap}
+.mhead .mtext{flex:1 1 380px; min-width:0}
+.langbar{flex:0 0 auto; display:flex; flex-direction:column; gap:8px; align-items:flex-end}
+.langbar label{font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+               color:var(--gold-light); font-weight:700}
+.langbar select{
+  font:inherit; font-size:.92rem; padding:8px 11px; border-radius:8px; min-width:190px;
+  border:1px solid rgba(255,255,255,.45); background:#fff; color:var(--ink); cursor:pointer;
+}
+.langbar select:focus-visible{outline:3px solid var(--gold-light); outline-offset:2px}
+.lvlwrap{display:flex; gap:0; border:1px solid rgba(255,255,255,.45); border-radius:8px; overflow:hidden}
+.lvl{
+  appearance:none; cursor:pointer; font:inherit; font-size:.82rem; font-weight:600;
+  padding:6px 12px; border:0; background:transparent; color:#f0e6e8; transition:background .15s;
+}
+.lvl:hover{background:rgba(255,255,255,.14)}
+.lvl[aria-pressed="true"]{background:var(--gold); color:#3d2a08; font-weight:700}
+.lvl:focus-visible{outline:3px solid var(--gold-light); outline-offset:-3px}
+.lvlwrap.hide{display:none}
+
+/* Notice shown whenever a translated version is on screen. */
+.transnote{
+  background:#fdf6e8; border:1px solid var(--gold-light); border-radius:var(--radius);
+  padding:11px 15px; margin:18px 0 0; font-size:.85rem; color:#6b5626;
+}
+.transnote strong{color:#7a5f1f}
+.transnote.hide{display:none}
+
+/* ---------- right-to-left support (Farsi, Pashto, Dari) ---------- */
+html[dir="rtl"] body{
+  font-family:"Segoe UI","Noto Naskh Arabic","Iranian Sans",Tahoma,Arial,sans-serif;
+}
+html[dir="rtl"] .rhead{border-left:0; border-right:4px solid var(--gold); padding-left:0; padding-right:14px}
+html[dir="rtl"] .callout{border-left:0; border-right:4px solid var(--ok); border-radius:8px 0 0 8px}
+html[dir="rtl"] .estflag .feelink{direction:rtl}
+html[dir="rtl"] table.costs th, html[dir="rtl"] table.costs td{text-align:right}
+html[dir="rtl"] table.costs th:last-child, html[dir="rtl"] table.costs td:last-child{text-align:left}
+html[dir="rtl"] .bar .bv{text-align:left}
+html[dir="rtl"] .path{text-align:right}
+html[dir="rtl"] .langbar{align-items:flex-start}
+/* Money and program names stay left-to-right even inside RTL text. */
+html[dir="rtl"] .num, html[dir="rtl"] .bigbox .v, html[dir="rtl"] .bar .bv{direction:ltr; unicode-bidi:embed}
+.ltr{direction:ltr; unicode-bidi:embed; display:inline-block}
+
 /* ---------- panels ---------- */
 .panel{background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:22px 24px; margin:22px 0}
 .panel h2{margin:0 0 4px; font-size:1.12rem; font-weight:700; color:var(--maroon)}
@@ -54,7 +99,10 @@ body{
 .path .pdesc{display:block; font-size:.82rem; color:var(--ink-soft); margin-top:3px}
 
 /* ---------- cascading selects ---------- */
-.cascade{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+.cascade{display:grid; gap:16px}
+.cascade-1{grid-template-columns:1fr 2fr; margin-bottom:16px}
+.cascade-1 .field:only-child{grid-column:1 / 2}
+.cascade-2{grid-template-columns:repeat(2,1fr)}
 .field{display:flex; flex-direction:column; gap:6px}
 .field label{font-size:.8rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--maroon-light)}
 .field select{
@@ -64,6 +112,45 @@ body{
 .field select:focus-visible{outline:3px solid var(--gold-light); outline-offset:1px; border-color:var(--maroon)}
 .field select:disabled{background:#f4f1ec; color:#9a948c; cursor:not-allowed}
 .field .sub{font-size:.78rem; color:var(--ink-soft); min-height:1.1em}
+
+/* ==========================================================================
+   INSTITUTION PROFILE CARD (Step 2)
+   Appears once an institution/sector is chosen, above the remaining menus.
+   The "crest" is a monogram tile built from the institution's initials on its
+   accent colour — deliberately NOT a real logo (see the note in the data
+   section). --crest is set inline per institution from `brand`.
+   ========================================================================== */
+.profile{
+  display:none; gap:16px; align-items:flex-start;
+  background:var(--cream); border:1px solid var(--line); border-left:5px solid var(--crest,var(--maroon));
+  border-radius:var(--radius); padding:15px 17px; margin:0 0 18px;
+  animation:profin .22s ease-out;
+}
+.profile.on{display:flex}
+@keyframes profin{from{opacity:0; transform:translateY(-5px)} to{opacity:1; transform:none}}
+.crest{
+  flex:0 0 auto; width:62px; height:62px; border-radius:12px;
+  background:var(--crest,var(--maroon)); color:#fff;
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  font-weight:700; font-size:.78rem; line-height:1.15; padding:6px;
+  letter-spacing:.01em; box-shadow:0 1px 3px rgba(0,0,0,.18);
+}
+.pbody{flex:1; min-width:0}
+.pname2{margin:0; font-size:1.05rem; font-weight:700; color:var(--maroon); line-height:1.3}
+.pabout{margin:4px 0 0; font-size:.88rem; color:var(--ink-soft); line-height:1.5}
+.pfacts{margin:9px 0 0; display:flex; flex-wrap:wrap; gap:6px}
+.pfact{
+  font-size:.76rem; font-weight:600; background:#fff; border:1px solid var(--line);
+  color:var(--maroon-light); border-radius:99px; padding:3px 10px;
+}
+.pfact.hi{background:var(--gold-light); border-color:var(--gold); color:#5f4a15}
+html[dir="rtl"] .profile{border-left:1px solid var(--line); border-right:5px solid var(--crest,var(--maroon))}
+/* The profile description is authored in English only, so render it LTR even
+   on RTL pages — otherwise the trailing punctuation jumps to the wrong side. */
+html[dir="rtl"] .pabout{direction:ltr; text-align:right}
+/* Fact chips mix translated words with currency; keep each chip internally LTR
+   so amounts like "$31,500/yr" don't get reordered by the bidi algorithm. */
+html[dir="rtl"] .pfact{direction:ltr}
 
 /* ---------- options row ---------- */
 .opts{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:18px;
@@ -139,10 +226,13 @@ footer a{color:var(--maroon-light)}
 
 @media (max-width:820px){
   .paths{grid-template-columns:1fr}
-  .cascade{grid-template-columns:1fr}
+  .cascade-1,.cascade-2{grid-template-columns:1fr}
   .opts{grid-template-columns:1fr}
   .cols{grid-template-columns:1fr}
   .masthead h1{font-size:1.5rem}
+  .mhead{gap:16px}
+  .langbar{align-items:stretch; width:100%}
+  .langbar select{width:100%}
 }
 
 /* ==========================================================================
@@ -165,49 +255,89 @@ body.embed .wrap{padding:0 14px}
 <body>
 
 <header class="masthead">
-  <div class="wrap">
-    <p class="school">Georges Vanier Secondary School &middot; Guidance &amp; Counselling</p>
-    <h1>Post-Secondary Cost Explorer</h1>
-    <p>Choose a pathway, then narrow down to a specific program to see what a year — and the
-       whole credential — could cost. Built for students and families planning ahead.</p>
+  <div class="wrap mhead">
+    <div class="mtext">
+      <p class="school">Georges Vanier Secondary School &middot; Guidance &amp; Counselling</p>
+      <h1 id="tTitle">Post-Secondary Cost Explorer</h1>
+      <p id="tBlurb">Choose a pathway, then narrow down to a specific program to see what a year —
+         and the whole credential — could cost. Built for students and families planning ahead.</p>
+    </div>
+
+    <!-- Language + reading-level controls. The reading-level pair is shown only for
+         English (see LANG_HAS_LEVELS in the script). -->
+    <div class="langbar">
+      <label for="selLang" id="tLangLabel">Language</label>
+      <select id="selLang">
+        <option value="en"     lang="en">English</option>
+        <option value="fa"     lang="fa">فارسی — Farsi</option>
+        <option value="prs"    lang="fa-AF">دری — Dari</option>
+        <option value="ps"     lang="ps">پښتو — Pashto</option>
+        <option value="zhHans" lang="zh-Hans">简体中文 — Mandarin</option>
+        <option value="zhHant" lang="zh-Hant">繁體中文 — Cantonese</option>
+        <option value="fr"     lang="fr">Français — French</option>
+        <option value="uk"     lang="uk">Українська — Ukrainian</option>
+      </select>
+      <div class="lvlwrap" id="lvlWrap" role="group" aria-label="Reading level">
+        <button type="button" class="lvl" id="lvlStd"   data-level="std"   aria-pressed="true">Standard</button>
+        <button type="button" class="lvl" id="lvlPlain" data-level="plain" aria-pressed="false">Plain language</button>
+      </div>
+    </div>
   </div>
 </header>
 
 <main class="wrap">
 
+  <!-- Shown whenever a translated version is on screen. -->
+  <div class="transnote hide" id="transNote"></div>
+
   <!-- ============ STEP 1: PATHWAY ============ -->
   <section class="panel">
-    <span class="step">Step 1</span>
-    <h2>Which pathway are you exploring?</h2>
-    <p class="hint">You can switch back and forth — nothing is locked in.</p>
+    <span class="step" data-i18n="step1">Step 1</span>
+    <h2 data-i18n="s1h">Which pathway are you exploring?</h2>
+    <p class="hint" data-i18n="s1hint">You can switch back and forth — nothing is locked in.</p>
     <div class="paths" role="group" aria-label="Pathway">
       <button type="button" class="path" data-path="university" aria-pressed="true">
-        <span class="pname">University</span>
-        <span class="pdesc">Bachelor's degrees, 3–5 years</span>
+        <span class="pname" data-i18n="pUni">University</span>
+        <span class="pdesc" data-i18n="pUniD">Bachelor's degrees, 3–5 years</span>
       </button>
       <button type="button" class="path" data-path="college" aria-pressed="false">
-        <span class="pname">College</span>
-        <span class="pdesc">Diplomas, advanced diplomas &amp; degrees, 1–4 years</span>
+        <span class="pname" data-i18n="pCol">College</span>
+        <span class="pdesc" data-i18n="pColD">Diplomas, advanced diplomas &amp; degrees, 1–4 years</span>
       </button>
       <button type="button" class="path" data-path="apprenticeship" aria-pressed="false">
-        <span class="pname">Apprenticeship</span>
-        <span class="pdesc">Skilled trades — earn while you learn</span>
+        <span class="pname" data-i18n="pApp">Apprenticeship</span>
+        <span class="pdesc" data-i18n="pAppD">Skilled trades — earn while you learn</span>
       </button>
     </div>
   </section>
 
   <!-- ============ STEP 2: CASCADE ============ -->
   <section class="panel">
-    <span class="step">Step 2</span>
+    <span class="step" data-i18n="step2">Step 2</span>
     <h2 id="cascadeHead">Pick an institution, faculty and program</h2>
     <p class="hint" id="cascadeHint">Each menu fills in based on the one before it.</p>
 
-    <div class="cascade">
+    <!-- Institution / sector on its own row, so the profile card can sit
+         between it and the two menus that depend on it. -->
+    <div class="cascade cascade-1">
       <div class="field">
         <label for="selA" id="labA">Institution</label>
         <select id="selA"></select>
         <span class="sub" id="subA"></span>
       </div>
+    </div>
+
+    <!-- Filled by renderProfile(). Hidden until an institution is chosen. -->
+    <div class="profile" id="profile">
+      <div class="crest" id="crest" aria-hidden="true"></div>
+      <div class="pbody">
+        <p class="pname2" id="pName"></p>
+        <p class="pabout" id="pAbout"></p>
+        <div class="pfacts" id="pFacts"></div>
+      </div>
+    </div>
+
+    <div class="cascade cascade-2">
       <div class="field">
         <label for="selB" id="labB">Faculty</label>
         <select id="selB" disabled></select>
@@ -222,19 +352,19 @@ body.embed .wrap{padding:0 14px}
 
     <div class="opts" id="optsBox">
       <div class="field" id="livingField">
-        <label for="selLiving">Living situation</label>
+        <label for="selLiving" data-i18n="labLiving">Living situation</label>
         <select id="selLiving">
-          <option value="home">Living at home (commuting)</option>
-          <option value="res">Residence + meal plan</option>
-          <option value="off">Off-campus / shared apartment</option>
+          <option value="home" data-i18n="livHome">Living at home (commuting)</option>
+          <option value="res"  data-i18n="livRes">Residence + meal plan</option>
+          <option value="off"  data-i18n="livOff">Off-campus / shared apartment</option>
         </select>
-        <span class="sub">Usually the single biggest cost difference.</span>
+        <span class="sub" data-i18n="livSub">Usually the single biggest cost difference.</span>
       </div>
       <div class="field">
-        <label for="selStatus">Student status</label>
+        <label for="selStatus" data-i18n="labStatus">Student status</label>
         <select id="selStatus">
-          <option value="domestic">Domestic (Ontario resident)</option>
-          <option value="international">International</option>
+          <option value="domestic"      data-i18n="stDom">Domestic (Ontario resident)</option>
+          <option value="international" data-i18n="stIntl">International</option>
         </select>
         <span class="sub" id="subStatus">Domestic rates shown.</span>
       </div>
@@ -243,14 +373,14 @@ body.embed .wrap{padding:0 14px}
 
   <!-- ============ STEP 3: RESULTS ============ -->
   <section class="panel results" id="results">
-    <span class="step">Step 3</span>
+    <span class="step" data-i18n="step3">Step 3</span>
 
     <!-- Estimate flag: always visible whenever numbers are on screen. The fee-schedule
          link is set per-institution from the `fees` field in the data object. -->
     <div class="estflag">
       <span class="bang" aria-hidden="true">!</span>
       <span class="etxt">
-        <strong>These are estimates, not quoted prices.</strong>
+        <strong data-i18n="estStrong">These are estimates, not quoted prices.</strong>
         <span id="estText">Figures are planning approximations for the 2026&ndash;27 year and are
         rounded. Your actual costs will differ.</span>
         <a class="feelink" id="feeLink" href="#" target="_blank" rel="noopener noreferrer"></a>
@@ -287,21 +417,15 @@ body.embed .wrap{padding:0 14px}
   </section>
 
   <div class="panel empty" id="emptyState">
-    <p style="margin:0"><strong>Nothing selected yet.</strong> Work through the menus above and the
-      cost breakdown will appear here.</p>
+    <p style="margin:0" id="emptyMsg"><strong>Nothing selected yet.</strong> Work through the menus
+      above and the cost breakdown will appear here.</p>
   </div>
 
-  <div class="disclaimer">
-    <strong>Please read:</strong> every dollar figure in this tool is a <strong>planning estimate</strong>
-    for the <span id="dataYear">2026&ndash;27</span> year, rounded for readability. Real tuition and fees
-    vary by program, campus, course load and year of study, and they change annually. Always confirm
-    against the institution's own fee schedule before making a financial decision. This tool does not
-    yet account for OSAP, scholarships, RESP withdrawals or bursaries — those are coming in later modules.
-  </div>
+  <div class="disclaimer" id="disclaimer"></div>
 
   <footer>
-    <p>Georges Vanier SS Guidance Department &middot; Module 1 of the Financial Planning Tool
-       (pathway &amp; program selector). Questions? Speak with your counsellor.</p>
+    <p id="footerMsg">Georges Vanier SS Guidance Department &middot; Module 1 of the Financial
+       Planning Tool (pathway &amp; program selector). Questions? Speak with your counsellor.</p>
   </footer>
 </main>
 
@@ -324,6 +448,8 @@ const UNIVERSITIES = {
   "uoft": {
     name: "University of Toronto", anc: 2100, res: 17500, off: 15500, intlMult: 6.5,
     fees: "https://www.registrar.utoronto.ca/fees-payments/tuition-fee-schedules/",
+    short: "U of T", brand: "#002A5C",
+    about: "Canada's largest university, downtown on the TTC subway. Research-heavy and academically demanding; three campuses (St. George, Mississauga, Scarborough).",
     faculties: {
       "Arts &amp; Science": [
         {n:"Humanities (History, English, Philosophy)", t:6400, y:4},
@@ -358,6 +484,8 @@ const UNIVERSITIES = {
   "york": {
     name: "York University", anc: 1250, res: 15500, off: 14500, intlMult: 4.2,
     fees: "https://students.yorku.ca/sfs/course-and-program-fees",
+    short: "York", brand: "#E31837",
+    about: "North York, on the subway line — a common commuter choice for Georges Vanier students. Very large, with strong liberal arts, business and law.",
     faculties: {
       "Liberal Arts &amp; Professional Studies": [
         {n:"Psychology (BA)", t:8100, y:4},
@@ -401,6 +529,8 @@ const UNIVERSITIES = {
   "tmu": {
     name: "Toronto Metropolitan University", anc: 1000, res: 15800, off: 16000, intlMult: 3.9,
     fees: "https://www.torontomu.ca/current-students/tuition-fees/undergraduate/",
+    short: "TMU", brand: "#004C9D",
+    about: "Downtown Toronto, career-focused and closely tied to industry. Formerly Ryerson. Strong in media, business and health.",
     faculties: {
       "Arts": [
         {n:"Psychology", t:7600, y:4},
@@ -443,6 +573,8 @@ const UNIVERSITIES = {
   "waterloo": {
     name: "University of Waterloo", anc: 1800, res: 15200, off: 13500, intlMult: 4.6,
     fees: "https://uwaterloo.ca/finance/student-financial-services/tuition-fee-schedules",
+    short: "Waterloo", brand: "#262626",
+    about: "About 90 minutes west of Toronto. Famous for co-op — most students alternate study terms with paid work terms.",
     faculties: {
       "Mathematics": [
         {n:"Computer Science (co-op)", t:17500, y:5},
@@ -483,6 +615,8 @@ const UNIVERSITIES = {
   "western": {
     name: "Western University", anc: 1500, res: 16800, off: 12500, intlMult: 4.4,
     fees: "https://registrar.uwo.ca/student_finances/fees_refunds/fee_schedules.html",
+    short: "Western", brand: "#4F2683",
+    about: "London, Ontario. Traditional campus with a strong student-life reputation; home of the Ivey business school.",
     faculties: {
       "Social Science": [
         {n:"Psychology", t:7500, y:4},
@@ -519,6 +653,8 @@ const UNIVERSITIES = {
   "mac": {
     name: "McMaster University", anc: 1400, res: 15400, off: 12000, intlMult: 4.5,
     fees: "https://registrar.mcmaster.ca/fees/",
+    short: "Mac", brand: "#7A003C",
+    about: "Hamilton, about an hour from Toronto. Best known for health sciences and its problem-based approach to teaching.",
     faculties: {
       "Health Sciences": [
         {n:"Bachelor of Health Sciences (BHSc)", t:8400, y:4},
@@ -554,6 +690,8 @@ const UNIVERSITIES = {
   "queens": {
     name: "Queen's University", anc: 1600, res: 17200, off: 11500, intlMult: 4.8,
     fees: "https://www.queensu.ca/registrar/tuition-fees",
+    short: "Queen's", brand: "#11335D",
+    about: "Kingston, roughly 2.5 hours away. Small-city campus with a tight-knit residence culture.",
     faculties: {
       "Arts &amp; Science": [
         {n:"Life Sciences", t:7800, y:4},
@@ -578,6 +716,8 @@ const UNIVERSITIES = {
   "guelph": {
     name: "University of Guelph", anc: 1500, res: 14400, off: 11000, intlMult: 4.0,
     fees: "https://www.uoguelph.ca/registrar/finances-fees/tuition-fees",
+    short: "Guelph", brand: "#C20430",
+    about: "Guelph, about an hour west. Strong in life sciences, agriculture, veterinary and food science.",
     faculties: {
       "Biological Science": [
         {n:"Biomedical Science", t:8000, y:4},
@@ -608,6 +748,8 @@ const UNIVERSITIES = {
   "ottawa": {
     name: "University of Ottawa", anc: 1300, res: 15000, off: 12000, intlMult: 4.3,
     fees: "https://www.uottawa.ca/study/fees-financial-support/university-fees/tuition-canadians-ontario",
+    short: "uOttawa", brand: "#8A1538",
+    about: "Downtown Ottawa and officially bilingual — you can study in English, French, or both.",
     faculties: {
       "Arts": [
         {n:"Communication", t:7600, y:4},
@@ -643,6 +785,8 @@ const COLLEGES = {
   "seneca": {
     name: "Seneca Polytechnic", anc: 1300, res: 12800, off: 14500, intlMult: 4.0,
     fees: "https://students.senecapolytechnic.ca/spaces/71/fees-and-payments/home",
+    short: "Seneca", brand: "#B01E28",
+    about: "Multiple GTA campuses including Newnham in North York. Career programs plus degrees; strong transfer paths to university.",
     faculties: {
       "Business": [
         {n:"Business Administration &mdash; Accounting (Adv. Dip.)", t:4200, y:3},
@@ -676,6 +820,8 @@ const COLLEGES = {
   "humber": {
     name: "Humber Polytechnic", anc: 1350, res: 13500, off: 15000, intlMult: 4.1,
     fees: "https://humber.ca/explore-programs/tuition-fee-schedule",
+    short: "Humber", brand: "#00539B",
+    about: "Etobicoke and North campuses. Polytechnic mixing hands-on diplomas with degrees and apprenticeship training.",
     faculties: {
       "Business": [
         {n:"Business Administration (Adv. Dip.)", t:4300, y:3},
@@ -714,6 +860,8 @@ const COLLEGES = {
   "gbc": {
     name: "George Brown College", anc: 1300, res: 14200, off: 16000, intlMult: 4.2,
     fees: "https://www.georgebrown.ca/apply/tuition-fees-and-costs",
+    short: "GBC", brand: "#005EB8",
+    about: "Downtown Toronto. Known for culinary, health sciences, construction and early childhood programs.",
     faculties: {
       "Centre for Business": [
         {n:"Business Administration &mdash; Finance (Adv. Dip.)", t:4400, y:3},
@@ -750,6 +898,8 @@ const COLLEGES = {
   "centennial": {
     name: "Centennial College", anc: 1250, res: 12500, off: 14500, intlMult: 4.0,
     fees: "https://www.centennialcollege.ca/admissions/tuition-and-fees/",
+    short: "Centennial", brand: "#005596",
+    about: "Scarborough — the closest college to many east-end families. Strong in transportation, aviation and health.",
     faculties: {
       "Business": [
         {n:"Business Administration (Adv. Dip.)", t:4200, y:3},
@@ -779,6 +929,8 @@ const COLLEGES = {
   "sheridan": {
     name: "Sheridan College", anc: 1300, res: 13200, off: 13500, intlMult: 4.1,
     fees: "https://www.sheridancollege.ca/admissions/fees-and-finances/academic-fees/full-time-fees",
+    short: "Sheridan", brand: "#0033A0",
+    about: "Oakville, Brampton and Mississauga. Internationally known for animation, illustration and design.",
     faculties: {
       "Animation, Arts &amp; Design": [
         {n:"Bachelor of Animation", t:9400, y:4},
@@ -805,6 +957,8 @@ const COLLEGES = {
   "durham": {
     name: "Durham College", anc: 1250, res: 12000, off: 12500, intlMult: 3.9,
     fees: "https://durhamcollege.ca/financial-info/tuition-and-fees/tuition-fees",
+    short: "Durham", brand: "#00573F",
+    about: "Oshawa and Whitby, east of Toronto. Skilled trades, health and tech, with smaller class sizes.",
     faculties: {
       "Business, IT &amp; Management": [
         {n:"Business Administration (Adv. Dip.)", t:4200, y:3},
@@ -830,6 +984,8 @@ const COLLEGES = {
   "fanshawe": {
     name: "Fanshawe College", anc: 1200, res: 11800, off: 11000, intlMult: 3.9,
     fees: "https://www.fanshawec.ca/admission-finance/tuition/fees",
+    short: "Fanshawe", brand: "#A6192E",
+    about: "London, Ontario. Large college with lower living costs than the GTA; strong trades and media programs.",
     faculties: {
       "Business": [
         {n:"Business Administration (Adv. Dip.)", t:4100, y:3},
@@ -867,6 +1023,7 @@ const COLLEGES = {
 const TRADES = {
   "construction": {
     name: "Construction",
+    short: "Build", brand: "#B5651D",
     blurb: "Ontario's largest apprenticeship sector — strong union pathways and Red Seal mobility.",
     trades: {
       "Electrician — Construction &amp; Maintenance (309A)":
@@ -889,6 +1046,7 @@ const TRADES = {
   },
   "motive": {
     name: "Motive Power",
+    short: "Motive", brand: "#1F6F8B",
     blurb: "Vehicles and mobile equipment — heavy demand from fleets, dealerships and transit.",
     trades: {
       "Automotive Service Technician (310S)":
@@ -905,6 +1063,7 @@ const TRADES = {
   },
   "industrial": {
     name: "Industrial",
+    short: "Industry", brand: "#4A4E69",
     blurb: "Manufacturing, maintenance and fabrication — often the highest starting wages.",
     trades: {
       "Industrial Mechanic Millwright (433A)":
@@ -923,6 +1082,7 @@ const TRADES = {
   },
   "service": {
     name: "Service",
+    short: "Service", brand: "#2F6B4F",
     blurb: "Personal, food and horticultural services — shorter terms, faster to certification.",
     trades: {
       "Cook (415A)":
@@ -949,12 +1109,761 @@ const PERSONAL   = 2400;   // phone, clothing, personal, some entertainment
 const FOOD_HOME  = 0;      // assumed absorbed by family when living at home
 
 /* ==========================================================================
+   LANGUAGES / TRANSLATION
+   --------------------------------------------------------------------------
+   TRANSLATION STATUS: the non-English strings below were produced by Claude
+   (an AI) and have NOT yet been checked by a native speaker. A visible notice
+   appears in the tool whenever a translated version is on screen. Get these
+   reviewed — TDSB Translation & Interpretation Services is the usual route —
+   then delete the notice by setting REVIEWED to true for that language.
+
+   WHAT IS NOT TRANSLATED, DELIBERATELY:
+   institution names, faculty names, program names and trade names/codes stay
+   in English. Families meet them in English on OUAC, myBlueprint, college
+   sites and job postings; translating them would make the tool harder to act
+   on, not easier.
+
+   READING LEVEL: English carries two registers ("std" and "plain"). The other
+   languages are written in ONE plain register, so the level toggle is hidden
+   for them (hasLevels:false). Rationale: the families who need a translation
+   are largely the same families who benefit from plain language, and keeping
+   two registers per language would double the review burden for little gain.
+
+   TO ADD A LANGUAGE: add an entry to LANGS, add a matching block to STRINGS,
+   and add an <option> to #selLang in the markup.
+   ========================================================================== */
+const LANGS = {
+  en:     {name:"English",     dir:"ltr", htmlLang:"en",      hasLevels:true,  REVIEWED:true },
+  fa:     {name:"فارسی",       dir:"rtl", htmlLang:"fa",      hasLevels:false, REVIEWED:false},
+  prs:    {name:"دری",         dir:"rtl", htmlLang:"fa-AF",   hasLevels:false, REVIEWED:false},
+  ps:     {name:"پښتو",        dir:"rtl", htmlLang:"ps",      hasLevels:false, REVIEWED:false},
+  zhHans: {name:"简体中文",     dir:"ltr", htmlLang:"zh-Hans", hasLevels:false, REVIEWED:false},
+  zhHant: {name:"繁體中文",     dir:"ltr", htmlLang:"zh-Hant", hasLevels:false, REVIEWED:false},
+  fr:     {name:"Français",    dir:"ltr", htmlLang:"fr",      hasLevels:false, REVIEWED:false},
+  uk:     {name:"Українська",  dir:"ltr", htmlLang:"uk",      hasLevels:false, REVIEWED:false}
+};
+
+/* {n}, {inst}, {y} etc. are filled in by t(). */
+const STRINGS = {};
+
+STRINGS.en = {};
+STRINGS.en.std = {
+  title:"Post-Secondary Cost Explorer",
+  blurb:"Choose a pathway, then narrow down to a specific program to see what a year — and the whole credential — could cost. Built for students and families planning ahead.",
+  langLabel:"Language", lvlStd:"Standard", lvlPlain:"Plain language",
+  step1:"Step 1", step2:"Step 2", step3:"Step 3",
+  s1h:"Which pathway are you exploring?",
+  s1hint:"You can switch back and forth — nothing is locked in.",
+  pUni:"University", pUniD:"Bachelor's degrees, 3–5 years",
+  pCol:"College",    pColD:"Diplomas, advanced diplomas & degrees, 1–4 years",
+  pApp:"Apprenticeship", pAppD:"Skilled trades — earn while you learn",
+  headSchool:"Pick an institution, faculty and program",
+  headTrade:"Pick a sector, trade and training pathway",
+  hintSchool:"Each menu fills in based on the one before it.",
+  hintTrade:"In an apprenticeship you are hired first, then attend school in short blocks. Each menu fills in based on the one before it.",
+  labInst:"Institution", labFac:"Faculty", labProg:"Program",
+  labSector:"Trade sector", labTrade:"Trade", labRoute:"Training pathway",
+  chInst:"Choose an institution…", chFac:"Choose a faculty…", chProg:"Choose a program…",
+  chSector:"Choose a sector…", chTrade:"Choose a trade…", chRoute:"Choose a route in…",
+  nFac:"{n} faculties listed", nProg:"{n} programs listed", nTrades:"{n} trades listed",
+  labLiving:"Living situation",
+  livHome:"Living at home (commuting)", livRes:"Residence + meal plan",
+  livOff:"Off-campus / shared apartment",
+  livSub:"Usually the single biggest cost difference.",
+  labStatus:"Student status", stDom:"Domestic (Ontario resident)", stIntl:"International",
+  subDom:"Domestic rates shown.",
+  subIntl:"International rates are rough multiples — confirm with the institution.",
+  estStrong:"These are estimates, not quoted prices.",
+  estSchool:"Figures are planning approximations for the {yr} year and are rounded. Tuition varies by campus, course load and year of study, and changes annually — confirm before making any financial decision.",
+  estTrade:"Wage figures are broad Ontario averages and vary enormously by employer, union agreement and region. In-school fees are set by the delivery college. Treat every number here as a starting point for a conversation, not a forecast.",
+  feeSchool:"Check {inst}'s official fee schedule",
+  feeTrade:"Check trade requirements at Skilled Trades Ontario",
+  thCost:"Cost per year", thMoney:"Money in / money out", thAmount:"Amount",
+  rTuition:"Tuition", rFees:"Ancillary & incidental fees",
+  rRes:"Residence & meal plan", rOff:"Rent & groceries (8 months)", rHome:"Housing & food",
+  rBooks:"Books & supplies", rTrans:"Transportation", rPersonal:"Personal & miscellaneous",
+  totalYear:"Total, one year",
+  nTuitionDom:"Domestic Ontario rate, full course load.",
+  nTuitionIntl:"International rate — estimate only.",
+  nFees:"Student union, athletics, health plan, U-Pass, technology.",
+  nRes:"Standard room plus a mid-tier meal plan.",
+  nOff:"Shared apartment near campus, plus food.",
+  nHome:"Assumed covered at home — the single biggest saving available.",
+  nBooks:"Textbooks, lab kits, software, a working laptop amortised.",
+  nTrans:"TTC post-secondary pass, ~10 months.", nTransRes:"Occasional travel home.",
+  nPersonal:"Phone, clothing, social life, emergencies.",
+  bTuition:"Tuition", bHousing:"Housing/food", bFees:"Fees", bBooks:"Books",
+  bTrans:"Transport", bPersonal:"Personal",
+  bEarn:"Earnings", bTools:"Tools", bPre:"Pre-trades",
+  kYear:"Estimated cost — one year", sYear:"About {m} a month across 12 months.",
+  kTotal:"Full credential ({y} years)",
+  sTotal:"Assumes today's costs repeat. Real tuition typically rises a few percent a year.",
+  coCoop:"<strong>Co-op offsets this.</strong> Paid co-op terms in this program commonly bring in $12,000–$25,000 per work term, which can cover a large share of the sticker price above.",
+  coHome:"<strong>Living at home is the biggest lever.</strong> Choosing residence instead would add roughly {res} a year — about {tot} over the whole credential.",
+  tagUni:"University", tagCol:"College", tagApp:"Apprenticeship",
+  tagYears:"{y}-year program", tagDom:"Domestic", tagIntl:"International",
+  tagRes:"Residence", tagOff:"Off-campus", tagHome:"Living at home",
+  tagTerm:"{y}-year term", tagLevels:"{n} in-school levels", tagRedSeal:"Red Seal trade",
+  trFee:"In-school tuition", trFeeNote:"{n} levels × {fee} — paid once per level, not per year.",
+  trTools:"Tools & equipment",
+  trToolsNote:"Mostly a first-year outlay; some trades need far more than others.",
+  trPre:"Pre-trades certificate",
+  trWages:"Gross wages while apprenticing",
+  trWagesNote:"Roughly {w1}/hr at the start rising toward {wj}/hr, over {y} years. Before tax, and before rent, food and transport — which this row does <em>not</em> deduct.",
+  trTotal:"Gross wages less training costs",
+  trKOut:"Out-of-pocket cost — whole apprenticeship",
+  trSOut:"Spread across {y} years, not paid up front.",
+  trKGross:"Gross wages over {y} years",
+  trSGross:"Before tax. Certified journeypersons in this trade earn roughly {j} a year at {wj}/hr.",
+  trCompare:"<strong>Comparing this to a degree?</strong> Read the two screens carefully — they measure different things. The university and college screens count living costs as an expense; this screen shows wages <em>before</em> tax and before rent, food and transport come out of them. A fair comparison also has to weigh what each pathway earns 10 and 20 years out, not just during training.",
+  rtEmployer:"Direct-entry apprenticeship",
+  rtEmployerN:"Hired by an employer who registers you as an apprentice. No up-front school year.",
+  rtPreapp:"Pre-apprenticeship program",
+  rtPreappN:"Provincially funded, tuition-free level-1 training plus a work placement. You still need a sponsor afterwards.",
+  rtCollege:"College pre-trades certificate",
+  rtCollegeN:"A one-year college certificate first. Costs money up front, but strengthens your position with employers.",
+  rtOyap:"OYAP — Ontario Youth Apprenticeship Program",
+  rtOyapN:"Start accumulating apprenticeship hours in Grade 11/12 through a co-op placement, at no cost.",
+  oyapExtra:"Ask your counsellor about OYAP — applications usually run in the spring for the following school year.",
+  grantsNote:"Grants such as the Apprenticeship Incentive Grant and Ontario's tools grants are not included above.",
+  emptyMsg:"<strong>Nothing selected yet.</strong> Work through the menus above and the cost breakdown will appear here.",
+  disclaimer:"<strong>Please read:</strong> every dollar figure in this tool is a <strong>planning estimate</strong> for the {yr} year, rounded for readability. Real tuition and fees vary by program, campus, course load and year of study, and they change annually. Always confirm against the institution's own fee schedule before making a financial decision. This tool does not yet account for OSAP, scholarships, RESP withdrawals or bursaries — those are coming in later modules.",
+  footerMsg:"Georges Vanier SS Guidance Department · Module 1 of the Financial Planning Tool (pathway & program selector). Questions? Speak with your counsellor."
+};
+
+/* Plain-language English: shorter sentences, no jargon. Same meaning. */
+STRINGS.en.plain = Object.assign({}, STRINGS.en.std, {
+  blurb:"Pick a path. Then pick a school and a program. The tool shows what one year could cost, and what the whole thing could cost.",
+  s1h:"What are you looking at?",
+  s1hint:"You can change this any time.",
+  pUniD:"Degrees. Takes 3 to 5 years.",
+  pColD:"Diplomas and degrees. Takes 1 to 4 years.",
+  pAppD:"Learn a trade at work. You get paid while you learn.",
+  headSchool:"Pick a school, an area of study, and a program",
+  headTrade:"Pick a trade area, a trade, and how you start",
+  hintSchool:"Each menu opens after you pick the one before it.",
+  hintTrade:"In a trade, you get a job first. Then you go to school for short blocks. Each menu opens after you pick the one before it.",
+  labInst:"School", labFac:"Area of study", labProg:"Program",
+  labSector:"Trade area", labTrade:"Trade", labRoute:"How you start",
+  chInst:"Pick a school…", chFac:"Pick an area…", chProg:"Pick a program…",
+  chSector:"Pick a trade area…", chTrade:"Pick a trade…", chRoute:"Pick how you start…",
+  nFac:"{n} areas of study", nProg:"{n} programs", nTrades:"{n} trades",
+  labLiving:"Where will you live?",
+  livHome:"At home (travel to school)", livRes:"In residence, with a meal plan",
+  livOff:"In an apartment",
+  livSub:"This changes the cost more than anything else.",
+  labStatus:"Are you from Ontario?",
+  stDom:"Yes — I live in Ontario", stIntl:"No — I am an international student",
+  subDom:"Showing Ontario prices.",
+  subIntl:"International prices are rough guesses. Check with the school.",
+  estStrong:"These are guesses, not real prices.",
+  estSchool:"These numbers are for the {yr} school year. They are rounded. Real costs change every year. Check with the school before you decide anything.",
+  estTrade:"These wages are averages for Ontario. Real pay changes a lot by employer and by city. School fees are set by the college. Use these numbers to start a conversation, not to plan exactly.",
+  feeSchool:"See real prices from {inst}",
+  thCost:"Cost each year", thMoney:"Money in and out", thAmount:"How much",
+  rFees:"School fees", rRes:"Room and food at school", rOff:"Rent and food",
+  rHome:"Home and food", rBooks:"Books and supplies", rTrans:"Getting around",
+  rPersonal:"Other things",
+  totalYear:"Total for one year",
+  nTuitionDom:"Ontario price. Full-time.",
+  nTuitionIntl:"International price. A guess.",
+  nFees:"Student groups, sports, health plan, bus pass, computers.",
+  nRes:"A normal room and a normal meal plan.",
+  nOff:"A shared apartment near school, plus food.",
+  nHome:"We count this as $0. Living at home saves the most money.",
+  nBooks:"Books, lab kits, and a laptop.",
+  nTrans:"TTC pass for about 10 months.", nTransRes:"Trips home now and then.",
+  nPersonal:"Phone, clothes, going out, emergencies.",
+  bHousing:"Home/food", bFees:"Fees", bTrans:"Travel", bPersonal:"Other",
+  kYear:"What one year could cost", sYear:"About {m} each month, for 12 months.",
+  kTotal:"The whole program ({y} years)",
+  sTotal:"This assumes prices stay the same. In real life they go up a little each year.",
+  coCoop:"<strong>Co-op helps a lot.</strong> In this program you work for pay. Students often earn $12,000 to $25,000 in one work term. That pays for a big part of the cost above.",
+  coHome:"<strong>Living at home saves the most.</strong> Living in residence would cost about {res} more each year. That is about {tot} for the whole program.",
+  tagYears:"{y} years", tagDom:"From Ontario", tagIntl:"International",
+  tagRes:"In residence", tagOff:"In an apartment", tagHome:"At home",
+  tagTerm:"{y} years", tagLevels:"{n} school blocks",
+  trFee:"School fees", trFeeNote:"{n} blocks × {fee}. You pay once per block, not per year.",
+  trTools:"Tools", trToolsNote:"You buy most tools in year one. Some trades need many more.",
+  trPre:"College course first",
+  trWages:"Pay while you learn",
+  trWagesNote:"About {w1} an hour at the start. About {wj} an hour later. Over {y} years. This is before tax. Rent and food come out of this too.",
+  trTotal:"Pay, minus what you spent on training",
+  trKOut:"What you pay, for the whole trade",
+  trSOut:"Spread over {y} years. Not all at once.",
+  trKGross:"Total pay over {y} years",
+  trSGross:"Before tax. Once you finish, you can earn about {j} a year at {wj} an hour.",
+  trCompare:"<strong>Careful when you compare.</strong> The school screens count rent and food as a cost. This screen does not. The pay shown here is before tax, and rent and food still come out of it. Also think about what each path pays in 10 or 20 years, not just now.",
+  rtEmployerN:"An employer hires you and signs you up. You do not pay for a school year first.",
+  rtPreappN:"A free government program. You do level 1 and get work experience. After that you still need an employer.",
+  rtCollegeN:"You do a one-year college course first. It costs money, but employers may pick you sooner.",
+  rtOyapN:"Start earning trade hours in Grade 11 or 12 through co-op. It is free.",
+  oyapExtra:"Ask your counsellor about OYAP. You usually apply in the spring.",
+  grantsNote:"There are also government grants for tools and training. They are not counted above.",
+  emptyMsg:"<strong>Nothing picked yet.</strong> Use the menus above. The costs will show up here.",
+  disclaimer:"<strong>Please read:</strong> every number here is a <strong>guess</strong> for the {yr} school year. Real prices change by program, campus and year. Always check the school's own website before you decide anything. This tool does not include OSAP, scholarships or RESP money yet. That is coming later.",
+  footerMsg:"Georges Vanier SS Guidance Department · Part 1 of the money planning tool. Questions? Talk to your counsellor."
+});
+
+/* ---- French ---- */
+STRINGS.fr = {
+  title:"Explorateur des coûts postsecondaires",
+  blurb:"Choisissez un parcours, puis un programme précis pour voir ce que pourraient coûter une année et l'ensemble des études.",
+  langLabel:"Langue",
+  step1:"Étape 1", step2:"Étape 2", step3:"Étape 3",
+  s1h:"Quel parcours explorez-vous ?", s1hint:"Vous pouvez changer à tout moment.",
+  pUni:"Université", pUniD:"Baccalauréats, 3 à 5 ans",
+  pCol:"Collège", pColD:"Diplômes et grades, 1 à 4 ans",
+  pApp:"Apprentissage", pAppD:"Métiers spécialisés — gagnez un salaire pendant la formation",
+  headSchool:"Choisissez un établissement, une faculté et un programme",
+  headTrade:"Choisissez un secteur, un métier et une voie de formation",
+  hintSchool:"Chaque menu s'ouvre après le choix précédent.",
+  hintTrade:"En apprentissage, vous êtes d'abord embauché, puis vous suivez de courts blocs de cours.",
+  labInst:"Établissement", labFac:"Faculté", labProg:"Programme",
+  labSector:"Secteur", labTrade:"Métier", labRoute:"Voie de formation",
+  chInst:"Choisir un établissement…", chFac:"Choisir une faculté…", chProg:"Choisir un programme…",
+  chSector:"Choisir un secteur…", chTrade:"Choisir un métier…", chRoute:"Choisir une voie…",
+  nFac:"{n} facultés", nProg:"{n} programmes", nTrades:"{n} métiers",
+  labLiving:"Où allez-vous habiter ?",
+  livHome:"À la maison (déplacements)", livRes:"Résidence avec plan de repas",
+  livOff:"Appartement partagé",
+  livSub:"C'est ce qui change le plus le coût total.",
+  labStatus:"Statut de l'étudiant", stDom:"Résident de l'Ontario", stIntl:"Étudiant international",
+  subDom:"Tarifs ontariens affichés.",
+  subIntl:"Les tarifs internationaux sont approximatifs — vérifiez auprès de l'établissement.",
+  estStrong:"Ce sont des estimations, pas des prix officiels.",
+  estSchool:"Ces chiffres sont des approximations pour l'année {yr} et sont arrondis. Les frais changent chaque année — vérifiez avant toute décision financière.",
+  estTrade:"Les salaires sont des moyennes ontariennes et varient beaucoup selon l'employeur et la région. Utilisez ces chiffres comme point de départ, pas comme prévision.",
+  feeSchool:"Voir les frais officiels de {inst}",
+  feeTrade:"Vérifier les exigences auprès de Métiers spécialisés Ontario",
+  thCost:"Coût par année", thMoney:"Argent reçu / dépensé", thAmount:"Montant",
+  rTuition:"Frais de scolarité", rFees:"Frais accessoires",
+  rRes:"Résidence et repas", rOff:"Loyer et épicerie (8 mois)", rHome:"Logement et nourriture",
+  rBooks:"Livres et fournitures", rTrans:"Transport", rPersonal:"Dépenses personnelles",
+  totalYear:"Total pour une année",
+  nTuitionDom:"Tarif ontarien, temps plein.", nTuitionIntl:"Tarif international — estimation.",
+  nFees:"Association étudiante, sports, assurance santé, laissez-passer, technologie.",
+  nRes:"Chambre standard et plan de repas moyen.",
+  nOff:"Appartement partagé près du campus, plus la nourriture.",
+  nHome:"Compté comme 0 $ — c'est la plus grande économie possible.",
+  nBooks:"Manuels, matériel de laboratoire, ordinateur portable.",
+  nTrans:"Laissez-passer TTC, environ 10 mois.", nTransRes:"Quelques voyages à la maison.",
+  nPersonal:"Téléphone, vêtements, sorties, imprévus.",
+  bTuition:"Scolarité", bHousing:"Logement", bFees:"Frais", bBooks:"Livres",
+  bTrans:"Transport", bPersonal:"Personnel",
+  bEarn:"Salaire", bTools:"Outils", bPre:"Préparation",
+  kYear:"Coût estimé — une année", sYear:"Environ {m} par mois sur 12 mois.",
+  kTotal:"Programme complet ({y} ans)",
+  sTotal:"Suppose des coûts stables. En réalité, ils augmentent chaque année.",
+  coCoop:"<strong>Les stages coop réduisent ce montant.</strong> Les stages rémunérés rapportent souvent de 12 000 $ à 25 000 $ par session.",
+  coHome:"<strong>Habiter à la maison change tout.</strong> La résidence coûterait environ {res} de plus par année, soit {tot} pour l'ensemble des études.",
+  tagUni:"Université", tagCol:"Collège", tagApp:"Apprentissage",
+  tagYears:"{y} ans", tagDom:"Ontario", tagIntl:"International",
+  tagRes:"Résidence", tagOff:"Appartement", tagHome:"À la maison",
+  tagTerm:"{y} ans", tagLevels:"{n} blocs de cours", tagRedSeal:"Sceau rouge",
+  trFee:"Frais de cours", trFeeNote:"{n} blocs × {fee} — payés par bloc, pas par année.",
+  trTools:"Outils et équipement", trToolsNote:"Surtout la première année.",
+  trPre:"Certificat préparatoire", trWages:"Salaire brut pendant l'apprentissage",
+  trWagesNote:"Environ {w1}/h au début, jusqu'à {wj}/h, sur {y} ans. Avant impôts, et avant le loyer et la nourriture.",
+  trTotal:"Salaire brut moins les coûts de formation",
+  trKOut:"Coût total de votre poche", trSOut:"Réparti sur {y} ans, pas payé d'avance.",
+  trKGross:"Salaire brut sur {y} ans",
+  trSGross:"Avant impôts. Un compagnon certifié gagne environ {j} par année à {wj}/h.",
+  trCompare:"<strong>Attention aux comparaisons.</strong> Les écrans université et collège comptent le logement et la nourriture comme dépenses. Cet écran montre un salaire <em>avant</em> impôts, duquel il faut encore payer le loyer et la nourriture.",
+  rtEmployer:"Apprentissage direct",
+  rtEmployerN:"Un employeur vous embauche et vous inscrit. Aucune année scolaire payée d'avance.",
+  rtPreapp:"Programme de pré-apprentissage",
+  rtPreappN:"Formation gratuite financée par la province, plus un stage. Il faut ensuite trouver un employeur.",
+  rtCollege:"Certificat collégial préparatoire",
+  rtCollegeN:"Un an de collège d'abord. Cela coûte de l'argent mais renforce votre candidature.",
+  rtOyap:"POJA — Programme d'apprentissage pour les jeunes de l'Ontario",
+  rtOyapN:"Accumulez des heures d'apprentissage en 11e ou 12e année, sans frais.",
+  oyapExtra:"Parlez du POJA à votre conseiller — les demandes se font au printemps.",
+  grantsNote:"Les subventions provinciales pour outils et formation ne sont pas comptées ci-dessus.",
+  emptyMsg:"<strong>Rien de sélectionné.</strong> Utilisez les menus ci-dessus pour voir les coûts.",
+  disclaimer:"<strong>À lire :</strong> chaque montant est une <strong>estimation</strong> pour l'année {yr}. Les frais réels varient et changent chaque année. Vérifiez toujours auprès de l'établissement avant toute décision. Cet outil ne tient pas encore compte du RAFEO, des bourses ni des REEE.",
+  footerMsg:"Département d'orientation de Georges Vanier SS · Module 1 de l'outil de planification financière. Des questions ? Parlez à votre conseiller."
+};
+
+/* ---- Ukrainian ---- */
+STRINGS.uk = {
+  title:"Калькулятор витрат на навчання",
+  blurb:"Оберіть шлях навчання, потім конкретну програму — і побачите, скільки може коштувати один рік і весь курс.",
+  langLabel:"Мова",
+  step1:"Крок 1", step2:"Крок 2", step3:"Крок 3",
+  s1h:"Який шлях вас цікавить?", s1hint:"Це можна змінити будь-коли.",
+  pUni:"Університет", pUniD:"Бакалаврські програми, 3–5 років",
+  pCol:"Коледж", pColD:"Дипломи та ступені, 1–4 роки",
+  pApp:"Учнівство", pAppD:"Робітничі професії — заробляєте під час навчання",
+  headSchool:"Оберіть заклад, факультет і програму",
+  headTrade:"Оберіть галузь, професію та шлях навчання",
+  hintSchool:"Кожне меню відкривається після попереднього вибору.",
+  hintTrade:"В учнівстві вас спершу наймають на роботу, а потім ви вчитеся короткими блоками.",
+  labInst:"Заклад", labFac:"Факультет", labProg:"Програма",
+  labSector:"Галузь", labTrade:"Професія", labRoute:"Шлях навчання",
+  chInst:"Оберіть заклад…", chFac:"Оберіть факультет…", chProg:"Оберіть програму…",
+  chSector:"Оберіть галузь…", chTrade:"Оберіть професію…", chRoute:"Оберіть шлях…",
+  nFac:"{n} факультетів", nProg:"{n} програм", nTrades:"{n} професій",
+  labLiving:"Де ви житимете?",
+  livHome:"Удома (їздити на навчання)", livRes:"Гуртожиток із харчуванням",
+  livOff:"Орендована квартира",
+  livSub:"Це впливає на вартість найбільше.",
+  labStatus:"Статус студента", stDom:"Мешканець Онтаріо", stIntl:"Іноземний студент",
+  subDom:"Показано ціни для Онтаріо.",
+  subIntl:"Ціни для іноземних студентів приблизні — уточніть у закладі.",
+  estStrong:"Це приблизні оцінки, а не офіційні ціни.",
+  estSchool:"Ці цифри приблизні, за {yr} навчальний рік, і округлені. Вартість змінюється щороку — перевірте перед фінансовим рішенням.",
+  estTrade:"Зарплати — це середні показники по Онтаріо. Вони дуже різняться залежно від роботодавця й міста. Використовуйте як орієнтир, не як прогноз.",
+  feeSchool:"Переглянути офіційні ціни: {inst}",
+  feeTrade:"Перевірити вимоги на сайті Skilled Trades Ontario",
+  thCost:"Витрати за рік", thMoney:"Надходження / витрати", thAmount:"Сума",
+  rTuition:"Навчання", rFees:"Додаткові збори",
+  rRes:"Гуртожиток і харчування", rOff:"Оренда та продукти (8 місяців)", rHome:"Житло та їжа",
+  rBooks:"Книжки та матеріали", rTrans:"Транспорт", rPersonal:"Особисті витрати",
+  totalYear:"Разом за рік",
+  nTuitionDom:"Ціна для Онтаріо, повне навантаження.",
+  nTuitionIntl:"Ціна для іноземців — оцінка.",
+  nFees:"Студентська спілка, спорт, медстрахування, проїзний, технології.",
+  nRes:"Звичайна кімната та середній план харчування.",
+  nOff:"Спільна квартира біля кампусу та їжа.",
+  nHome:"Рахуємо як 0 $ — це найбільша економія.",
+  nBooks:"Підручники, лабораторні набори, ноутбук.",
+  nTrans:"Проїзний TTC, близько 10 місяців.", nTransRes:"Іноді поїздки додому.",
+  nPersonal:"Телефон, одяг, дозвілля, непередбачене.",
+  bTuition:"Навчання", bHousing:"Житло/їжа", bFees:"Збори", bBooks:"Книжки",
+  bTrans:"Транспорт", bPersonal:"Особисте",
+  bEarn:"Заробіток", bTools:"Інструменти", bPre:"Підготовка",
+  kYear:"Орієнтовна вартість — один рік", sYear:"Близько {m} на місяць протягом 12 місяців.",
+  kTotal:"Уся програма ({y} р.)",
+  sTotal:"Припускаємо, що ціни не зміняться. Насправді вони щороку трохи зростають.",
+  coCoop:"<strong>Оплачувана практика зменшує витрати.</strong> Студенти часто заробляють 12 000–25 000 $ за один робочий семестр.",
+  coHome:"<strong>Життя вдома заощаджує найбільше.</strong> Гуртожиток коштував би приблизно на {res} більше щороку — це близько {tot} за весь курс.",
+  tagUni:"Університет", tagCol:"Коледж", tagApp:"Учнівство",
+  tagYears:"{y} р. програма", tagDom:"Онтаріо", tagIntl:"Іноземний",
+  tagRes:"Гуртожиток", tagOff:"Квартира", tagHome:"Удома",
+  tagTerm:"{y} р. навчання", tagLevels:"{n} навчальних блоки", tagRedSeal:"Red Seal",
+  trFee:"Плата за навчання", trFeeNote:"{n} блоків × {fee} — оплата за блок, не за рік.",
+  trTools:"Інструменти", trToolsNote:"Переважно витрати першого року.",
+  trPre:"Підготовчий курс коледжу", trWages:"Зарплата під час учнівства",
+  trWagesNote:"Близько {w1}/год на початку, до {wj}/год згодом, протягом {y} років. До сплати податків, житла та їжі.",
+  trTotal:"Зарплата мінус витрати на навчання",
+  trKOut:"Ваші витрати за весь період", trSOut:"Розподілено на {y} років, не одразу.",
+  trKGross:"Загальна зарплата за {y} років",
+  trSGross:"До податків. Сертифікований майстер заробляє близько {j} на рік при {wj}/год.",
+  trCompare:"<strong>Обережно з порівнянням.</strong> Екрани університету й коледжу враховують житло та їжу як витрати. Цей екран показує зарплату <em>до</em> податків, і житло та їжа ще не відняті.",
+  rtEmployer:"Пряме працевлаштування",
+  rtEmployerN:"Роботодавець наймає вас і реєструє як учня. Не треба платити за рік навчання наперед.",
+  rtPreapp:"Програма підготовки до учнівства",
+  rtPreappN:"Безкоштовне навчання від провінції плюс практика. Потім усе одно потрібен роботодавець.",
+  rtCollege:"Підготовчий сертифікат коледжу",
+  rtCollegeN:"Спершу рік у коледжі. Це коштує грошей, але покращує ваші шанси.",
+  rtOyap:"OYAP — програма учнівства для молоді Онтаріо",
+  rtOyapN:"Починайте накопичувати години у 11–12 класі через co-op, безкоштовно.",
+  oyapExtra:"Запитайте радника про OYAP — заявки зазвичай подають навесні.",
+  grantsNote:"Державні гранти на інструменти та навчання тут не враховані.",
+  emptyMsg:"<strong>Нічого не вибрано.</strong> Скористайтеся меню вище, і витрати з'являться тут.",
+  disclaimer:"<strong>Прочитайте:</strong> кожна сума тут — це <strong>приблизна оцінка</strong> за {yr} рік. Реальні ціни різняться та змінюються щороку. Завжди перевіряйте на сайті закладу перед рішенням. Інструмент поки не враховує OSAP, стипендії та RESP.",
+  footerMsg:"Відділ профорієнтації Georges Vanier SS · Модуль 1. Питання? Зверніться до свого радника."
+};
+
+/* ---- Farsi (فارسی) ---- */
+STRINGS.fa = {
+  title:"برآورد هزینه تحصیلات پس از دبیرستان",
+  blurb:"یک مسیر را انتخاب کنید، سپس یک رشته مشخص، تا ببینید هزینه یک سال و کل دوره چقدر می‌شود.",
+  langLabel:"زبان",
+  step1:"گام ۱", step2:"گام ۲", step3:"گام ۳",
+  s1h:"کدام مسیر را بررسی می‌کنید؟", s1hint:"هر زمان می‌توانید تغییر دهید.",
+  pUni:"دانشگاه", pUniD:"مدرک کارشناسی، ۳ تا ۵ سال",
+  pCol:"کالج", pColD:"دیپلم و مدرک، ۱ تا ۴ سال",
+  pApp:"کارآموزی حرفه‌ای", pAppD:"مشاغل فنی — هنگام یادگیری حقوق می‌گیرید",
+  headSchool:"مؤسسه، دانشکده و رشته را انتخاب کنید",
+  headTrade:"بخش، حرفه و مسیر آموزش را انتخاب کنید",
+  hintSchool:"هر منو پس از انتخاب قبلی باز می‌شود.",
+  hintTrade:"در کارآموزی ابتدا استخدام می‌شوید، سپس دوره‌های کوتاه آموزشی می‌گذرانید.",
+  labInst:"مؤسسه", labFac:"دانشکده", labProg:"رشته",
+  labSector:"بخش حرفه‌ای", labTrade:"حرفه", labRoute:"مسیر آموزش",
+  chInst:"یک مؤسسه انتخاب کنید…", chFac:"یک دانشکده انتخاب کنید…", chProg:"یک رشته انتخاب کنید…",
+  chSector:"یک بخش انتخاب کنید…", chTrade:"یک حرفه انتخاب کنید…", chRoute:"یک مسیر انتخاب کنید…",
+  nFac:"{n} دانشکده", nProg:"{n} رشته", nTrades:"{n} حرفه",
+  labLiving:"کجا زندگی می‌کنید؟",
+  livHome:"در خانه (رفت‌وآمد)", livRes:"خوابگاه با برنامه غذایی", livOff:"آپارتمان مشترک",
+  livSub:"این بیش از هر چیز دیگری هزینه را تغییر می‌دهد.",
+  labStatus:"وضعیت دانشجو", stDom:"ساکن انتاریو", stIntl:"دانشجوی بین‌المللی",
+  subDom:"نرخ‌های انتاریو نمایش داده می‌شود.",
+  subIntl:"نرخ‌های بین‌المللی تقریبی است — با مؤسسه بررسی کنید.",
+  estStrong:"این‌ها برآورد هستند، نه قیمت رسمی.",
+  estSchool:"این ارقام برآوردی برای سال {yr} و گرد شده‌اند. هزینه‌ها هر سال تغییر می‌کنند — پیش از هر تصمیم مالی بررسی کنید.",
+  estTrade:"دستمزدها میانگین انتاریو هستند و بسته به کارفرما و شهر بسیار متفاوت‌اند. این ارقام نقطه شروع گفت‌وگو هستند، نه پیش‌بینی.",
+  feeSchool:"مشاهده هزینه‌های رسمی {inst}",
+  feeTrade:"بررسی شرایط در Skilled Trades Ontario",
+  thCost:"هزینه سالانه", thMoney:"درآمد / هزینه", thAmount:"مبلغ",
+  rTuition:"شهریه", rFees:"هزینه‌های جانبی",
+  rRes:"خوابگاه و غذا", rOff:"اجاره و خوراک (۸ ماه)", rHome:"مسکن و غذا",
+  rBooks:"کتاب و لوازم", rTrans:"حمل‌ونقل", rPersonal:"هزینه‌های شخصی",
+  totalYear:"مجموع یک سال",
+  nTuitionDom:"نرخ انتاریو، تمام‌وقت.", nTuitionIntl:"نرخ بین‌المللی — برآورد.",
+  nFees:"انجمن دانشجویی، ورزش، بیمه درمانی، بلیت حمل‌ونقل، فناوری.",
+  nRes:"اتاق معمولی و برنامه غذایی متوسط.",
+  nOff:"آپارتمان مشترک نزدیک دانشگاه، به‌همراه غذا.",
+  nHome:"صفر در نظر گرفته شده — بزرگ‌ترین صرفه‌جویی ممکن.",
+  nBooks:"کتاب، وسایل آزمایشگاه، لپ‌تاپ.",
+  nTrans:"بلیت TTC، حدود ۱۰ ماه.", nTransRes:"گاهی سفر به خانه.",
+  nPersonal:"تلفن، پوشاک، تفریح، موارد اضطراری.",
+  bTuition:"شهریه", bHousing:"مسکن/غذا", bFees:"هزینه‌ها", bBooks:"کتاب",
+  bTrans:"حمل‌ونقل", bPersonal:"شخصی",
+  bEarn:"درآمد", bTools:"ابزار", bPre:"دوره مقدماتی",
+  kYear:"هزینه برآوردی — یک سال", sYear:"حدود {m} در ماه، به مدت ۱۲ ماه.",
+  kTotal:"کل دوره ({y} سال)",
+  sTotal:"با فرض ثابت ماندن هزینه‌ها. در واقعیت هر سال کمی افزایش می‌یابند.",
+  coCoop:"<strong>دوره کارآموزی این هزینه را کم می‌کند.</strong> دانشجویان اغلب ۱۲٬۰۰۰ تا ۲۵٬۰۰۰ دلار در هر دوره کاری درآمد دارند.",
+  coHome:"<strong>زندگی در خانه بیشترین صرفه‌جویی است.</strong> خوابگاه سالانه حدود {res} بیشتر هزینه دارد — یعنی حدود {tot} برای کل دوره.",
+  tagUni:"دانشگاه", tagCol:"کالج", tagApp:"کارآموزی",
+  tagYears:"دوره {y} ساله", tagDom:"انتاریو", tagIntl:"بین‌المللی",
+  tagRes:"خوابگاه", tagOff:"آپارتمان", tagHome:"در خانه",
+  tagTerm:"دوره {y} ساله", tagLevels:"{n} دوره آموزشی", tagRedSeal:"Red Seal",
+  trFee:"شهریه دوره‌های آموزشی", trFeeNote:"{n} دوره × {fee} — پرداخت برای هر دوره، نه هر سال.",
+  trTools:"ابزار و تجهیزات", trToolsNote:"بیشتر در سال اول خریداری می‌شود.",
+  trPre:"گواهی مقدماتی کالج", trWages:"دستمزد ناخالص در دوره کارآموزی",
+  trWagesNote:"حدود {w1} در ساعت در آغاز، تا {wj} در ساعت بعداً، طی {y} سال. پیش از مالیات و پیش از اجاره و غذا.",
+  trTotal:"دستمزد منهای هزینه‌های آموزش",
+  trKOut:"هزینه پرداختی شما در کل دوره", trSOut:"در {y} سال پخش می‌شود، نه یکجا.",
+  trKGross:"کل دستمزد در {y} سال",
+  trSGross:"پیش از مالیات. یک استادکار دارای گواهی حدود {j} در سال با {wj} در ساعت درآمد دارد.",
+  trCompare:"<strong>در مقایسه دقت کنید.</strong> صفحه‌های دانشگاه و کالج، مسکن و غذا را هزینه حساب می‌کنند. این صفحه دستمزد <em>پیش از</em> مالیات را نشان می‌دهد و اجاره و غذا هنوز از آن کم نشده است.",
+  rtEmployer:"کارآموزی مستقیم",
+  rtEmployerN:"کارفرما شما را استخدام و ثبت‌نام می‌کند. نیازی به پرداخت یک سال تحصیلی از پیش نیست.",
+  rtPreapp:"برنامه پیش‌کارآموزی",
+  rtPreappN:"آموزش رایگان دولتی به‌همراه کارورزی. پس از آن هنوز به کارفرما نیاز دارید.",
+  rtCollege:"گواهی مقدماتی کالج",
+  rtCollegeN:"ابتدا یک سال کالج. هزینه دارد اما موقعیت شما را نزد کارفرمایان بهتر می‌کند.",
+  rtOyap:"OYAP — برنامه کارآموزی جوانان انتاریو",
+  rtOyapN:"از پایه ۱۱ یا ۱۲ از طریق co-op ساعت کارآموزی جمع کنید، رایگان.",
+  oyapExtra:"درباره OYAP با مشاور خود صحبت کنید — ثبت‌نام معمولاً در بهار است.",
+  grantsNote:"کمک‌هزینه‌های دولتی برای ابزار و آموزش در بالا محاسبه نشده است.",
+  emptyMsg:"<strong>هنوز چیزی انتخاب نشده.</strong> از منوهای بالا استفاده کنید تا هزینه‌ها نمایش داده شود.",
+  disclaimer:"<strong>لطفاً بخوانید:</strong> هر رقم در این ابزار یک <strong>برآورد</strong> برای سال {yr} است. هزینه‌های واقعی متفاوت‌اند و هر سال تغییر می‌کنند. همیشه پیش از تصمیم‌گیری با خود مؤسسه بررسی کنید. این ابزار هنوز OSAP، بورسیه‌ها و RESP را محاسبه نمی‌کند.",
+  footerMsg:"بخش مشاوره Georges Vanier SS · بخش ۱ ابزار برنامه‌ریزی مالی. سؤالی دارید؟ با مشاور خود صحبت کنید."
+};
+
+/* ---- Dari (دری) ---- */
+STRINGS.prs = Object.assign({}, STRINGS.fa, {
+  title:"برآورد مصارف تحصیلات بعد از مکتب",
+  blurb:"یک مسیر را انتخاب کنید، بعد یک رشته مشخص، تا ببینید مصرف یک سال و تمام دوره چقدر می‌شود.",
+  s1h:"کدام مسیر را بررسی می‌کنید؟",
+  pApp:"شاگردی مسلکی", pAppD:"مسلک‌های فنی — هنگام آموزش معاش می‌گیرید",
+  headTrade:"بخش، مسلک و مسیر آموزش را انتخاب کنید",
+  hintTrade:"در شاگردی اول استخدام می‌شوید، بعد دوره‌های کوتاه آموزشی می‌خوانید.",
+  labSector:"بخش مسلکی", labTrade:"مسلک", chTrade:"یک مسلک انتخاب کنید…",
+  nTrades:"{n} مسلک",
+  labLiving:"کجا زندگی می‌کنید؟",
+  livHome:"در خانه (آمد و رفت)", livRes:"لیلیه با پروگرام غذایی",
+  thCost:"مصرف سالانه", thMoney:"عاید / مصرف",
+  rTuition:"فیس تحصیلی", rFees:"مصارف جانبی",
+  rRes:"لیلیه و غذا", rOff:"کرایه و مواد خوراکی (۸ ماه)", rHome:"مسکن و غذا",
+  rBooks:"کتاب و سامان", rTrans:"ترانسپورت", rPersonal:"مصارف شخصی",
+  totalYear:"مجموع یک سال",
+  kYear:"مصرف تخمینی — یک سال",
+  tagApp:"شاگردی", trFee:"فیس دوره‌های آموزشی",
+  trWages:"معاش ناخالص در دوره شاگردی",
+  estStrong:"این‌ها تخمین است، نه قیمت رسمی.",
+  emptyMsg:"<strong>هنوز چیزی انتخاب نشده.</strong> از منوهای بالا استفاده کنید تا مصارف نشان داده شود."
+});
+
+/* ---- Pashto (پښتو) ---- */
+STRINGS.ps = {
+  title:"د لوړو زده‌کړو د لګښت اټکل",
+  blurb:"یوه لاره وټاکئ، بیا یو ځانګړی څانګه، ترڅو وګورئ چې د یو کال او د ټولې دورې لګښت څومره دی.",
+  langLabel:"ژبه",
+  step1:"لومړی ګام", step2:"دوهم ګام", step3:"دریم ګام",
+  s1h:"کومه لاره څیړئ؟", s1hint:"هر وخت یې بدلولی شئ.",
+  pUni:"پوهنتون", pUniD:"لیسانس، ۳ تر ۵ کاله",
+  pCol:"کالج", pColD:"ډیپلوم او سند، ۱ تر ۴ کاله",
+  pApp:"مسلکي زده‌کړه", pAppD:"تخنیکي مسلکونه — د زده‌کړې پرمهال معاش اخلئ",
+  headSchool:"مؤسسه، پوهنځی او څانګه وټاکئ",
+  headTrade:"برخه، مسلک او د زده‌کړې لاره وټاکئ",
+  hintSchool:"هر مینو د پخوانۍ ټاکنې وروسته پرانیستل کیږي.",
+  hintTrade:"په مسلکي زده‌کړه کې لومړی په کار ګمارل کیږئ، بیا لنډې زده‌کړې کوئ.",
+  labInst:"مؤسسه", labFac:"پوهنځی", labProg:"څانګه",
+  labSector:"مسلکي برخه", labTrade:"مسلک", labRoute:"د زده‌کړې لاره",
+  chInst:"یوه مؤسسه وټاکئ…", chFac:"یو پوهنځی وټاکئ…", chProg:"یوه څانګه وټاکئ…",
+  chSector:"یوه برخه وټاکئ…", chTrade:"یو مسلک وټاکئ…", chRoute:"یوه لاره وټاکئ…",
+  nFac:"{n} پوهنځي", nProg:"{n} څانګې", nTrades:"{n} مسلکونه",
+  labLiving:"چیرې اوسیږئ؟",
+  livHome:"په کور کې (تګ‌راتګ)", livRes:"لیلیه د خواړو پروګرام سره", livOff:"ګډ اپارتمان",
+  livSub:"دا تر بل هر څه زیات لګښت بدلوي.",
+  labStatus:"د زده‌کوونکي حالت", stDom:"د انتاریو اوسیدونکی", stIntl:"بهرنی زده‌کوونکی",
+  subDom:"د انتاریو نرخونه ښودل کیږي.",
+  subIntl:"د بهرنیو نرخونه اټکلي دي — له مؤسسې سره یې وګورئ.",
+  estStrong:"دا اټکلونه دي، رسمي بیې نه دي.",
+  estSchool:"دا شمېرې د {yr} کال لپاره اټکلي او ګردې شوې دي. لګښتونه هر کال بدلیږي — د مالي پریکړې دمخه یې وګورئ.",
+  estTrade:"معاشونه د انتاریو اوسط دي او د کارګمارونکي او ښار له مخې ډېر توپیر لري. دا شمېرې د خبرو د پیل ټکی دی، وړاندوینه نه ده.",
+  feeSchool:"د {inst} رسمي لګښتونه وګورئ",
+  feeTrade:"شرایط په Skilled Trades Ontario کې وګورئ",
+  thCost:"کلنی لګښت", thMoney:"عاید / لګښت", thAmount:"اندازه",
+  rTuition:"د زده‌کړې فیس", rFees:"اړونده لګښتونه",
+  rRes:"لیلیه او خواړه", rOff:"کرایه او خواړه (۸ میاشتې)", rHome:"استوګنه او خواړه",
+  rBooks:"کتابونه او سامان", rTrans:"ترانسپورت", rPersonal:"شخصي لګښتونه",
+  totalYear:"د یو کال ټولټال",
+  nTuitionDom:"د انتاریو نرخ، بشپړ وخت.", nTuitionIntl:"بهرنی نرخ — اټکل.",
+  nFees:"د زده‌کوونکو ټولنه، سپورت، روغتیایي بیمه، د ترانسپورت کارت، ټکنالوژي.",
+  nRes:"عادي خونه او منځنی د خواړو پروګرام.",
+  nOff:"د پوهنتون شاوخوا ګډ اپارتمان، له خوړو سره.",
+  nHome:"صفر شمېرل شوی — تر ټولو لویه سپما.",
+  nBooks:"کتابونه، د لابراتوار سامان، لپ‌ټاپ.",
+  nTrans:"د TTC کارت، شاوخوا ۱۰ میاشتې.", nTransRes:"کله‌کله کور ته سفر.",
+  nPersonal:"ټیلیفون، جامې، تفریح، بیړني حالات.",
+  bTuition:"فیس", bHousing:"استوګنه/خواړه", bFees:"لګښتونه", bBooks:"کتابونه",
+  bTrans:"ترانسپورت", bPersonal:"شخصي",
+  bEarn:"عاید", bTools:"وسایل", bPre:"مقدماتي دوره",
+  kYear:"اټکلي لګښت — یو کال", sYear:"شاوخوا {m} په میاشت کې، د ۱۲ میاشتو لپاره.",
+  kTotal:"ټوله دوره ({y} کاله)",
+  sTotal:"داسې انګیرل کیږي چې لګښتونه ثابت پاتې شي. په حقیقت کې هر کال لږ لوړیږي.",
+  coCoop:"<strong>د کار دوره دا لګښت کموي.</strong> زده‌کوونکي ډېری وخت په هره کاري دوره کې ۱۲٬۰۰۰ تر ۲۵٬۰۰۰ ډالره ګټي.",
+  coHome:"<strong>په کور کې اوسیدل تر ټولو زیاته سپما ده.</strong> لیلیه به کلنۍ شاوخوا {res} زیاته لګښت ولري — د ټولې دورې لپاره شاوخوا {tot}.",
+  tagUni:"پوهنتون", tagCol:"کالج", tagApp:"مسلکي زده‌کړه",
+  tagYears:"{y} کلنه دوره", tagDom:"انتاریو", tagIntl:"بهرنی",
+  tagRes:"لیلیه", tagOff:"اپارتمان", tagHome:"په کور کې",
+  tagTerm:"{y} کلنه دوره", tagLevels:"{n} زده‌کړیزې دورې", tagRedSeal:"Red Seal",
+  trFee:"د زده‌کړې فیس", trFeeNote:"{n} دورې × {fee} — د هرې دورې لپاره، نه هر کال.",
+  trTools:"وسایل او تجهیزات", trToolsNote:"ډېری یې په لومړي کال کې اخیستل کیږي.",
+  trPre:"د کالج مقدماتي سند", trWages:"د زده‌کړې پرمهال ناخالص معاش",
+  trWagesNote:"په پیل کې شاوخوا {w1} په ساعت، وروسته تر {wj} پورې، د {y} کلونو لپاره. له مالیې، کرایې او خوړو دمخه.",
+  trTotal:"معاش منفي د زده‌کړې لګښتونه",
+  trKOut:"ستاسو ټول لګښت", trSOut:"په {y} کلونو ویشل شوی، یوځل نه.",
+  trKGross:"په {y} کلونو کې ټول معاش",
+  trSGross:"له مالیې دمخه. سند لرونکی استاد شاوخوا {j} په کال کې په {wj} په ساعت ګټي.",
+  trCompare:"<strong>په پرتله کولو کې پام وکړئ.</strong> د پوهنتون او کالج پاڼې استوګنه او خواړه لګښت ګڼي. دا پاڼه معاش <em>له</em> مالیې دمخه ښیي، او کرایه او خواړه لا هم ترې نه دي کم شوي.",
+  rtEmployer:"مستقیمه مسلکي زده‌کړه",
+  rtEmployerN:"کارګمارونکی تاسو په کار ګماري او ثبتوي. د یو زده‌کړیز کال دمخه تادیه اړینه نه ده.",
+  rtPreapp:"د مسلکي زده‌کړې مقدماتي پروګرام",
+  rtPreappN:"د حکومت لخوا وړیا زده‌کړه او کاري تجربه. وروسته بیا هم کارګمارونکي ته اړتیا لرئ.",
+  rtCollege:"د کالج مقدماتي سند",
+  rtCollegeN:"لومړی یو کال کالج. لګښت لري خو ستاسو موقف ښه کوي.",
+  rtOyap:"OYAP — د انتاریو د ځوانانو مسلکي پروګرام",
+  rtOyapN:"په ۱۱ یا ۱۲ ټولګي کې د co-op له لارې ساعتونه راټول کړئ، وړیا.",
+  oyapExtra:"د OYAP په اړه له خپل مشاور سره خبرې وکړئ — غوښتنلیکونه معمولاً په پسرلي کې دي.",
+  grantsNote:"د وسایلو او زده‌کړې لپاره حکومتي مرستې پورته نه دي شاملې.",
+  emptyMsg:"<strong>لا څه نه دي ټاکل شوي.</strong> پورتني مینوګانې وکاروئ، لګښتونه به دلته ښکاره شي.",
+  disclaimer:"<strong>مهرباني وکړئ ولولئ:</strong> هره شمېره دلته د {yr} کال لپاره <strong>اټکل</strong> ده. اصلي لګښتونه توپیر لري او هر کال بدلیږي. د پریکړې دمخه تل له مؤسسې سره وګورئ. دا وسیله لا OSAP، بورسونه او RESP نه شاملوي.",
+  footerMsg:"د Georges Vanier SS مشورتي څانګه · لومړۍ برخه. پوښتنې لرئ؟ له خپل مشاور سره خبرې وکړئ."
+};
+
+/* ---- Mandarin / Simplified Chinese ---- */
+STRINGS.zhHans = {
+  title:"高等教育费用估算工具",
+  blurb:"先选择一条升学路径，再选择具体专业，即可看到一年以及整个课程的大致费用。",
+  langLabel:"语言",
+  step1:"第一步", step2:"第二步", step3:"第三步",
+  s1h:"您想了解哪条路径？", s1hint:"随时可以更改。",
+  pUni:"大学", pUniD:"学士学位，3至5年",
+  pCol:"学院", pColD:"文凭与学位，1至4年",
+  pApp:"学徒制", pAppD:"技术行业——边工作边学习，有工资",
+  headSchool:"选择院校、学院和专业",
+  headTrade:"选择行业、工种和入行方式",
+  hintSchool:"每个菜单会在您做出上一个选择后开启。",
+  hintTrade:"学徒制是先被雇用，然后分阶段回校短期学习。",
+  labInst:"院校", labFac:"学院", labProg:"专业",
+  labSector:"行业类别", labTrade:"工种", labRoute:"入行方式",
+  chInst:"请选择院校…", chFac:"请选择学院…", chProg:"请选择专业…",
+  chSector:"请选择行业…", chTrade:"请选择工种…", chRoute:"请选择方式…",
+  nFac:"共 {n} 个学院", nProg:"共 {n} 个专业", nTrades:"共 {n} 个工种",
+  labLiving:"您将住在哪里？",
+  livHome:"住家里（通勤）", livRes:"住宿舍并包餐", livOff:"校外合租公寓",
+  livSub:"这一项对总费用的影响最大。",
+  labStatus:"学生身份", stDom:"安省本地学生", stIntl:"国际学生",
+  subDom:"显示安省本地学费。",
+  subIntl:"国际学费为粗略估算，请向院校确认。",
+  estStrong:"以下均为估算，并非正式报价。",
+  estSchool:"这些数字是 {yr} 学年的估算值，已作取整。学费每年都会变动——做出财务决定前请务必核实。",
+  estTrade:"工资为安省平均水平，因雇主、工会协议和地区而差异很大。请将这些数字作为讨论起点，而非预测。",
+  feeSchool:"查看 {inst} 的官方收费标准",
+  feeTrade:"在 Skilled Trades Ontario 查看行业要求",
+  thCost:"每年费用", thMoney:"收入 / 支出", thAmount:"金额",
+  rTuition:"学费", rFees:"杂费与附加费",
+  rRes:"住宿与膳食", rOff:"房租与伙食（8个月）", rHome:"住宿与伙食",
+  rBooks:"书本与用品", rTrans:"交通", rPersonal:"个人及其他开支",
+  totalYear:"一年合计",
+  nTuitionDom:"安省本地学费，全日制。", nTuitionIntl:"国际学费——仅为估算。",
+  nFees:"学生会、体育、医疗保险、交通卡、technology 费用。",
+  nRes:"标准宿舍加中档膳食计划。",
+  nOff:"校园附近合租公寓，含伙食。",
+  nHome:"按 0 元计算——这是最大的一项节省。",
+  nBooks:"教科书、实验用品、笔记本电脑。",
+  nTrans:"TTC 学生月票，约 10 个月。", nTransRes:"偶尔回家的路费。",
+  nPersonal:"手机、衣物、社交、应急。",
+  bTuition:"学费", bHousing:"住宿伙食", bFees:"杂费", bBooks:"书本",
+  bTrans:"交通", bPersonal:"个人",
+  bEarn:"收入", bTools:"工具", bPre:"入行预备",
+  kYear:"估算费用——一年", sYear:"约每月 {m}，共 12 个月。",
+  kTotal:"完整课程（{y} 年）",
+  sTotal:"假设费用维持不变。实际上学费每年通常会上涨几个百分点。",
+  coCoop:"<strong>带薪实习可抵消部分费用。</strong> 该专业的带薪实习每个学期通常可赚取 12,000 至 25,000 元。",
+  coHome:"<strong>住在家里最省钱。</strong> 改住宿舍每年约多花 {res}，整个课程约多花 {tot}。",
+  tagUni:"大学", tagCol:"学院", tagApp:"学徒制",
+  tagYears:"{y} 年制", tagDom:"本地", tagIntl:"国际",
+  tagRes:"住宿舍", tagOff:"校外住", tagHome:"住家里",
+  tagTerm:"{y} 年期", tagLevels:"{n} 个在校阶段", tagRedSeal:"Red Seal 红印章",
+  trFee:"在校学习费用", trFeeNote:"{n} 个阶段 × {fee}——按阶段收费，不是按年。",
+  trTools:"工具与设备", trToolsNote:"多数在第一年购买，各工种差别很大。",
+  trPre:"学院预备课程", trWages:"学徒期间的税前工资",
+  trWagesNote:"起薪约每小时 {w1}，之后升至约 {wj}，为期 {y} 年。此为税前收入，且尚未扣除房租和伙食。",
+  trTotal:"工资减去培训费用",
+  trKOut:"整个学徒期的自付费用", trSOut:"分摊在 {y} 年内，无需一次付清。",
+  trKGross:"{y} 年的税前总收入",
+  trSGross:"税前。取得资格后，按每小时 {wj} 计算，年收入约 {j}。",
+  trCompare:"<strong>比较时请留意。</strong> 大学和学院页面把住宿伙食算作支出；本页显示的是<em>税前</em>工资，房租和伙食尚未从中扣除。也请考虑各条路径在 10 年、20 年后的收入，而不只是学习期间。",
+  rtEmployer:"直接入职学徒",
+  rtEmployerN:"由雇主聘用并为您注册学徒身份，无需先自费读一年书。",
+  rtPreapp:"预备学徒课程",
+  rtPreappN:"省府资助的免费一级培训加实习。之后仍需自行找到雇主。",
+  rtCollege:"学院预备证书课程",
+  rtCollegeN:"先读一年学院课程。需要自费，但更容易获得雇主青睐。",
+  rtOyap:"OYAP——安省青年学徒计划",
+  rtOyapN:"在 11 或 12 年级通过带薪实习累积学徒工时，免费。",
+  oyapExtra:"请向辅导员咨询 OYAP，通常在春季申请。",
+  grantsNote:"政府提供的工具补助和培训补助未计入上表。",
+  emptyMsg:"<strong>尚未选择。</strong> 请使用上方菜单，费用明细将显示在这里。",
+  disclaimer:"<strong>请注意：</strong>本工具中的每个金额都是 {yr} 学年的<strong>估算值</strong>。实际费用因专业、校区和年级而异，且每年变动。做出任何财务决定前，请务必核对院校的官方收费标准。本工具尚未计入 OSAP、奖学金或 RESP。",
+  footerMsg:"Georges Vanier 中学辅导部 · 财务规划工具第一部分。有疑问请咨询您的辅导员。"
+};
+
+/* ---- Cantonese / Traditional Chinese ---- */
+STRINGS.zhHant = {
+  title:"專上教育費用估算工具",
+  blurb:"先揀一條升學路徑，再揀具體課程，就可以睇到一年同埋成個課程大約要幾多錢。",
+  langLabel:"語言",
+  step1:"第一步", step2:"第二步", step3:"第三步",
+  s1h:"你想了解邊條路徑？", s1hint:"隨時可以改。",
+  pUni:"大學", pUniD:"學士學位，3 至 5 年",
+  pCol:"學院", pColD:"文憑同學位，1 至 4 年",
+  pApp:"學徒制", pAppD:"技術行業——一邊做嘢一邊學，有人工",
+  headSchool:"揀院校、學院同課程",
+  headTrade:"揀行業、工種同入行方式",
+  hintSchool:"揀咗上一項之後，下一個選單先會開。",
+  hintTrade:"學徒制係先受僱，然後分階段返學校短期上堂。",
+  labInst:"院校", labFac:"學院", labProg:"課程",
+  labSector:"行業類別", labTrade:"工種", labRoute:"入行方式",
+  chInst:"請揀院校…", chFac:"請揀學院…", chProg:"請揀課程…",
+  chSector:"請揀行業…", chTrade:"請揀工種…", chRoute:"請揀方式…",
+  nFac:"共 {n} 個學院", nProg:"共 {n} 個課程", nTrades:"共 {n} 個工種",
+  labLiving:"你會住喺邊？",
+  livHome:"住屋企（返學車程）", livRes:"住宿舍連膳食", livOff:"校外合租單位",
+  livSub:"呢項對總費用影響最大。",
+  labStatus:"學生身分", stDom:"安省本地學生", stIntl:"國際學生",
+  subDom:"顯示安省本地學費。",
+  subIntl:"國際學費係粗略估算，請向院校確認。",
+  estStrong:"以下全部係估算，唔係正式報價。",
+  estSchool:"呢啲數字係 {yr} 學年嘅估算，已經取整。學費每年都會變——做財務決定之前請核實。",
+  estTrade:"人工係安省平均水平，會因僱主、工會協議同地區有好大差異。請當呢啲數字係傾談嘅起點，唔係預測。",
+  feeSchool:"查看 {inst} 嘅官方收費",
+  feeTrade:"喺 Skilled Trades Ontario 查看行業要求",
+  thCost:"每年費用", thMoney:"收入 / 支出", thAmount:"金額",
+  rTuition:"學費", rFees:"雜費同附加費",
+  rRes:"宿舍同膳食", rOff:"租金同伙食（8 個月）", rHome:"住宿同伙食",
+  rBooks:"書本同用品", rTrans:"交通", rPersonal:"個人同其他開支",
+  totalYear:"一年合計",
+  nTuitionDom:"安省本地學費，全日制。", nTuitionIntl:"國際學費——只係估算。",
+  nFees:"學生會、體育、醫療保險、交通證、科技費用。",
+  nRes:"標準宿舍連中檔膳食計劃。",
+  nOff:"校園附近合租單位，連伙食。",
+  nHome:"當 0 元計——呢個係最大嘅節省。",
+  nBooks:"教科書、實驗用品、手提電腦。",
+  nTrans:"TTC 學生月票，大約 10 個月。", nTransRes:"偶爾返屋企嘅車費。",
+  nPersonal:"電話、衫、social、應急錢。",
+  bTuition:"學費", bHousing:"住宿伙食", bFees:"雜費", bBooks:"書本",
+  bTrans:"交通", bPersonal:"個人",
+  bEarn:"收入", bTools:"工具", bPre:"入行預備",
+  kYear:"估算費用——一年", sYear:"大約每月 {m}，共 12 個月。",
+  kTotal:"完整課程（{y} 年）",
+  sTotal:"假設費用唔變。實際上學費每年通常會升幾個百分點。",
+  coCoop:"<strong>帶薪實習可以抵消部分費用。</strong> 呢個課程嘅帶薪實習，每個學期通常可以賺 12,000 至 25,000 元。",
+  coHome:"<strong>住屋企最慳錢。</strong> 改住宿舍每年大約多使 {res}，成個課程大約多使 {tot}。",
+  tagUni:"大學", tagCol:"學院", tagApp:"學徒制",
+  tagYears:"{y} 年制", tagDom:"本地", tagIntl:"國際",
+  tagRes:"住宿舍", tagOff:"校外住", tagHome:"住屋企",
+  tagTerm:"{y} 年期", tagLevels:"{n} 個在校階段", tagRedSeal:"Red Seal 紅印章",
+  trFee:"在校上堂費用", trFeeNote:"{n} 個階段 × {fee}——按階段收費，唔係按年。",
+  trTools:"工具同設備", trToolsNote:"多數第一年買，各工種差好遠。",
+  trPre:"學院預備課程", trWages:"學徒期間嘅稅前人工",
+  trWagesNote:"起薪大約每小時 {w1}，之後升到大約 {wj}，為期 {y} 年。呢個係稅前收入，未扣租金同伙食。",
+  trTotal:"人工減去培訓費用",
+  trKOut:"成個學徒期自己要俾嘅錢", trSOut:"分攤喺 {y} 年入面，唔使一次過俾。",
+  trKGross:"{y} 年嘅稅前總收入",
+  trSGross:"稅前。攞到資格之後，按每小時 {wj} 計，一年大約 {j}。",
+  trCompare:"<strong>比較嘅時候要留意。</strong> 大學同學院嗰版將住宿伙食當支出；呢版顯示嘅係<em>稅前</em>人工，租金同伙食仲未扣。亦都要諗吓每條路徑 10 年、20 年之後賺幾多，唔淨係讀書嗰陣。",
+  rtEmployer:"直接入職學徒",
+  rtEmployerN:"由僱主聘用同幫你註冊學徒身分，唔使先自費讀一年書。",
+  rtPreapp:"預備學徒課程",
+  rtPreappN:"省政府資助嘅免費一級培訓連實習。之後仲係要自己搵僱主。",
+  rtCollege:"學院預備證書課程",
+  rtCollegeN:"先讀一年學院課程。要自費，但係僱主可能會早啲揀你。",
+  rtOyap:"OYAP——安省青年學徒計劃",
+  rtOyapN:"喺 11 或 12 年級透過 co-op 儲學徒工時，免費。",
+  oyapExtra:"請向輔導員問吓 OYAP，通常春季申請。",
+  grantsNote:"政府嘅工具補助同培訓補助未計入上面。",
+  emptyMsg:"<strong>仲未揀。</strong> 請用上面嘅選單，費用明細會喺呢度顯示。",
+  disclaimer:"<strong>請注意：</strong>本工具入面每個金額都係 {yr} 學年嘅<strong>估算</strong>。實際費用會因課程、校區同年級而異，而且每年變。做任何財務決定之前，請務必核對院校嘅官方收費。本工具仲未計 OSAP、獎學金或者 RESP。",
+  footerMsg:"Georges Vanier 中學輔導部 · 財務規劃工具第一部分。有問題請問你嘅輔導員。"
+};
+
+/* ==========================================================================
    STATE + HELPERS
    ========================================================================== */
-let path = "university";
+let path  = "university";
+let lang  = "en";
+let level = "std";
+
 const $ = id => document.getElementById(id);
 const money = n => "$" + Math.round(n).toLocaleString("en-CA");
 const decode = s => { const d = document.createElement("textarea"); d.innerHTML = s; return d.value; };
+/* Keep currency and codes left-to-right inside RTL sentences. */
+const ltr = s => LANGS[lang].dir === "rtl" ? "<span class='ltr'>" + s + "</span>" : s;
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+/* Look up a string: current language -> plain English -> standard English.
+   The fallback chain means a missing translation degrades to English rather
+   than showing a blank or a key name. */
+function t(key, vars){
+  const pack = lang === "en" ? STRINGS.en[level] : STRINGS[lang];
+  let s = (pack && pack[key]) || STRINGS.en.plain[key] || STRINGS.en.std[key] || "";
+  if(vars) Object.keys(vars).forEach(k => { s = s.split("{"+k+"}").join(vars[k]); });
+  return s;
+}
+
+function applyI18n(){
+  const L = LANGS[lang];
+  document.documentElement.setAttribute("lang", L.htmlLang);
+  document.documentElement.setAttribute("dir", L.dir);
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    el.textContent = t(el.getAttribute("data-i18n"));
+  });
+
+  $("tTitle").textContent     = t("title");
+  $("tBlurb").textContent     = t("blurb");
+  $("tLangLabel").textContent = t("langLabel");
+  $("lvlStd").textContent     = t("lvlStd");
+  $("lvlPlain").textContent   = t("lvlPlain");
+  $("emptyMsg").innerHTML     = t("emptyMsg");
+  $("disclaimer").innerHTML   = t("disclaimer", {yr: DATA_YEAR});
+  $("footerMsg").textContent  = t("footerMsg");
+
+  /* Reading-level toggle is English-only — see the note in the LANGS block. */
+  $("lvlWrap").classList.toggle("hide", !L.hasLevels);
+
+  /* Unreviewed-translation notice. */
+  const tn = $("transNote");
+  if(L.REVIEWED){
+    tn.classList.add("hide");
+  }else{
+    tn.classList.remove("hide");
+    tn.innerHTML = "<strong>Machine translation — not yet checked by a person.</strong> "
+      + "This page was translated automatically and is waiting on review by a fluent speaker. "
+      + "School, program and trade names stay in English on purpose, because that is how you "
+      + "will see them on applications. If anything here is unclear, please ask a counsellor.";
+  }
+  $("subStatus").textContent = t($("selStatus").value === "international" ? "subIntl" : "subDom");
+}
 
 function fill(sel, items, placeholder){
   sel.innerHTML = "";
@@ -974,33 +1883,78 @@ function currentSet(){
 }
 
 /* ==========================================================================
+   INSTITUTION PROFILE CARD
+   Shows the crest tile, the one-line description, and facts that sharpen as
+   the user picks a faculty and then a program.
+   ========================================================================== */
+function renderProfile(){
+  const box = $("profile");
+  const set = currentSet();
+  const a   = set[$("selA").value];
+  if(!a){ box.classList.remove("on"); return; }
+
+  box.style.setProperty("--crest", a.brand || "#6b1f2a");
+  $("crest").textContent = decode(a.short || "");
+  $("pName").textContent = decode(a.name);
+  /* Profile text is authored in English only; mark it so screen readers
+     switch voice rather than reading English with the page's language. */
+  $("pAbout").setAttribute("lang", "en");
+  $("pAbout").textContent = decode(a.about || a.blurb || "");
+
+  const facts = [];
+  const bKey  = $("selB").value;
+  const cVal  = $("selC").value;
+
+  if(path === "apprenticeship"){
+    facts.push([t("nTrades", {n: Object.keys(a.trades).length}), false]);
+    if(bKey){
+      const tr = a.trades[bKey];
+      facts.push([t("tagTerm",   {y: tr.term}),   false]);
+      facts.push([t("tagLevels", {n: tr.levels}), false]);
+      if(tr.redseal) facts.push([t("tagRedSeal"), true]);
+      facts.push([money(tr.wageJ) + "/hr", true]);
+    }
+  }else{
+    facts.push([t("nFac", {n: Object.keys(a.faculties).length}), false]);
+    if(bKey){
+      const progs = a.faculties[bKey];
+      facts.push([decode(bKey), false]);
+      facts.push([t("nProg", {n: progs.length}), false]);
+      if(cVal !== ""){
+        const p = progs[Number(cVal)];
+        facts.push([t("tagYears", {y: p.y}), false]);
+        facts.push([money(p.t) + "/yr", true]);
+        if(/co-op/i.test(p.n)) facts.push(["Co-op", true]);
+      }
+    }
+  }
+  $("pFacts").innerHTML = facts
+    .map(f => "<span class='pfact" + (f[1] ? " hi" : "") + "'>" + esc(f[0]) + "</span>").join("");
+  box.classList.add("on");
+}
+
+/* ==========================================================================
    CASCADE WIRING
    ========================================================================== */
 function relabel(){
   const isTrade = path === "apprenticeship";
-  $("labA").textContent = isTrade ? "Trade sector" : "Institution";
-  $("labB").textContent = isTrade ? "Trade" : "Faculty";
-  $("labC").textContent = isTrade ? "Training pathway" : "Program";
-  $("cascadeHead").textContent = isTrade
-    ? "Pick a sector, trade and training pathway"
-    : "Pick an institution, faculty and program";
-  $("cascadeHint").textContent = isTrade
-    ? "In an apprenticeship you are hired first, then attend school in short blocks. Each menu fills in based on the one before it."
-    : "Each menu fills in based on the one before it.";
-  $("livingField").style.display = isTrade ? "none" : "";
-  $("selStatus").parentElement.style.display = isTrade ? "none" : "";
+  $("labA").textContent = t(isTrade ? "labSector" : "labInst");
+  $("labB").textContent = t(isTrade ? "labTrade"  : "labFac");
+  $("labC").textContent = t(isTrade ? "labRoute"  : "labProg");
+  $("cascadeHead").textContent = t(isTrade ? "headTrade" : "headSchool");
+  $("cascadeHint").textContent = t(isTrade ? "hintTrade" : "hintSchool");
   $("optsBox").style.display = isTrade ? "none" : "";
-  $("thItem").textContent = isTrade ? "Money in / money out" : "Cost per year";
 }
 
 function loadA(){
   relabel();
   const set = currentSet();
-  const items = Object.keys(set).map(k => [k, set[k].name]);
-  fill($("selA"), items, path === "apprenticeship" ? "Choose a sector…" : "Choose an institution…");
+  fill($("selA"), Object.keys(set).map(k => [k, set[k].name]),
+       t(path === "apprenticeship" ? "chSector" : "chInst"));
   fill($("selB"), [], "—");
   fill($("selC"), [], "—");
-  $("subA").textContent = ""; $("subB").textContent = ""; $("subC").textContent = "";
+  $("subA").textContent=""; $("subB").textContent=""; $("subC").textContent="";
+  $("profile").classList.remove("on");
   hideResults();
 }
 
@@ -1008,17 +1962,17 @@ function loadB(){
   const set = currentSet();
   const a = set[$("selA").value];
   fill($("selC"), [], "—");
-  $("subB").textContent = ""; $("subC").textContent = "";
-  if(!a){ fill($("selB"), [], "—"); $("subA").textContent=""; hideResults(); return; }
+  $("subB").textContent=""; $("subC").textContent="";
+  if(!a){ fill($("selB"), [], "—"); $("subA").textContent=""; $("profile").classList.remove("on"); hideResults(); return; }
 
   if(path === "apprenticeship"){
-    $("subA").textContent = a.blurb;
-    fill($("selB"), Object.keys(a.trades).map(k => [k, k]), "Choose a trade…");
-    $("subB").textContent = Object.keys(a.trades).length + " trades listed";
+    $("subA").textContent = t("nTrades", {n: Object.keys(a.trades).length});
+    fill($("selB"), Object.keys(a.trades).map(k => [k, k]), t("chTrade"));
   }else{
-    $("subA").textContent = Object.keys(a.faculties).length + " faculties listed";
-    fill($("selB"), Object.keys(a.faculties).map(k => [k, k]), "Choose a faculty…");
+    $("subA").textContent = t("nFac", {n: Object.keys(a.faculties).length});
+    fill($("selB"), Object.keys(a.faculties).map(k => [k, k]), t("chFac"));
   }
+  renderProfile();
   hideResults();
 }
 
@@ -1027,31 +1981,31 @@ function loadC(){
   const a = set[$("selA").value];
   const bKey = $("selB").value;
   $("subC").textContent = "";
-  if(!a || !bKey){ fill($("selC"), [], "—"); hideResults(); return; }
+  if(!a || !bKey){ fill($("selC"), [], "—"); renderProfile(); hideResults(); return; }
 
   if(path === "apprenticeship"){
-    const t = a.trades[bKey];
-    $("subB").textContent = t.term + "-year term · " + t.levels + " in-school levels"
-                          + (t.redseal ? " · Red Seal" : "");
+    const tr = a.trades[bKey];
+    $("subB").textContent = t("tagTerm",{y:tr.term}) + " · " + t("tagLevels",{n:tr.levels});
     fill($("selC"), [
-      ["employer","Find an employer first (direct-entry apprenticeship)"],
-      ["preapp","Pre-apprenticeship program (free, then find a sponsor)"],
-      ["college","College pre-trades certificate, then apprentice"],
-      ["oyap","OYAP — start while still in high school"]
-    ], "Choose a route in…");
+      ["employer", t("rtEmployer")],
+      ["preapp",   t("rtPreapp")],
+      ["college",  t("rtCollege")],
+      ["oyap",     t("rtOyap")]
+    ], t("chRoute"));
   }else{
     const progs = a.faculties[bKey];
-    $("subB").textContent = progs.length + " programs listed";
-    fill($("selC"), progs.map((p,i) => [String(i), p.n]), "Choose a program…");
+    $("subB").textContent = t("nProg", {n: progs.length});
+    fill($("selC"), progs.map((p,i) => [String(i), p.n]), t("chProg"));
   }
+  renderProfile();
   hideResults();
 }
 
 /* ==========================================================================
    RESULTS
    ========================================================================== */
-function hideResults(){ $("results").classList.remove("on"); $("emptyState").style.display = ""; }
-function showResults(){ $("results").classList.add("on"); $("emptyState").style.display = "none"; }
+function hideResults(){ $("results").classList.remove("on"); $("emptyState").style.display=""; }
+function showResults(){ $("results").classList.add("on"); $("emptyState").style.display="none"; }
 
 function row(label, note, amount, cls){
   return "<tr" + (cls ? " class='"+cls+"'" : "") + "><td><span class='lbl'>" + label + "</span>"
@@ -1064,24 +2018,11 @@ function bars(items){
   return items.filter(i => i[1] > 0).map((i,idx) =>
     "<div class='bar'><span class='bl'>" + i[0] + "</span>"
     + "<span class='btrack'><span class='bfill" + (idx%2 ? " g" : "") + "' style='width:"
-    + Math.max(3, (i[1]/max)*100) + "%'></span></span>"
+    + Math.max(3,(i[1]/max)*100) + "%'></span></span>"
     + "<span class='bv'>" + money(i[1]) + "</span></div>"
   ).join("");
 }
 
-function render(){
-  const set = currentSet();
-  const a = set[$("selA").value];
-  const bKey = $("selB").value;
-  const cVal = $("selC").value;
-  if(!a || !bKey || cVal === ""){ hideResults(); return; }
-
-  if(path === "apprenticeship") renderTrade(a, bKey, cVal);
-  else renderSchool(a, bKey, cVal);
-  showResults();
-}
-
-/* Point the estimate flag at the chosen institution's own fee schedule. */
 function setFeeLink(url, label, text){
   $("estText").innerHTML = text;
   const a = $("feeLink");
@@ -1089,9 +2030,19 @@ function setFeeLink(url, label, text){
     a.href = url;
     a.innerHTML = label + " <span class='ext'>&#8599;</span>";
     a.style.display = "";
-  }else{
-    a.style.display = "none";
-  }
+  }else{ a.style.display = "none"; }
+}
+
+function render(){
+  const set = currentSet();
+  const a = set[$("selA").value];
+  const bKey = $("selB").value;
+  const cVal = $("selC").value;
+  renderProfile();
+  if(!a || !bKey || cVal === ""){ hideResults(); return; }
+  if(path === "apprenticeship") renderTrade(a, bKey, cVal);
+  else renderSchool(a, bKey, cVal);
+  showResults();
 }
 
 function renderSchool(inst, facKey, idx){
@@ -1103,145 +2054,106 @@ function renderSchool(inst, facKey, idx){
   const books   = path === "university" ? BOOKS_UNI : BOOKS_COL;
   const housing = living === "res" ? inst.res : living === "off" ? inst.off : FOOD_HOME;
   const transit = living === "res" ? 400 : TRANSIT;
+  const yearly  = tuition + inst.anc + housing + books + transit + PERSONAL;
 
-  setFeeLink(inst.fees, "Check " + decode(inst.name) + "'s official fee schedule",
-    "Figures are planning approximations for the " + DATA_YEAR + " year and are rounded. "
-    + "Tuition varies by campus, course load and year of study, and changes annually — "
-    + "confirm before making any financial decision.");
+  setFeeLink(inst.fees, t("feeSchool", {inst: decode(inst.name)}), t("estSchool", {yr: DATA_YEAR}));
 
   $("rProg").textContent = decode(p.n);
   $("rInst").textContent = decode(inst.name) + " — " + decode(facKey);
   $("rTags").innerHTML =
-      "<span class='tag'>" + (path === "university" ? "University" : "College") + "</span>"
-    + "<span class='tag'>" + p.y + "-year program</span>"
-    + "<span class='tag'>" + (intl ? "International" : "Domestic") + "</span>"
-    + "<span class='tag'>" + (living === "res" ? "Residence" : living === "off" ? "Off-campus" : "Living at home") + "</span>";
+      "<span class='tag'>" + t(path === "university" ? "tagUni" : "tagCol") + "</span>"
+    + "<span class='tag'>" + t("tagYears",{y:p.y}) + "</span>"
+    + "<span class='tag'>" + t(intl ? "tagIntl" : "tagDom") + "</span>"
+    + "<span class='tag'>" + t(living === "res" ? "tagRes" : living === "off" ? "tagOff" : "tagHome") + "</span>";
 
-  const livingLabel = living === "res" ? "Residence &amp; meal plan"
-                    : living === "off" ? "Rent &amp; groceries (8 months)"
-                    : "Housing &amp; food";
-  const livingNote  = living === "res" ? "Standard room plus a mid-tier meal plan."
-                    : living === "off" ? "Shared apartment near campus, plus food."
-                    : "Assumed covered at home — the single biggest saving available.";
-
+  $("thItem").textContent = t("thCost");
   $("rBody").innerHTML =
-      row("Tuition", intl ? "International rate — estimate only." : "Domestic Ontario rate, full course load.", money(tuition))
-    + row("Ancillary &amp; incidental fees", "Student union, athletics, health plan, U-Pass, technology.", money(inst.anc))
-    + row(livingLabel, livingNote, money(housing))
-    + row("Books &amp; supplies", "Textbooks, lab kits, software, a working laptop amortised.", money(books))
-    + row("Transportation", living === "res" ? "Occasional travel home." : "TTC post-secondary pass, ~10 months.", money(transit))
-    + row("Personal &amp; miscellaneous", "Phone, clothing, social life, emergencies.", money(PERSONAL))
-    + "<tr class='total'><td>Total, one year</td><td class='num'>"
-      + money(tuition + inst.anc + housing + books + transit + PERSONAL) + "</td></tr>";
+      row(t("rTuition"), t(intl ? "nTuitionIntl" : "nTuitionDom"), ltr(money(tuition)))
+    + row(t("rFees"), t("nFees"), ltr(money(inst.anc)))
+    + row(t(living === "res" ? "rRes" : living === "off" ? "rOff" : "rHome"),
+          t(living === "res" ? "nRes" : living === "off" ? "nOff" : "nHome"), ltr(money(housing)))
+    + row(t("rBooks"), t("nBooks"), ltr(money(books)))
+    + row(t("rTrans"), t(living === "res" ? "nTransRes" : "nTrans"), ltr(money(transit)))
+    + row(t("rPersonal"), t("nPersonal"), ltr(money(PERSONAL)))
+    + "<tr class='total'><td>" + t("totalYear") + "</td><td class='num'>" + ltr(money(yearly)) + "</td></tr>";
 
-  const yearly = tuition + inst.anc + housing + books + transit + PERSONAL;
   $("rBars").innerHTML = bars([
-    ["Tuition", tuition],
-    ["Housing/food", housing],
-    ["Fees", inst.anc],
-    ["Books", books],
-    ["Transport", transit],
-    ["Personal", PERSONAL]
+    [t("bTuition"),tuition],[t("bHousing"),housing],[t("bFees"),inst.anc],
+    [t("bBooks"),books],[t("bTrans"),transit],[t("bPersonal"),PERSONAL]
   ]);
 
-  $("kYear").textContent = "Estimated cost — one year";
+  $("kYear").textContent = t("kYear");
   $("vYear").textContent = money(yearly);
   $("vYear").className = "v";
-  $("sYear").textContent = "About " + money(yearly/12) + " a month across 12 months.";
-  $("kTotal").textContent = "Full credential (" + p.y + " years)";
+  $("sYear").textContent = t("sYear", {m: money(yearly/12)});
+  $("kTotal").textContent = t("kTotal", {y: p.y});
   $("vTotal").textContent = money(yearly * p.y);
-  $("sTotal").textContent = "Assumes today's costs repeat. Real tuition typically rises a few percent a year.";
+  $("vTotal").className = "v";
+  $("sTotal").textContent = t("sTotal");
 
   const co = /co-op/i.test(p.n);
   $("rCallout").hidden = !(co || living === "home");
-  $("rCallout").innerHTML = co
-    ? "<strong>Co-op offsets this.</strong> Paid co-op terms in this program commonly bring in "
-      + "$12,000–$25,000 per work term, which can cover a large share of the sticker price above."
-    : "<strong>Living at home is the biggest lever.</strong> Choosing residence instead would add roughly "
-      + money(inst.res) + " a year — about " + money(inst.res * p.y) + " over the whole credential.";
+  $("rCallout").innerHTML = co ? t("coCoop")
+    : t("coHome", {res: money(inst.res), tot: money(inst.res * p.y)});
 }
 
 function renderTrade(sector, tradeKey, route){
-  const t = sector.trades[tradeKey];
-
+  const tr = sector.trades[tradeKey];
   const ROUTES = {
-    employer:{ label:"Direct-entry apprenticeship",
-      note:"Hired by an employer who registers you as an apprentice. No up-front school year.",
-      extraCost:0, extraYears:0 },
-    preapp:{ label:"Pre-apprenticeship program",
-      note:"Provincially funded, tuition-free level-1 training plus a work placement. You still need a sponsor afterwards.",
-      extraCost:0, extraYears:0.5 },
-    college:{ label:"College pre-trades certificate",
-      note:"A one-year college certificate first. Costs money up front, but strengthens your position with employers.",
-      extraCost:4400, extraYears:1 },
-    oyap:{ label:"OYAP — Ontario Youth Apprenticeship Program",
-      note:"Start accumulating apprenticeship hours in Grade 11/12 through a co-op placement, at no cost.",
-      extraCost:0, extraYears:0 }
+    employer:{key:"rtEmployer", extraCost:0},
+    preapp:  {key:"rtPreapp",   extraCost:0},
+    college: {key:"rtCollege",  extraCost:4400},
+    oyap:    {key:"rtOyap",     extraCost:0}
   };
   const r = ROUTES[route];
+  const rLabel = t(r.key), rNote = t(r.key + "N");
 
   const hoursYr   = 1800;
-  const schoolWks = t.levels * 8;                       // ~8 weeks per in-school level
-  const paidHrs   = hoursYr - (schoolWks/t.term) * 40;  // rough: school time is unpaid
-  const avgWage   = (t.wage1 + t.wageJ) / 2;
-  const earnYr1   = Math.round(t.wage1 * paidHrs / 100) * 100;
-  const earnTotal = Math.round(avgWage * paidHrs * t.term / 100) * 100;
-  const feesTotal = t.levels * t.lvlFee;
-  const costTotal = feesTotal + t.tools + r.extraCost;
+  const schoolWks = tr.levels * 8;
+  const paidHrs   = hoursYr - (schoolWks / tr.term) * 40;
+  const avgWage   = (tr.wage1 + tr.wageJ) / 2;
+  const earnTotal = Math.round(avgWage * paidHrs * tr.term / 100) * 100;
+  const feesTotal = tr.levels * tr.lvlFee;
+  const costTotal = feesTotal + tr.tools + r.extraCost;
   const netTotal  = earnTotal - costTotal;
-  const jrYear    = Math.round(t.wageJ * 2000 / 100) * 100;
+  const jrYear    = Math.round(tr.wageJ * 2000 / 100) * 100;
 
-  setFeeLink("https://www.skilledtradesontario.ca/", "Check trade requirements at Skilled Trades Ontario",
-    "Wage figures are broad Ontario averages and vary enormously by employer, union agreement and "
-    + "region. In-school fees are set by the delivery college. Treat every number here as a "
-    + "starting point for a conversation, not a forecast.");
+  setFeeLink("https://www.skilledtradesontario.ca/", t("feeTrade"), t("estTrade"));
 
   $("rProg").textContent = decode(tradeKey);
-  $("rInst").textContent = decode(sector.name) + " sector — " + r.label;
+  $("rInst").textContent = decode(sector.name) + " — " + rLabel;
   $("rTags").innerHTML =
-      "<span class='tag'>Apprenticeship</span>"
-    + "<span class='tag'>" + t.term + "-year term</span>"
-    + "<span class='tag'>" + t.levels + " in-school levels</span>"
-    + (t.redseal ? "<span class='tag'>Red Seal trade</span>" : "");
+      "<span class='tag'>" + t("tagApp") + "</span>"
+    + "<span class='tag'>" + t("tagTerm",{y:tr.term}) + "</span>"
+    + "<span class='tag'>" + t("tagLevels",{n:tr.levels}) + "</span>"
+    + (tr.redseal ? "<span class='tag'>" + t("tagRedSeal") + "</span>" : "");
 
+  $("thItem").textContent = t("thMoney");
   $("rBody").innerHTML =
-      row("In-school tuition", t.levels + " levels &times; " + money(t.lvlFee)
-          + " — paid once per level, not per year.", money(feesTotal))
-    + row("Tools &amp; equipment", "Mostly a first-year outlay; some trades need far more than others.", money(t.tools))
-    + (r.extraCost ? row("Pre-trades certificate", r.note, money(r.extraCost)) : "")
-    + row("Gross wages while apprenticing", "Roughly " + money(t.wage1) + "/hr at the start rising toward "
-          + money(t.wageJ) + "/hr, over " + t.term + " years. Before tax, and before rent, food and "
-          + "transport — which this row does <em>not</em> deduct.", "+" + money(earnTotal), "credit")
-    + "<tr class='total'><td>Gross wages less training costs</td><td class='num'>"
-      + (netTotal >= 0 ? "+" : "") + money(netTotal) + "</td></tr>";
+      row(t("trFee"), t("trFeeNote",{n:tr.levels, fee:ltr(money(tr.lvlFee))}), ltr(money(feesTotal)))
+    + row(t("trTools"), t("trToolsNote"), ltr(money(tr.tools)))
+    + (r.extraCost ? row(t("trPre"), rNote, ltr(money(r.extraCost))) : "")
+    + row(t("trWages"), t("trWagesNote",{w1:ltr(money(tr.wage1)), wj:ltr(money(tr.wageJ)), y:tr.term}),
+          "+" + ltr(money(earnTotal)), "credit")
+    + "<tr class='total'><td>" + t("trTotal") + "</td><td class='num'>"
+      + (netTotal >= 0 ? "+" : "") + ltr(money(netTotal)) + "</td></tr>";
 
   $("rBars").innerHTML = bars([
-    ["Earnings", earnTotal],
-    ["Tuition", feesTotal],
-    ["Tools", t.tools],
-    ["Pre-trades", r.extraCost]
+    [t("bEarn"),earnTotal],[t("bTuition"),feesTotal],[t("bTools"),tr.tools],[t("bPre"),r.extraCost]
   ]);
 
-  $("kYear").textContent = "Out-of-pocket cost — whole apprenticeship";
+  $("kYear").textContent = t("trKOut");
   $("vYear").textContent = money(costTotal);
   $("vYear").className = "v";
-  $("sYear").textContent = "Spread across " + t.term + " years, not paid up front.";
-  $("kTotal").textContent = "Gross wages over " + t.term + " years";
+  $("sYear").textContent = t("trSOut",{y:tr.term});
+  $("kTotal").textContent = t("trKGross",{y:tr.term});
   $("vTotal").textContent = "+" + money(earnTotal);
   $("vTotal").className = "v pos";
-  $("sTotal").textContent = "Before tax. Certified journeypersons in this trade earn roughly "
-    + money(jrYear) + " a year at " + money(t.wageJ) + "/hr.";
+  $("sTotal").textContent = t("trSGross",{j:money(jrYear), wj:money(tr.wageJ)});
 
   $("rCallout").hidden = false;
-  $("rCallout").innerHTML = "<strong>Comparing this to a degree?</strong> Read the two screens carefully — "
-    + "they measure different things. The university and college screens count living costs as an expense; "
-    + "this screen shows wages <em>before</em> tax and before rent, food and transport come out of them. "
-    + "A fair comparison also has to weigh what each pathway earns 10 and 20 years out, not just during training. "
-    + "<br><br><strong>" + r.label + ".</strong> " + r.note
-    + (route === "oyap"
-        ? " Ask your counsellor about OYAP — applications usually run in the spring for the following school year."
-        : "")
-    + " Grants such as the Apprenticeship Incentive Grant and Ontario's tools grants are not included above.";
+  $("rCallout").innerHTML = t("trCompare") + "<br><br><strong>" + rLabel + ".</strong> " + rNote
+    + (route === "oyap" ? " " + t("oyapExtra") : "") + " " + t("grantsNote");
 }
 
 /* ==========================================================================
@@ -1259,28 +2171,64 @@ $("selB").addEventListener("change", () => { loadC(); render(); });
 $("selC").addEventListener("change", render);
 $("selLiving").addEventListener("change", render);
 $("selStatus").addEventListener("change", () => {
-  $("subStatus").textContent = $("selStatus").value === "international"
-    ? "International rates are rough multiples — confirm with the institution."
-    : "Domestic rates shown.";
+  $("subStatus").textContent = t($("selStatus").value === "international" ? "subIntl" : "subDom");
   render();
 });
 
-/* Embed mode hides the masthead so the tool sits cleanly inside the guidance
-   page's own layout (that page has its own header). It switches on automatically
-   when this file is displayed inside an <iframe> — no special URL needed.
+/* Language + reading level. Choice is remembered on this device. */
+function setLang(code){
+  if(!LANGS[code]) code = "en";
+  lang = code;
+  $("selLang").value = code;
+  try{ localStorage.setItem("gvCostLang", code); }catch(e){}
+  applyI18n();
+  relabel();
+  /* Rebuild the menus so placeholders and counts pick up the new language,
+     preserving what the user had already chosen. */
+  const a = $("selA").value, b = $("selB").value, c = $("selC").value;
+  loadA();
+  if(a){ $("selA").value = a; loadB();
+    if(b){ $("selB").value = b; loadC();
+      if(c){ $("selC").value = c; } } }
+  render();
+}
+function setLevel(lv){
+  level = lv;
+  $("lvlStd").setAttribute("aria-pressed", String(lv === "std"));
+  $("lvlPlain").setAttribute("aria-pressed", String(lv === "plain"));
+  try{ localStorage.setItem("gvCostLevel", lv); }catch(e){}
+  setLang(lang);
+}
+$("selLang").addEventListener("change", e => setLang(e.target.value));
+document.querySelectorAll(".lvl").forEach(b =>
+  b.addEventListener("click", () => setLevel(b.dataset.level)));
+
+/* Embed mode hides the school-name line so the tool sits cleanly inside the
+   guidance page. Switches on automatically inside an <iframe>.
    ?embed=1 forces it on for testing; ?embed=0 forces it off. */
 (function(){
   const q = window.location.search;
   let embedded;
-  try { embedded = window.self !== window.top; }   // framed?
-  catch(e){ embedded = true; }                     // cross-origin block => framed
+  try { embedded = window.self !== window.top; }
+  catch(e){ embedded = true; }
   if(/[?&]embed=1/.test(q)) embedded = true;
   if(/[?&]embed=0/.test(q)) embedded = false;
   if(embedded) document.body.classList.add("embed");
 })();
 
-$("dataYear").textContent = DATA_YEAR;
-loadA();
+/* Restore saved preferences, then draw. */
+(function(){
+  let savedLang = "en", savedLevel = "std";
+  try{
+    savedLang  = localStorage.getItem("gvCostLang")  || "en";
+    savedLevel = localStorage.getItem("gvCostLevel") || "std";
+  }catch(e){}
+  level = (savedLevel === "plain") ? "plain" : "std";
+  $("lvlStd").setAttribute("aria-pressed", String(level === "std"));
+  $("lvlPlain").setAttribute("aria-pressed", String(level === "plain"));
+  setLang(savedLang);
+})();
+
 </script>
 </body>
 </html>
