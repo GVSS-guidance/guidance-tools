@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en-CA">
 <head>
@@ -144,6 +145,16 @@ footer a{color:var(--maroon-light)}
   .cols{grid-template-columns:1fr}
   .masthead h1{font-size:1.5rem}
 }
+
+/* ==========================================================================
+   EMBED MODE — activated by loading this file with ?embed=1
+   Used when the tool is shown inside an <iframe> on the Evoq guidance page,
+   which already has its own header. Nothing else about the tool changes.
+   ========================================================================== */
+body.embed .masthead{display:none}
+body.embed footer{padding-bottom:20px}
+body.embed .wrap{padding:0 14px}
+body.embed .panel:first-of-type{margin-top:14px}
 </style>
 </head>
 <body>
@@ -1248,6 +1259,20 @@ $("selStatus").addEventListener("change", () => {
     : "Domestic rates shown.";
   render();
 });
+
+/* Embed mode hides the masthead so the tool sits cleanly inside the guidance
+   page's own layout (that page has its own header). It switches on automatically
+   when this file is displayed inside an <iframe> — no special URL needed.
+   ?embed=1 forces it on for testing; ?embed=0 forces it off. */
+(function(){
+  const q = window.location.search;
+  let embedded;
+  try { embedded = window.self !== window.top; }   // framed?
+  catch(e){ embedded = true; }                     // cross-origin block => framed
+  if(/[?&]embed=1/.test(q)) embedded = true;
+  if(/[?&]embed=0/.test(q)) embedded = false;
+  if(embedded) document.body.classList.add("embed");
+})();
 
 $("dataYear").textContent = DATA_YEAR;
 loadA();
