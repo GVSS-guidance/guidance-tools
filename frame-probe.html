@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frame probe</title>
+<style>
+  body{margin:0;padding:12px;background:#fff;color:#22201e;line-height:1.45;
+       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+  .b{border:2px solid #e4ddd0;border-radius:10px;padding:12px;margin-bottom:12px}
+  .b.ok{border-color:#2f6b4f;background:#eaf3ee}
+  h2{font-size:.95rem;margin:0 0 8px;color:#6b1f2a}
+  select{font:inherit;font-size:16px;padding:11px;width:100%;border:1px solid #cfc7b8;
+         border-radius:8px;background:#fff;color:#22201e}
+  .r{margin-top:8px;font-weight:700;font-size:.88rem;color:#8a7a55}
+  .r.ok{color:#2f6b4f}
+  .fill{color:#bbb;font-size:.8rem;border-left:2px dashed #eee;padding-left:10px}
+</style>
+</head>
+<body>
+
+<div class="b" id="bTop">
+  <h2>A — dropdown at the TOP of this frame</h2>
+  <select onchange="ok('bTop','rTop')">
+    <option>Tap me and pick something…</option>
+    <option>Option 1</option><option>Option 2</option><option>Option 3</option>
+  </select>
+  <div class="r" id="rTop">not tried yet</div>
+</div>
+
+<div class="fill" style="height:700px">
+  <p>(empty space — keep scrolling, there is a second dropdown below)</p>
+</div>
+
+<div class="b" id="bLow">
+  <h2>B — dropdown ~700px DOWN inside this frame</h2>
+  <p style="font-size:.83rem;color:#5c5751;margin:0 0 8px">
+    This is roughly where the real Institution menu sits.</p>
+  <select onchange="ok('bLow','rLow')">
+    <option>Tap me and pick something…</option>
+    <option>Option 1</option><option>Option 2</option><option>Option 3</option>
+  </select>
+  <div class="r" id="rLow">not tried yet</div>
+</div>
+
+<div class="fill" style="height:400px"><p>(more empty space)</p></div>
+
+<div class="b" id="bDeep">
+  <h2>C — dropdown ~1200px DOWN inside this frame</h2>
+  <select onchange="ok('bDeep','rDeep')">
+    <option>Tap me and pick something…</option>
+    <option>Option 1</option><option>Option 2</option><option>Option 3</option>
+  </select>
+  <div class="r" id="rDeep">not tried yet</div>
+</div>
+
+<script>
+function ok(box, res){
+  document.getElementById(box).className = "b ok";
+  var r = document.getElementById(res);
+  r.className = "r ok"; r.textContent = "✓ WORKED";
+}
+</script>
+</body>
+</html>
