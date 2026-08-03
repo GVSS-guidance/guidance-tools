@@ -2538,7 +2538,19 @@ function row(label, note, amount, cls){
 /* A share-of-total view, NOT a repeat of the table above it. It answers a
    different question - which line dominates - and is drawn as a donut so it
    reads as a different object rather than a reprint of the same numbers. */
-const DONUT_COLOURS = ["#6b1f2a", "#c8a24a", "#8a2c3a", "#2f6b4f", "#e3c87f", "#7d7469"];
+/* Six DISTINCT hues, not shades of two. An earlier set paired maroon with
+   maroon-light (Tuition/Fees) and gold with gold-light (Housing/Transport),
+   which read as the same colour in small slices. The two brand colours stay on
+   the two largest categories; the rest separate by hue, and a small gap is cut
+   between segments so they remain readable even if colours are close. */
+const DONUT_COLOURS = [
+  "#6b1f2a",  /* deep maroon  - brand    */
+  "#c8a24a",  /* gold         - brand    */
+  "#2f6b4f",  /* forest green            */
+  "#3a5fa8",  /* steel blue              */
+  "#8e4a9e",  /* plum                    */
+  "#6f6a63"   /* warm grey               */
+];
 
 function donut(items){
   const shown = items.filter(i => i[1] > 0);
@@ -2549,8 +2561,10 @@ function donut(items){
   shown.forEach((it, idx) => {
     const pct = it[1] / total;
     const col = DONUT_COLOURS[idx % DONUT_COLOURS.length];
+    const GAP = 2.5;                       /* visual separator between slices */
+    const len = Math.max(pct * C - GAP, 0.6);
     segs += "<circle r='" + R + "' cx='75' cy='75' stroke='" + col + "'"
-          + " stroke-dasharray='" + (pct * C).toFixed(2) + " " + C.toFixed(2) + "'"
+          + " stroke-dasharray='" + len.toFixed(2) + " " + (C - len).toFixed(2) + "'"
           + " stroke-dashoffset='" + (-offset * C).toFixed(2) + "'></circle>";
     legend += "<li><span class='sw' style='background:" + col + "'></span>"
             + "<span class='dl'>" + it[0] + "</span>"
