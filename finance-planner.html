@@ -158,6 +158,13 @@ html[dir="rtl"] .pabout{direction:ltr; text-align:right}
    so amounts like "$31,500/yr" don't get reordered by the bidi algorithm. */
 html[dir="rtl"] .pfact{direction:ltr}
 
+.samplenote{
+  margin:12px 0 0; font-size:.85rem; line-height:1.5; color:#5f4a15;
+  background:#fdf6e8; border:1px solid var(--gold-light); border-radius:8px; padding:9px 13px;
+}
+.samplenote strong{color:#7a5f1f}
+.samplenote.hide{display:none}
+
 /* ---------- options row ---------- */
 .opts{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:18px;
       border-top:1px dashed var(--line); padding-top:18px}
@@ -359,6 +366,8 @@ body.embed .wrap{padding:0 14px}
         <span class="sub" id="subC"></span>
       </div>
     </div>
+
+    <p class="samplenote hide" id="sampleNote"></p>
 
     <div class="opts" id="optsBox">
       <div class="field" id="livingField">
@@ -618,10 +627,15 @@ const UNIVERSITIES = {
         {n:"Biomedical Engineering (co-op)", t:14248, y:5, terms:8, work:6}
       ],
       "Science": [
-        {n:"Honours Science", t:6250, y:4},
         {n:"Life Sciences &mdash; Biology", t:6250, y:4},
+        {n:"Life Sciences &mdash; Biochemistry", t:6250, y:4},
+        {n:"Life Sciences &mdash; Biomedical Sciences", t:6250, y:4},
+        {n:"Physical Sciences &mdash; Chemistry", t:6250, y:4},
+        {n:"Physical Sciences &mdash; Physics &amp; Astronomy", t:6250, y:4},
+        {n:"Materials &amp; Nanosciences", t:6250, y:4},
         {n:"Kinesiology", t:6250, y:4},
-        {n:"Optometry pre-requisite stream", t:6250, y:4}
+        {n:"Honours Science", t:6250, y:4},
+        {n:"Science &amp; Business", t:6250, y:4}
       ],
       "Arts": [
         {n:"Accounting &amp; Financial Management (AFM)", t:15338, y:5, terms:8, work:4},
@@ -1436,6 +1450,7 @@ const STRINGS = {};
 
 STRINGS.en = {};
 STRINGS.en.std = {
+  sampleNote:"<strong>These are sample programs, not a full list.</strong> Each institution offers many more. Tuition is set by faculty rather than by individual program, so if yours is not shown, choose the closest one in the same faculty and the estimate will still be about right.",
   progNote:"About this program",
   coopHead:"Co-op program",
   coopTerms:"{s} study terms and {w} paid work terms, over {y} years.",
@@ -1533,6 +1548,7 @@ STRINGS.en.std = {
 
 /* Plain-language English: shorter sentences, no jargon. Same meaning. */
 STRINGS.en.plain = Object.assign({}, STRINGS.en.std, {
+  sampleNote:"<strong>This is a short list, not every program.</strong> Each school has many more. Schools set the price by area of study, not by each program. So if you do not see yours, pick one close to it in the same area. The cost will be about the same.",
   progNote:"About this program",
   coopHead:"Co-op program",
   coopTerms:"{s} terms at school and {w} paid work terms, over {y} years.",
@@ -1619,6 +1635,7 @@ STRINGS.en.plain = Object.assign({}, STRINGS.en.std, {
 
 /* ---- French ---- */
 STRINGS.fr = {
+  sampleNote:"<strong>Ce sont des exemples de programmes, pas une liste compl\u00e8te.</strong> Chaque \u00e9tablissement en offre bien d&#39;autres. Les frais sont fix\u00e9s par facult\u00e9 et non par programme : si le v\u00f4tre n&#39;y figure pas, choisissez le plus proche dans la m\u00eame facult\u00e9 et l&#39;estimation restera juste.",
   progNote:"\u00c0 propos de ce programme",
   coopHead:"Programme coop",
   coopTerms:"{s} sessions d&#39;\u00e9tudes et {w} stages r\u00e9mun\u00e9r\u00e9s, sur {y} ans.",
@@ -1711,6 +1728,7 @@ STRINGS.fr = {
 
 /* ---- Ukrainian ---- */
 STRINGS.uk = {
+  sampleNote:"<strong>\u0426\u0435 \u043f\u0440\u0438\u043a\u043b\u0430\u0434\u0438 \u043f\u0440\u043e\u0433\u0440\u0430\u043c, \u0430 \u043d\u0435 \u043f\u043e\u0432\u043d\u0438\u0439 \u0441\u043f\u0438\u0441\u043e\u043a.</strong> \u041a\u043e\u0436\u0435\u043d \u0437\u0430\u043a\u043b\u0430\u0434 \u043f\u0440\u043e\u043f\u043e\u043d\u0443\u0454 \u0431\u0430\u0433\u0430\u0442\u043e \u0456\u043d\u0448\u0438\u0445. \u0412\u0430\u0440\u0442\u0456\u0441\u0442\u044c \u0432\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u044e\u0454\u0442\u044c\u0441\u044f \u0437\u0430 \u0444\u0430\u043a\u0443\u043b\u044c\u0442\u0435\u0442\u043e\u043c, \u0430 \u043d\u0435 \u0437\u0430 \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043e\u044e \u2014 \u044f\u043a\u0449\u043e \u0432\u0430\u0448\u043e\u0457 \u043d\u0435\u043c\u0430\u0454, \u043e\u0431\u0435\u0440\u0456\u0442\u044c \u043d\u0430\u0439\u0431\u043b\u0438\u0436\u0447\u0443 \u043d\u0430 \u0442\u043e\u043c\u0443 \u0441\u0430\u043c\u043e\u043c\u0443 \u0444\u0430\u043a\u0443\u043b\u044c\u0442\u0435\u0442\u0456.",
   progNote:"\u041f\u0440\u043e \u0446\u044e \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u0443",
   coopHead:"\u041f\u0440\u043e\u0433\u0440\u0430\u043c\u0430 \u0437 \u043f\u0440\u0430\u043a\u0442\u0438\u043a\u043e\u044e (co-op)",
   coopTerms:"{s} \u043d\u0430\u0432\u0447\u0430\u043b\u044c\u043d\u0438\u0445 \u0442\u0430 {w} \u043e\u043f\u043b\u0430\u0447\u0443\u0432\u0430\u043d\u0438\u0445 \u0440\u043e\u0431\u043e\u0447\u0438\u0445 \u0442\u0435\u0440\u043c\u0456\u043d\u0456\u0432, \u0437\u0430 {y} \u0440.",
@@ -1804,6 +1822,7 @@ STRINGS.uk = {
 
 /* ---- Farsi (فارسی) ---- */
 STRINGS.fa = {
+  sampleNote:"<strong>\u0627\u06cc\u0646\u200c\u0647\u0627 \u0646\u0645\u0648\u0646\u0647\u200c\u0627\u06cc \u0627\u0632 \u0631\u0634\u062a\u0647\u200c\u0647\u0627 \u0647\u0633\u062a\u0646\u062f\u060c \u0646\u0647 \u0641\u0647\u0631\u0633\u062a \u06a9\u0627\u0645\u0644.</strong> \u0647\u0631 \u0645\u0624\u0633\u0633\u0647 \u0631\u0634\u062a\u0647\u200c\u0647\u0627\u06cc \u0628\u0633\u06cc\u0627\u0631 \u0628\u06cc\u0634\u062a\u0631\u06cc \u062f\u0627\u0631\u062f. \u0634\u0647\u0631\u06cc\u0647 \u0628\u0631 \u0627\u0633\u0627\u0633 \u062f\u0627\u0646\u0634\u06a9\u062f\u0647 \u062a\u0639\u06cc\u06cc\u0646 \u0645\u06cc\u200c\u0634\u0648\u062f \u0646\u0647 \u0631\u0634\u062a\u0647\u060c \u067e\u0633 \u0627\u06af\u0631 \u0631\u0634\u062a\u0647 \u0634\u0645\u0627 \u0646\u06cc\u0633\u062a\u060c \u0646\u0632\u062f\u06cc\u06a9\u200c\u062a\u0631\u06cc\u0646 \u0631\u0634\u062a\u0647 \u062f\u0631 \u0647\u0645\u0627\u0646 \u062f\u0627\u0646\u0634\u06a9\u062f\u0647 \u0631\u0627 \u0627\u0646\u062a\u062e\u0627\u0628 \u06a9\u0646\u06cc\u062f.",
   progNote:"\u062f\u0631\u0628\u0627\u0631\u0647 \u0627\u06cc\u0646 \u0631\u0634\u062a\u0647",
   coopHead:"\u0628\u0631\u0646\u0627\u0645\u0647 \u06a9\u0627\u0631\u0622\u0645\u0648\u0632\u06cc (co-op)",
   coopTerms:"{s} \u062a\u0631\u0645 \u062f\u0631\u0633\u06cc \u0648 {w} \u062a\u0631\u0645 \u06a9\u0627\u0631\u06cc \u0628\u0627 \u062d\u0642\u0648\u0642\u060c \u062f\u0631 {y} \u0633\u0627\u0644.",
@@ -1919,6 +1938,7 @@ STRINGS.prs = Object.assign({}, STRINGS.fa, {
 
 /* ---- Pashto (پښتو) ---- */
 STRINGS.ps = {
+  sampleNote:"<strong>\u062f\u0627 \u062f \u0685\u0627\u0646\u06ab\u0648 \u0628\u06d0\u0644\u06ab\u06d0 \u062f\u064a\u060c \u0628\u0634\u067e\u0693 \u0644\u0633\u062a \u0646\u0647.</strong> \u0647\u0631\u0647 \u0645\u0624\u0633\u0633\u0647 \u0688\u06d0\u0631\u06d0 \u0646\u0648\u0631\u06d0 \u0685\u0627\u0646\u06ab\u06d0 \u0644\u0631\u064a. \u0641\u06cc\u0633 \u062f \u067e\u0648\u0647\u0646\u0681\u064a \u0644\u0647 \u0645\u062e\u06d0 \u0679\u0627\u06a9\u0644 \u06a9\u06cc\u0696\u064a\u060c \u0646\u0647 \u062f \u0685\u0627\u0646\u06ab\u06d0. \u06a9\u0647 \u0633\u062a\u0627\u0633\u0648 \u0685\u0627\u0646\u06ab\u0647 \u0646\u0634\u062a\u0647\u060c \u067e\u0647 \u0647\u0645\u0627\u063a\u0647 \u067e\u0648\u0647\u0646\u0681\u064a \u06a9\u06d0 \u0646\u0698\u062f\u06d0 \u0648\u0679\u0627\u06a9\u0626.",
   progNote:"\u062f \u062f\u06d0 \u067e\u0631\u0648\u06ab\u0631\u0627\u0645 \u067e\u0647 \u0627\u0693\u0647",
   coopHead:"\u062f co-op \u067e\u0631\u0648\u06ab\u0631\u0627\u0645",
   coopTerms:"{s} \u062f\u0631\u0633\u064a \u0627\u0648 {w} \u0645\u0639\u0627\u0634\u064a \u06a9\u0627\u0631\u064a \u062f\u0648\u0631\u06d0\u060c \u067e\u0647 {y} \u06a9\u0644\u0648\u0646\u0648 \u06a9\u06d0.",
@@ -2010,6 +2030,7 @@ STRINGS.ps = {
 
 /* ---- Mandarin / Simplified Chinese ---- */
 STRINGS.zhHans = {
+  sampleNote:"<strong>\u4ee5\u4e0b\u4ec5\u4e3a\u90e8\u5206\u793a\u4f8b\u4e13\u4e1a\uff0c\u5e76\u975e\u5b8c\u6574\u5217\u8868\u3002</strong> \u6bcf\u6240\u9662\u6821\u8fd8\u6709\u8bb8\u591a\u5176\u4ed6\u4e13\u4e1a\u3002\u5b66\u8d39\u6309\u5b66\u9662\u5236\u5b9a\uff0c\u800c\u975e\u6309\u5177\u4f53\u4e13\u4e1a\uff0c\u56e0\u6b64\u5982\u679c\u6ca1\u6709\u60a8\u7684\u4e13\u4e1a\uff0c\u8bf7\u9009\u62e9\u540c\u4e00\u5b66\u9662\u4e2d\u6700\u63a5\u8fd1\u7684\u4e00\u4e2a\uff0c\u4f30\u7b97\u4ecd\u7136\u63a5\u8fd1\u3002",
   progNote:"\u5173\u4e8e\u8be5\u4e13\u4e1a",
   coopHead:"\u5e26\u85aa\u5b9e\u4e60\uff08co-op\uff09\u4e13\u4e1a",
   coopTerms:"{s} \u4e2a\u5b66\u4e60\u5b66\u671f\u548c {w} \u4e2a\u5e26\u85aa\u5b9e\u4e60\u5b66\u671f\uff0c\u5171 {y} \u5e74\u3002",
@@ -2101,6 +2122,7 @@ STRINGS.zhHans = {
 
 /* ---- Cantonese / Traditional Chinese ---- */
 STRINGS.zhHant = {
+  sampleNote:"<strong>\u4ee5\u4e0b\u53ea\u4fc2\u90e8\u5206\u793a\u4f8b\u5c08\u696d\uff0c\u5514\u4fc2\u5b8c\u6574\u5217\u8868\u3002</strong> \u6bcf\u9593\u9662\u6821\u9084\u6709\u597d\u591a\u5176\u4ed6\u5c08\u696d\u3002\u5b78\u8cbb\u6309\u5b78\u9662\u5b9a\uff0c\u5514\u4fc2\u6309\u500b\u5225\u5c08\u696d\uff0c\u6240\u4ee5\u5982\u679c\u5514\u898b\u4f60\u5605\u5c08\u696d\uff0c\u63c0\u540c\u4e00\u5b78\u9662\u5167\u6700\u63a5\u8fd1\u5605\u4e00\u500b\uff0c\u4f30\u7b97\u4e00\u6a23\u63a5\u8fd1\u3002",
   progNote:"\u95dc\u65bc\u5462\u500b\u5c08\u696d",
   coopHead:"\u5e36\u85aa\u5be6\u7fd2\uff08co-op\uff09\u5c08\u696d",
   coopTerms:"{s} \u500b\u4e0a\u8ab2\u5b78\u671f\u548c {w} \u500b\u5e36\u85aa\u5be6\u7fd2\u5b78\u671f\uff0c\u5171 {y} \u5e74\u3002",
@@ -2379,6 +2401,7 @@ function loadB(){
   }
   updateLivingOptions();
   renderProfile();
+  updateSampleNote();
   hideResults();
 }
 
@@ -2405,6 +2428,7 @@ function loadC(){
     fill($("selC"), progs.map((p,i) => [String(i), p.n]), t("chProg"));
   }
   renderProfile();
+  updateSampleNote();
   hideResults();
 }
 
@@ -2440,12 +2464,23 @@ function setFeeLink(url, label, text){
   }else{ a.style.display = "none"; }
 }
 
+/* The program menus list a representative sample, not every offering. Tuition
+   is banded by faculty, so the closest match in the same faculty gives an
+   accurate figure — the note says so rather than leaving people to guess. */
+function updateSampleNote(){
+  const el = $("sampleNote");
+  const show = path !== "apprenticeship" && !!$("selB").value;
+  el.classList.toggle("hide", !show);
+  if(show) el.innerHTML = t("sampleNote");
+}
+
 function render(){
   const set = currentSet();
   const a = set[$("selA").value];
   const bKey = $("selB").value;
   const cVal = $("selC").value;
   renderProfile();
+  updateSampleNote();
   if(!a || !bKey || cVal === ""){ hideResults(); return; }
   if(path === "apprenticeship") renderTrade(a, bKey, cVal);
   else renderSchool(a, bKey, cVal);
