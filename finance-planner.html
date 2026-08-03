@@ -168,7 +168,7 @@ html[dir="rtl"] .pfact{direction:ltr}
 .samplenote.hide{display:none}
 
 /* ---------- options row ---------- */
-.opts{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:18px;
+.opts{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:18px;
       border-top:1px dashed var(--line); padding-top:18px}
 
 /* ---------- results ---------- */
@@ -206,11 +206,28 @@ table.costs tr.credit td{color:var(--ok)}
 .bigbox hr{border:none; border-top:1px solid var(--line); margin:16px 0}
 
 /* ---------- bars ---------- */
-.bars{margin-top:14px}
+.bars{margin-top:22px; padding-top:16px; border-top:1px solid var(--line)}
+.barshead{margin:0 0 12px; font-size:.72rem; letter-spacing:.09em; text-transform:uppercase;
+          color:var(--ink-soft); font-weight:700}
+
+/* Donut + legend. Deliberately not a bar list: the table above already gives
+   the numbers, so this has to look like a different object, not a reprint. */
+.donutwrap{display:flex; gap:20px; align-items:center; flex-wrap:wrap}
+.donut{flex:0 0 auto; width:150px; height:150px; transform:rotate(-90deg)}
+.donut circle{fill:none; stroke-width:26}
+.dlegend{flex:1 1 190px; min-width:170px; margin:0; padding:0; list-style:none}
+.dlegend li{display:flex; align-items:center; gap:8px; font-size:.85rem; padding:3px 0; color:var(--ink)}
+.dlegend .sw{flex:0 0 auto; width:11px; height:11px; border-radius:3px}
+.dlegend .dl{flex:1; color:var(--ink-soft)}
+.dlegend .dp{font-variant-numeric:tabular-nums; font-weight:700; color:var(--maroon)}
+.dcentre{font-size:.72rem; fill:var(--ink-soft)}
+
+/* Bars are still used on the apprenticeship screen, where income and expense
+   are mixed and a share-of-total pie would be meaningless. */
 .bar{display:flex; align-items:center; gap:10px; margin-bottom:7px; font-size:.83rem}
 .bar .bl{flex:0 0 108px; color:var(--ink-soft)}
 .bar .btrack{flex:1; height:9px; background:#efeae1; border-radius:99px; overflow:hidden}
-.bar .bfill{height:100%; background:var(--maroon-light); border-radius:99px}
+.bar .bfill{display:block; height:9px; background:var(--maroon-light); border-radius:99px}
 .bar .bfill.g{background:var(--gold)}
 .bar .bv{flex:0 0 76px; text-align:right; font-variant-numeric:tabular-nums}
 
@@ -380,6 +397,15 @@ body.embed .wrap{padding:0 14px}
           <option value="off"  data-i18n="livOff">Off-campus / shared apartment</option>
         </select>
         <span class="sub" data-i18n="livSub">Usually the single biggest cost difference.</span>
+      </div>
+      <div class="field">
+        <label for="selPersonal" data-i18n="labPersonal">Personal spending</label>
+        <select id="selPersonal">
+          <option value="1200"          data-i18n="persLow">Frugal</option>
+          <option value="2400" selected data-i18n="persMid">Moderate</option>
+          <option value="4200"          data-i18n="persHigh">Comfortable</option>
+        </select>
+        <span class="sub" data-i18n="persSub">The one figure here you control.</span>
       </div>
       <div class="field">
         <label for="selStatus" data-i18n="labStatus">Student status</label>
@@ -1459,6 +1485,11 @@ const STRINGS = {};
 
 STRINGS.en = {};
 STRINGS.en.std = {
+  barsHead:"Where the money goes",
+  labPersonal:"Personal spending",
+  persLow:"Frugal", persMid:"Moderate", persHigh:"Comfortable",
+  persSub:"The one figure here you control \u2014 set it to match your household.",
+  nPersonalPick:"Phone, clothing, social life, emergencies. Highly personal \u2014 adjust this above.",
   sampleVaries:"<strong>Tuition differs between programs in this faculty</strong>, so your choice below changes the estimate. The list is a sample, not every program offered \u2014 if yours is not shown, pick the closest match.",
   sampleSame:"<strong>Every program in this faculty is charged the same tuition</strong>, so your choice below will not change the estimate. The list is a sample, not every program offered \u2014 pick whichever is closest to yours.",
   sampleNote:"<strong>These are sample programs, not a full list.</strong> Each institution offers many more. Tuition is set by faculty rather than by individual program, so if yours is not shown, choose the closest one in the same faculty and the estimate will still be about right.",
@@ -1559,6 +1590,11 @@ STRINGS.en.std = {
 
 /* Plain-language English: shorter sentences, no jargon. Same meaning. */
 STRINGS.en.plain = Object.assign({}, STRINGS.en.std, {
+  barsHead:"What costs the most",
+  labPersonal:"Your own spending",
+  persLow:"Low", persMid:"Middle", persHigh:"Higher",
+  persSub:"This is the one number you choose. Set it to match your family.",
+  nPersonalPick:"Phone, clothes, going out, emergencies. Everyone is different \u2014 change it above.",
   sampleVaries:"<strong>Programs in this area cost different amounts.</strong> So your choice below changes the price. This is a short list, not every program. If you do not see yours, pick the closest one.",
   sampleSame:"<strong>Every program in this area costs the same.</strong> So your choice below will not change the price. This is a short list, not every program. Pick whichever is closest to yours.",
   sampleNote:"<strong>This is a short list, not every program.</strong> Each school has many more. Schools set the price by area of study, not by each program. So if you do not see yours, pick one close to it in the same area. The cost will be about the same.",
@@ -1648,6 +1684,11 @@ STRINGS.en.plain = Object.assign({}, STRINGS.en.std, {
 
 /* ---- French ---- */
 STRINGS.fr = {
+  barsHead:"R\u00e9partition des co\u00fbts",
+  labPersonal:"D\u00e9penses personnelles",
+  persLow:"Modeste", persMid:"Mod\u00e9r\u00e9", persHigh:"Confortable",
+  persSub:"Le seul montant ici que vous contr\u00f4lez \u2014 ajustez-le \u00e0 votre m\u00e9nage.",
+  nPersonalPick:"T\u00e9l\u00e9phone, v\u00eatements, sorties, impr\u00e9vus. Tr\u00e8s variable \u2014 modifiable ci-dessus.",
   sampleVaries:"<strong>Les frais varient d&#39;un programme \u00e0 l&#39;autre dans cette facult\u00e9</strong> : votre choix ci-dessous modifie l&#39;estimation. La liste est un \u00e9chantillon, pas tous les programmes offerts \u2014 si le v\u00f4tre n&#39;y figure pas, choisissez le plus proche.",
   sampleSame:"<strong>Tous les programmes de cette facult\u00e9 co\u00fbtent le m\u00eame prix</strong> : votre choix ci-dessous ne changera pas l&#39;estimation. La liste est un \u00e9chantillon \u2014 choisissez celui qui se rapproche le plus du v\u00f4tre.",
   sampleNote:"<strong>Ce sont des exemples de programmes, pas une liste compl\u00e8te.</strong> Chaque \u00e9tablissement en offre bien d&#39;autres. Les frais sont fix\u00e9s par facult\u00e9 et non par programme : si le v\u00f4tre n&#39;y figure pas, choisissez le plus proche dans la m\u00eame facult\u00e9 et l&#39;estimation restera juste.",
@@ -1743,6 +1784,11 @@ STRINGS.fr = {
 
 /* ---- Ukrainian ---- */
 STRINGS.uk = {
+  barsHead:"\u041d\u0430 \u0449\u043e \u0439\u0434\u0443\u0442\u044c \u0433\u0440\u043e\u0448\u0456",
+  labPersonal:"\u041e\u0441\u043e\u0431\u0438\u0441\u0442\u0456 \u0432\u0438\u0442\u0440\u0430\u0442\u0438",
+  persLow:"\u041e\u0449\u0430\u0434\u043b\u0438\u0432\u043e", persMid:"\u041f\u043e\u043c\u0456\u0440\u043d\u043e", persHigh:"\u0412\u0456\u043b\u044c\u043d\u0456\u0448\u0435",
+  persSub:"\u0404\u0434\u0438\u043d\u0430 \u0441\u0443\u043c\u0430 \u0442\u0443\u0442\u060c \u044f\u043a\u0443 \u0432\u0438 \u043e\u0431\u0438\u0440\u0430\u0454\u0442\u0435 \u0441\u0430\u043c\u0456.",
+  nPersonalPick:"\u0422\u0435\u043b\u0435\u0444\u043e\u043d, \u043e\u0434\u044f\u0433, \u0434\u043e\u0437\u0432\u0456\u043b\u043b\u044f, \u043d\u0435\u043f\u0435\u0440\u0435\u0434\u0431\u0430\u0447\u0435\u043d\u0435. \u0414\u0443\u0436\u0435 \u0440\u0456\u0437\u043d\u0438\u0442\u044c\u0441\u044f \u2014 \u0437\u043c\u0456\u043d\u0456\u0442\u044c \u0432\u0438\u0449\u0435.",
   sampleVaries:"<strong>\u0412\u0430\u0440\u0442\u0456\u0441\u0442\u044c \u043f\u0440\u043e\u0433\u0440\u0430\u043c \u043d\u0430 \u0446\u044c\u043e\u043c\u0443 \u0444\u0430\u043a\u0443\u043b\u044c\u0442\u0435\u0442\u0456 \u0440\u0456\u0437\u043d\u0430</strong> \u2014 \u0432\u0430\u0448 \u0432\u0438\u0431\u0456\u0440 \u043d\u0438\u0436\u0447\u0435 \u0437\u043c\u0456\u043d\u044e\u0454 \u043e\u0446\u0456\u043d\u043a\u0443. \u0421\u043f\u0438\u0441\u043e\u043a \u2014 \u0446\u0435 \u043f\u0440\u0438\u043a\u043b\u0430\u0434\u0438, \u0430 \u043d\u0435 \u0432\u0441\u0456 \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u0438.",
   sampleSame:"<strong>\u0423\u0441\u0456 \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u0438 \u0446\u044c\u043e\u0433\u043e \u0444\u0430\u043a\u0443\u043b\u044c\u0442\u0435\u0442\u0443 \u043a\u043e\u0448\u0442\u0443\u044e\u0442\u044c \u043e\u0434\u043d\u0430\u043a\u043e\u0432\u043e</strong> \u2014 \u0432\u0430\u0448 \u0432\u0438\u0431\u0456\u0440 \u043d\u0438\u0436\u0447\u0435 \u043d\u0435 \u0437\u043c\u0456\u043d\u0438\u0442\u044c \u043e\u0446\u0456\u043d\u043a\u0443. \u041e\u0431\u0435\u0440\u0456\u0442\u044c \u043d\u0430\u0439\u0431\u043b\u0438\u0436\u0447\u0443 \u0434\u043e \u0432\u0430\u0448\u043e\u0457.",
   sampleNote:"<strong>\u0426\u0435 \u043f\u0440\u0438\u043a\u043b\u0430\u0434\u0438 \u043f\u0440\u043e\u0433\u0440\u0430\u043c, \u0430 \u043d\u0435 \u043f\u043e\u0432\u043d\u0438\u0439 \u0441\u043f\u0438\u0441\u043e\u043a.</strong> \u041a\u043e\u0436\u0435\u043d \u0437\u0430\u043a\u043b\u0430\u0434 \u043f\u0440\u043e\u043f\u043e\u043d\u0443\u0454 \u0431\u0430\u0433\u0430\u0442\u043e \u0456\u043d\u0448\u0438\u0445. \u0412\u0430\u0440\u0442\u0456\u0441\u0442\u044c \u0432\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u044e\u0454\u0442\u044c\u0441\u044f \u0437\u0430 \u0444\u0430\u043a\u0443\u043b\u044c\u0442\u0435\u0442\u043e\u043c, \u0430 \u043d\u0435 \u0437\u0430 \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043e\u044e \u2014 \u044f\u043a\u0449\u043e \u0432\u0430\u0448\u043e\u0457 \u043d\u0435\u043c\u0430\u0454, \u043e\u0431\u0435\u0440\u0456\u0442\u044c \u043d\u0430\u0439\u0431\u043b\u0438\u0436\u0447\u0443 \u043d\u0430 \u0442\u043e\u043c\u0443 \u0441\u0430\u043c\u043e\u043c\u0443 \u0444\u0430\u043a\u0443\u043b\u044c\u0442\u0435\u0442\u0456.",
@@ -1839,6 +1885,11 @@ STRINGS.uk = {
 
 /* ---- Farsi (فارسی) ---- */
 STRINGS.fa = {
+  barsHead:"\u067e\u0648\u0644 \u06a9\u062c\u0627 \u062e\u0631\u062c \u0645\u06cc\u200c\u0634\u0648\u062f",
+  labPersonal:"\u0647\u0632\u06cc\u0646\u0647\u200c\u0647\u0627\u06cc \u0634\u062e\u0635\u06cc",
+  persLow:"\u06a9\u0645", persMid:"\u0645\u062a\u0648\u0633\u0637", persHigh:"\u0628\u06cc\u0634\u062a\u0631",
+  persSub:"\u062a\u0646\u0647\u0627 \u0639\u062f\u062f\u06cc \u06a9\u0647 \u062e\u0648\u062f\u062a\u0627\u0646 \u0627\u0646\u062a\u062e\u0627\u0628 \u0645\u06cc\u200c\u06a9\u0646\u06cc\u062f.",
+  nPersonalPick:"\u062a\u0644\u0641\u0646\u060c \u067e\u0648\u0634\u0627\u06a9\u060c \u062a\u0641\u0631\u06cc\u062d\u060c \u0645\u0648\u0627\u0631\u062f \u0627\u0636\u0637\u0631\u0627\u0631\u06cc. \u0628\u0633\u06cc\u0627\u0631 \u0645\u062a\u0641\u0627\u0648\u062a \u2014 \u062f\u0631 \u0628\u0627\u0644\u0627 \u062a\u063a\u06cc\u06cc\u0631 \u062f\u0647\u06cc\u062f.",
   sampleVaries:"<strong>\u0634\u0647\u0631\u06cc\u0647 \u0631\u0634\u062a\u0647\u200c\u0647\u0627\u06cc \u0627\u06cc\u0646 \u062f\u0627\u0646\u0634\u06a9\u062f\u0647 \u0645\u062a\u0641\u0627\u0648\u062a \u0627\u0633\u062a</strong> \u2014 \u0627\u0646\u062a\u062e\u0627\u0628 \u0634\u0645\u0627 \u062f\u0631 \u0632\u06cc\u0631 \u0628\u0631\u0622\u0648\u0631\u062f \u0631\u0627 \u062a\u063a\u06cc\u06cc\u0631 \u0645\u06cc\u200c\u062f\u0647\u062f. \u0627\u06cc\u0646 \u0641\u0647\u0631\u0633\u062a \u0646\u0645\u0648\u0646\u0647 \u0627\u0633\u062a\u060c \u0646\u0647 \u0647\u0645\u0647 \u0631\u0634\u062a\u0647\u200c\u0647\u0627.",
   sampleSame:"<strong>\u0647\u0645\u0647 \u0631\u0634\u062a\u0647\u200c\u0647\u0627\u06cc \u0627\u06cc\u0646 \u062f\u0627\u0646\u0634\u06a9\u062f\u0647 \u0634\u0647\u0631\u06cc\u0647 \u06cc\u06a9\u0633\u0627\u0646 \u062f\u0627\u0631\u0646\u062f</strong> \u2014 \u0627\u0646\u062a\u062e\u0627\u0628 \u0634\u0645\u0627 \u0628\u0631\u0622\u0648\u0631\u062f \u0631\u0627 \u062a\u063a\u06cc\u06cc\u0631 \u0646\u0645\u06cc\u200c\u062f\u0647\u062f. \u0646\u0632\u062f\u06cc\u06a9\u200c\u062a\u0631\u06cc\u0646 \u0631\u0627 \u0627\u0646\u062a\u062e\u0627\u0628 \u06a9\u0646\u06cc\u062f.",
   sampleNote:"<strong>\u0627\u06cc\u0646\u200c\u0647\u0627 \u0646\u0645\u0648\u0646\u0647\u200c\u0627\u06cc \u0627\u0632 \u0631\u0634\u062a\u0647\u200c\u0647\u0627 \u0647\u0633\u062a\u0646\u062f\u060c \u0646\u0647 \u0641\u0647\u0631\u0633\u062a \u06a9\u0627\u0645\u0644.</strong> \u0647\u0631 \u0645\u0624\u0633\u0633\u0647 \u0631\u0634\u062a\u0647\u200c\u0647\u0627\u06cc \u0628\u0633\u06cc\u0627\u0631 \u0628\u06cc\u0634\u062a\u0631\u06cc \u062f\u0627\u0631\u062f. \u0634\u0647\u0631\u06cc\u0647 \u0628\u0631 \u0627\u0633\u0627\u0633 \u062f\u0627\u0646\u0634\u06a9\u062f\u0647 \u062a\u0639\u06cc\u06cc\u0646 \u0645\u06cc\u200c\u0634\u0648\u062f \u0646\u0647 \u0631\u0634\u062a\u0647\u060c \u067e\u0633 \u0627\u06af\u0631 \u0631\u0634\u062a\u0647 \u0634\u0645\u0627 \u0646\u06cc\u0633\u062a\u060c \u0646\u0632\u062f\u06cc\u06a9\u200c\u062a\u0631\u06cc\u0646 \u0631\u0634\u062a\u0647 \u062f\u0631 \u0647\u0645\u0627\u0646 \u062f\u0627\u0646\u0634\u06a9\u062f\u0647 \u0631\u0627 \u0627\u0646\u062a\u062e\u0627\u0628 \u06a9\u0646\u06cc\u062f.",
@@ -1957,6 +2008,11 @@ STRINGS.prs = Object.assign({}, STRINGS.fa, {
 
 /* ---- Pashto (پښتو) ---- */
 STRINGS.ps = {
+  barsHead:"\u067e\u06cc\u0633\u06d0 \u0686\u06cc\u0631\u062a\u0647 \u0698\u064a",
+  labPersonal:"\u0634\u062e\u0635\u064a \u0644\u06ab\u0634\u062a\u0648\u0646\u0647",
+  persLow:"\u0644\u0645", persMid:"\u0645\u0646\u0681\u0646\u06cc", persHigh:"\u0632\u064a\u0627\u062a",
+  persSub:"\u062f\u0627 \u064a\u0648\u0627\u0632\u06d0 \u0634\u0645\u06cc\u0631\u0647 \u062f\u0647 \u0686\u06d0 \u062a\u0627\u0633\u0648 \u064a\u06d0 \u067e\u062e\u067e\u0644\u0647 \u067c\u0627\u06a9\u0626.",
+  nPersonalPick:"\u067c\u06cc\u0644\u06cc\u0641\u0648\u0646\u060c \u062c\u0627\u0645\u06d0\u060c \u062a\u0641\u0631\u06cc\u062d\u060c \u0628\u06cc\u0693\u0646\u064a \u062d\u0627\u0644\u0627\u062a. \u0689\u06d0\u0631 \u062a\u0648\u067e\u06cc\u0631 \u2014 \u067e\u0648\u0631\u062a\u0647 \u064a\u06d0 \u0628\u062f\u0644 \u06a9\u0693\u0626.",
   sampleVaries:"<strong>\u062f \u062f\u06d0 \u067e\u0648\u0647\u0646\u0681\u064a \u062f \u0685\u0627\u0646\u06ab\u0648 \u0641\u06cc\u0633 \u062a\u0648\u067e\u06cc\u0631 \u0644\u0631\u064a</strong> \u2014 \u0644\u0627\u0646\u062f\u06d0 \u0679\u0627\u06a9\u0646\u0647 \u0627\u067c\u06a9\u0644 \u0628\u062f\u0644\u0648\u064a. \u062f\u0627 \u0644\u0633\u062a \u0628\u06d0\u0644\u06ab\u06d0 \u062f\u064a\u060c \u067c\u0648\u0644 \u0685\u0627\u0646\u06ab\u06d0 \u0646\u0647.",
   sampleSame:"<strong>\u062f \u062f\u06d0 \u067e\u0648\u0647\u0646\u0681\u064a \u067c\u0648\u0644\u06d0 \u0685\u0627\u0646\u06ab\u06d0 \u064a\u0648 \u0634\u0627\u0646 \u0641\u06cc\u0633 \u0644\u0631\u064a</strong> \u2014 \u0644\u0627\u0646\u062f\u06d0 \u0679\u0627\u06a9\u0646\u0647 \u0627\u067c\u06a9\u0644 \u0646\u0647 \u0628\u062f\u0644\u0648\u064a. \u0646\u0698\u062f\u06d0 \u0648\u0679\u0627\u06a9\u0626.",
   sampleNote:"<strong>\u062f\u0627 \u062f \u0685\u0627\u0646\u06ab\u0648 \u0628\u06d0\u0644\u06ab\u06d0 \u062f\u064a\u060c \u0628\u0634\u067e\u0693 \u0644\u0633\u062a \u0646\u0647.</strong> \u0647\u0631\u0647 \u0645\u0624\u0633\u0633\u0647 \u0688\u06d0\u0631\u06d0 \u0646\u0648\u0631\u06d0 \u0685\u0627\u0646\u06ab\u06d0 \u0644\u0631\u064a. \u0641\u06cc\u0633 \u062f \u067e\u0648\u0647\u0646\u0681\u064a \u0644\u0647 \u0645\u062e\u06d0 \u0679\u0627\u06a9\u0644 \u06a9\u06cc\u0696\u064a\u060c \u0646\u0647 \u062f \u0685\u0627\u0646\u06ab\u06d0. \u06a9\u0647 \u0633\u062a\u0627\u0633\u0648 \u0685\u0627\u0646\u06ab\u0647 \u0646\u0634\u062a\u0647\u060c \u067e\u0647 \u0647\u0645\u0627\u063a\u0647 \u067e\u0648\u0647\u0646\u0681\u064a \u06a9\u06d0 \u0646\u0698\u062f\u06d0 \u0648\u0679\u0627\u06a9\u0626.",
@@ -2051,6 +2107,11 @@ STRINGS.ps = {
 
 /* ---- Mandarin / Simplified Chinese ---- */
 STRINGS.zhHans = {
+  barsHead:"\u94b1\u82b1\u5728\u54ea\u91cc",
+  labPersonal:"\u4e2a\u4eba\u5f00\u652f",
+  persLow:"\u8282\u7ea6", persMid:"\u9002\u4e2d", persHigh:"\u5bbd\u88d5",
+  persSub:"\u8fd9\u662f\u8868\u4e2d\u552f\u4e00\u7531\u60a8\u51b3\u5b9a\u7684\u91d1\u989d\u3002",
+  nPersonalPick:"\u624b\u673a\u3001\u8863\u7269\u3001\u793e\u4ea4\u3001\u5e94\u6025\u3002\u56e0\u4eba\u800c\u5f02\u2014\u2014\u53ef\u5728\u4e0a\u65b9\u8c03\u6574\u3002",
   sampleVaries:"<strong>\u8be5\u5b66\u9662\u5404\u4e13\u4e1a\u5b66\u8d39\u4e0d\u540c</strong>\uff0c\u56e0\u6b64\u60a8\u5728\u4e0b\u65b9\u7684\u9009\u62e9\u4f1a\u6539\u53d8\u4f30\u7b97\u3002\u4ee5\u4e0b\u4ec5\u4e3a\u793a\u4f8b\uff0c\u5e76\u975e\u5168\u90e8\u4e13\u4e1a\u2014\u2014\u82e5\u65e0\u60a8\u7684\u4e13\u4e1a\uff0c\u8bf7\u9009\u6700\u63a5\u8fd1\u7684\u3002",
   sampleSame:"<strong>\u8be5\u5b66\u9662\u6240\u6709\u4e13\u4e1a\u5b66\u8d39\u76f8\u540c</strong>\uff0c\u56e0\u6b64\u60a8\u5728\u4e0b\u65b9\u7684\u9009\u62e9\u4e0d\u4f1a\u6539\u53d8\u4f30\u7b97\u3002\u4ee5\u4e0b\u4ec5\u4e3a\u793a\u4f8b\uff0c\u8bf7\u9009\u6700\u63a5\u8fd1\u60a8\u7684\u4e00\u4e2a\u3002",
   sampleNote:"<strong>\u4ee5\u4e0b\u4ec5\u4e3a\u90e8\u5206\u793a\u4f8b\u4e13\u4e1a\uff0c\u5e76\u975e\u5b8c\u6574\u5217\u8868\u3002</strong> \u6bcf\u6240\u9662\u6821\u8fd8\u6709\u8bb8\u591a\u5176\u4ed6\u4e13\u4e1a\u3002\u5b66\u8d39\u6309\u5b66\u9662\u5236\u5b9a\uff0c\u800c\u975e\u6309\u5177\u4f53\u4e13\u4e1a\uff0c\u56e0\u6b64\u5982\u679c\u6ca1\u6709\u60a8\u7684\u4e13\u4e1a\uff0c\u8bf7\u9009\u62e9\u540c\u4e00\u5b66\u9662\u4e2d\u6700\u63a5\u8fd1\u7684\u4e00\u4e2a\uff0c\u4f30\u7b97\u4ecd\u7136\u63a5\u8fd1\u3002",
@@ -2145,6 +2206,11 @@ STRINGS.zhHans = {
 
 /* ---- Cantonese / Traditional Chinese ---- */
 STRINGS.zhHant = {
+  barsHead:"\u9322\u82b1\u5728\u908a\u5ea6",
+  labPersonal:"\u500b\u4eba\u958b\u652f",
+  persLow:"\u7bc0\u7d04", persMid:"\u9069\u4e2d", persHigh:"\u5bec\u88d5",
+  persSub:"\u5462\u500b\u4fc2\u8868\u5167\u552f\u4e00\u7531\u4f60\u6c7a\u5b9a\u5605\u91d1\u984d\u3002",
+  nPersonalPick:"\u96fb\u8a71\u3001\u8863\u7269\u3001\u793e\u4ea4\u3001\u61c9\u6025\u3002\u56e0\u4eba\u800c\u7570\u2014\u2014\u53ef\u4ee5\u5728\u4e0a\u9762\u8abf\u6574\u3002",
   sampleVaries:"<strong>\u5462\u500b\u5b78\u9662\u5404\u5c08\u696d\u5b78\u8cbb\u5514\u540c</strong>\uff0c\u6240\u4ee5\u4f60\u5728\u4e0b\u9762\u5605\u9078\u64c7\u6703\u6539\u8b8a\u4f30\u7b97\u3002\u4ee5\u4e0b\u53ea\u4fc2\u793a\u4f8b\uff0c\u5514\u4fc2\u5168\u90e8\u5c08\u696d\u2014\u2014\u5982\u679c\u5514\u898b\u4f60\u5605\uff0c\u63c0\u6700\u63a5\u8fd1\u5605\u3002",
   sampleSame:"<strong>\u5462\u500b\u5b78\u9662\u6240\u6709\u5c08\u696d\u5b78\u8cbb\u4e00\u6a23</strong>\uff0c\u6240\u4ee5\u4f60\u5728\u4e0b\u9762\u5605\u9078\u64c7\u5514\u6703\u6539\u8b8a\u4f30\u7b97\u3002\u4ee5\u4e0b\u53ea\u4fc2\u793a\u4f8b\uff0c\u63c0\u6700\u63a5\u8fd1\u4f60\u5605\u4e00\u500b\u3002",
   sampleNote:"<strong>\u4ee5\u4e0b\u53ea\u4fc2\u90e8\u5206\u793a\u4f8b\u5c08\u696d\uff0c\u5514\u4fc2\u5b8c\u6574\u5217\u8868\u3002</strong> \u6bcf\u9593\u9662\u6821\u9084\u6709\u597d\u591a\u5176\u4ed6\u5c08\u696d\u3002\u5b78\u8cbb\u6309\u5b78\u9662\u5b9a\uff0c\u5514\u4fc2\u6309\u500b\u5225\u5c08\u696d\uff0c\u6240\u4ee5\u5982\u679c\u5514\u898b\u4f60\u5605\u5c08\u696d\uff0c\u63c0\u540c\u4e00\u5b78\u9662\u5167\u6700\u63a5\u8fd1\u5605\u4e00\u500b\uff0c\u4f30\u7b97\u4e00\u6a23\u63a5\u8fd1\u3002",
@@ -2469,13 +2535,47 @@ function row(label, note, amount, cls){
        + "</td><td class='num'>" + amount + "</td></tr>";
 }
 
-function bars(items){
-  const max = Math.max(...items.map(i => i[1]), 1);
-  return items.filter(i => i[1] > 0).map((i,idx) =>
+/* A share-of-total view, NOT a repeat of the table above it. It answers a
+   different question - which line dominates - and is drawn as a donut so it
+   reads as a different object rather than a reprint of the same numbers. */
+const DONUT_COLOURS = ["#6b1f2a", "#c8a24a", "#8a2c3a", "#2f6b4f", "#e3c87f", "#7d7469"];
+
+function donut(items){
+  const shown = items.filter(i => i[1] > 0);
+  const total = shown.reduce((a,i) => a + i[1], 0);
+  if(!total) return "";
+  const R = 62, C = 2 * Math.PI * R;
+  let offset = 0, segs = "", legend = "";
+  shown.forEach((it, idx) => {
+    const pct = it[1] / total;
+    const col = DONUT_COLOURS[idx % DONUT_COLOURS.length];
+    segs += "<circle r='" + R + "' cx='75' cy='75' stroke='" + col + "'"
+          + " stroke-dasharray='" + (pct * C).toFixed(2) + " " + C.toFixed(2) + "'"
+          + " stroke-dashoffset='" + (-offset * C).toFixed(2) + "'></circle>";
+    legend += "<li><span class='sw' style='background:" + col + "'></span>"
+            + "<span class='dl'>" + it[0] + "</span>"
+            + "<span class='dp'>" + Math.round(pct * 100) + "%</span></li>";
+    offset += pct;
+  });
+  const alt = shown.map(i => i[0] + " " + Math.round(i[1] / total * 100) + "%").join(", ");
+  return "<p class='barshead'>" + t("barsHead") + "</p>"
+       + "<div class='donutwrap'>"
+       + "<svg class='donut' viewBox='0 0 150 150' role='img' aria-label='" + esc(alt) + "'>"
+       + segs + "</svg>"
+       + "<ul class='dlegend'>" + legend + "</ul></div>";
+}
+
+/* Kept for the apprenticeship screen only. */
+function bars(items, asMoney){
+  const shown = items.filter(i => i[1] > 0);
+  const total = shown.reduce((a,i) => a + i[1], 0) || 1;
+  const max = Math.max(...shown.map(i => i[1]), 1);
+  return "<p class='barshead'>" + t("barsHead") + "</p>"
+    + shown.map((i,idx) =>
     "<div class='bar'><span class='bl'>" + i[0] + "</span>"
     + "<span class='btrack'><span class='bfill" + (idx%2 ? " g" : "") + "' style='width:"
     + Math.max(3,(i[1]/max)*100) + "%'></span></span>"
-    + "<span class='bv'>" + money(i[1]) + "</span></div>"
+    + "<span class='bv'>" + (asMoney ? money(i[1]) : Math.round((i[1]/total)*100) + "%") + "</span></div>"
   ).join("");
 }
 
@@ -2537,7 +2637,8 @@ function renderSchool(inst, facKey, idx){
   const books   = path === "university" ? BOOKS_UNI : BOOKS_COL;
   const housing = living === "res" ? inst.res : living === "off" ? inst.off : FOOD_HOME;
   const transit = oop ? inst.travel : (living === "res" ? 400 : TRANSIT);
-  const yearly  = tuition + inst.anc + housing + books + transit + PERSONAL;
+  const personal = Number($("selPersonal").value) || PERSONAL;
+  const yearly  = tuition + inst.anc + housing + books + transit + personal;
 
   setFeeLink(inst.fees, t("feeSchool", {inst: decode(inst.name)}), t("estSchool", {yr: DATA_YEAR}));
 
@@ -2557,13 +2658,13 @@ function renderSchool(inst, facKey, idx){
           t(living === "res" ? "nRes" : living === "off" ? "nOff" : "nHome"), ltr(money(housing)))
     + row(t("rBooks"), t("nBooks"), ltr(money(books)))
     + row(t("rTrans"), t(oop ? "nTravel" : (living === "res" ? "nTransRes" : "nTrans")), ltr(money(transit)))
-    + row(t("rPersonal"), t("nPersonal"), ltr(money(PERSONAL)))
+    + row(t("rPersonal"), t("nPersonalPick"), ltr(money(personal)))
     + "<tr class='total'><td>" + t("totalYear") + "</td><td class='num'>" + ltr(money(yearly)) + "</td></tr>"
     + (p.terms ? row(t("coopEarnRow"), t("coopEarnNote", {w: p.work}), "", "credit") : "");
 
-  $("rBars").innerHTML = bars([
+  $("rBars").innerHTML = donut([
     [t("bTuition"),tuition],[t("bHousing"),housing],[t("bFees"),inst.anc],
-    [t("bBooks"),books],[t("bTrans"),transit],[t("bPersonal"),PERSONAL]
+    [t("bBooks"),books],[t("bTrans"),transit],[t("bPersonal"),personal]
   ]);
 
   /* Program note (e.g. 2+2 business programs where the headline rate applies
@@ -2639,9 +2740,11 @@ function renderTrade(sector, tradeKey, route){
     + "<tr class='total'><td>" + t("trTotal") + "</td><td class='num'>"
       + (netTotal >= 0 ? "+" : "") + ltr(money(netTotal)) + "</td></tr>";
 
+  /* Dollars, not percentages: this mixes money coming IN with money going OUT,
+     so a share-of-total figure would be meaningless. */
   $("rBars").innerHTML = bars([
     [t("bEarn"),earnTotal],[t("bTuition"),feesTotal],[t("bTools"),tr.tools],[t("bPre"),r.extraCost]
-  ]);
+  ], true);
 
   $("kYear").textContent = t("trKOut");
   $("vYear").textContent = money(costTotal);
@@ -2671,6 +2774,7 @@ $("selA").addEventListener("change", () => { loadB(); render(); });
 $("selB").addEventListener("change", () => { loadC(); render(); });
 $("selC").addEventListener("change", render);
 $("selLiving").addEventListener("change", render);
+$("selPersonal").addEventListener("change", render);
 $("selStatus").addEventListener("change", () => {
   $("subStatus").textContent = t($("selStatus").value === "international" ? "subIntl" : "subDom");
   render();
