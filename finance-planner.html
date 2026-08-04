@@ -255,6 +255,43 @@ table.costs tr.credit td{color:var(--ok)}
   background:var(--maroon); color:#fff; border-radius:8px; padding:12px 16px; margin-top:16px;
 }
 .paylink:hover, .paylink:focus{background:var(--maroon-light); color:#fff}
+
+/* ---------- print / save as PDF ----------
+   A family that has worked through this wants to take it away, or show it to
+   someone. The report is built from the live selections at print time, so it
+   cannot drift from what is on screen. Everything happens in the browser —
+   nothing is uploaded. */
+.printbtn{
+  display:block; width:100%; text-align:center; cursor:pointer; font:inherit;
+  font-weight:700; font-size:.92rem; padding:11px 16px; margin-top:10px;
+  background:transparent; color:var(--maroon); border:2px solid var(--maroon); border-radius:8px;
+}
+.printbtn:hover, .printbtn:focus{background:var(--maroon); color:#fff}
+#printReport{display:none}
+
+@media print{
+  body{background:#fff}
+  body > *{display:none !important}
+  #printReport{display:block !important; padding:0; color:#000}
+  #printReport h1{font-size:17pt; margin:0 0 2pt; color:#000}
+  #printReport .rp-school{font-size:9pt; letter-spacing:.08em; text-transform:uppercase; margin:0 0 10pt}
+  #printReport .rp-made{font-size:8.5pt; color:#444; margin:0 0 14pt}
+  #printReport h2{font-size:11pt; margin:14pt 0 5pt; border-bottom:1px solid #999; padding-bottom:2pt}
+  #printReport dl{display:grid; grid-template-columns:auto 1fr; gap:2pt 14pt; margin:0; font-size:10pt}
+  #printReport dt{font-weight:700}
+  #printReport dd{margin:0}
+  #printReport table{width:100%; border-collapse:collapse; font-size:10pt; margin-top:4pt}
+  #printReport th{text-align:left; border-bottom:1px solid #999; padding:3pt 0; font-size:8.5pt;
+                  text-transform:uppercase; letter-spacing:.06em}
+  #printReport td{padding:3pt 0; border-bottom:1px solid #ddd; vertical-align:top}
+  #printReport td:last-child, #printReport th:last-child{text-align:right; white-space:nowrap}
+  #printReport tr.tot td{font-weight:700; border-top:2px solid #000; border-bottom:none; padding-top:5pt}
+  #printReport .rp-note{font-size:9pt; border-left:3px solid #999; padding-left:8pt; margin:10pt 0}
+  #printReport .rp-disc{font-size:8.5pt; color:#333; border:1px solid #999; padding:7pt; margin-top:14pt}
+  #printReport .rp-next{font-size:9pt; margin-top:9pt}
+  #printReport .rp-url{font-size:8pt; color:#555; margin-top:10pt; word-break:break-all}
+  @page{margin:16mm}
+}
 .disclaimer{background:#fdf6e8; border:1px solid var(--gold-light); border-radius:var(--radius);
             padding:14px 18px; font-size:.86rem; color:#6b5626; margin:22px 0}
 .disclaimer strong{color:#7a5f1f}
@@ -486,6 +523,7 @@ body.embed .wrap{padding:0 14px}
         </div>
         <div class="callout" id="rCallout" hidden></div>
         <a class="paylink" id="payLink" href="funding.html">Plan how to pay for this &#8599;</a>
+        <button type="button" class="printbtn" id="printBtn">Print or save this estimate</button>
       </aside>
     </div>
   </section>
@@ -502,6 +540,9 @@ body.embed .wrap{padding:0 14px}
        Planning Tool (pathway &amp; program selector). Questions? Speak with your counsellor.</p>
   </footer>
 </main>
+
+<!-- Built at print time from whatever is currently selected. -->
+<div id="printReport" aria-hidden="true"></div>
 
 <script>
 /* ==========================================================================
@@ -1583,6 +1624,13 @@ const STRINGS = {};
 
 STRINGS.en = {};
 STRINGS.en.std = {
+  repPathway:"Pathway", repBreakdown:"Cost breakdown",
+  printBtn:"Print or save this estimate",
+  repTitle:"Post-Secondary Cost Estimate",
+  repPrepared:"Prepared {d} using the Georges Vanier SS Guidance Post-Secondary Planning Tools.",
+  repChoices:"Your selections",
+  repDisc:"These figures are planning ESTIMATES for the {yr} year, not quoted prices. Tuition was checked against the institution's published fee schedule but varies by campus, course load and year of study, and changes annually. Confirm with the institution before making any financial decision. This estimate does not include OSAP, scholarships or bursaries.",
+  repNext:"Next step: work out how much of this is already covered at the Closing the Gap tool.",
   payFor:"Plan how to pay for this",
   barsHead:"Where the money goes",
   labPersonal:"Personal spending",
@@ -1689,6 +1737,13 @@ STRINGS.en.std = {
 
 /* Plain-language English: shorter sentences, no jargon. Same meaning. */
 STRINGS.en.plain = Object.assign({}, STRINGS.en.std, {
+  repPathway:"Path", repBreakdown:"What it costs",
+  printBtn:"Print or save this",
+  repTitle:"What this could cost",
+  repPrepared:"Made {d} with the Georges Vanier SS Guidance planning tools.",
+  repChoices:"What you picked",
+  repDisc:"These numbers are GUESSES for the {yr} school year, not real prices. We checked them against the school's own website, but prices change every year. Check with the school before you decide anything. This does not include OSAP, scholarships or bursaries.",
+  repNext:"Next: see how much of this is already covered, in the Closing the Gap tool.",
   payFor:"See how to pay for this",
   barsHead:"What costs the most",
   labPersonal:"Your own spending",
@@ -2442,6 +2497,7 @@ function applyI18n(){
   $("lvlStd").textContent     = t("lvlStd");
   $("lvlPlain").textContent   = t("lvlPlain");
   $("emptyMsg").innerHTML     = t("emptyMsg");
+  $("printBtn").textContent   = t("printBtn");
   $("disclaimer").innerHTML   = t("disclaimer", {yr: DATA_YEAR});
   $("footerMsg").textContent  = t("footerMsg");
 
@@ -2890,6 +2946,76 @@ function renderTrade(sector, tradeKey, route){
   $("rCallout").innerHTML = t("trCompare") + "<br><br><strong>" + rLabel + ".</strong> " + rNote
     + (route === "oyap" ? " " + t("oyapExtra") : "") + " " + t("grantsNote");
 }
+
+/* ==========================================================================
+   PRINT REPORT
+   --------------------------------------------------------------------------
+   Assembled from the live DOM at print time rather than kept as a parallel
+   copy, so it can never disagree with what the family is looking at. Runs
+   entirely in the browser — nothing is uploaded anywhere.
+   ========================================================================== */
+function buildPrintReport(){
+  const rep = $("printReport");
+  if(!$("results").classList.contains("on")){ rep.innerHTML = ""; return; }
+
+  const d = new Date().toLocaleDateString("en-CA", {year:"numeric", month:"long", day:"numeric"});
+  const isTrade = path === "apprenticeship";
+
+  /* Selections, read back from the controls so the report shows exactly what
+     produced these numbers — including the living situation and spending level,
+     which change the total but are easy to forget afterwards. */
+  const rows = [];
+  const pathBtn = document.querySelector('.path[aria-pressed="true"] .pname');
+  rows.push([t("repPathway"), pathBtn ? pathBtn.textContent : ""]);
+  rows.push([$("labA").textContent, $("selA").options[$("selA").selectedIndex].text]);
+  rows.push([$("labB").textContent, $("selB").options[$("selB").selectedIndex].text]);
+  rows.push([$("labC").textContent, $("selC").options[$("selC").selectedIndex].text]);
+  if(!isTrade){
+    rows.push([t("labLiving"), $("selLiving").options[$("selLiving").selectedIndex].text]);
+    rows.push([t("labStatus"), $("selStatus").options[$("selStatus").selectedIndex].text]);
+    rows.push([t("labPersonal"), $("selPersonal").options[$("selPersonal").selectedIndex].text]);
+  }
+
+  const note = $("rNote").hidden ? "" :
+    "<p class='rp-note'>" + esc($("rNote").textContent) + "</p>";
+
+  /* Reuse the on-screen table, minus the small print, which does not earn its
+     space on paper. */
+  const tbl = $("rBody").cloneNode(true);
+  tbl.querySelectorAll(".note").forEach(n => n.remove());
+  tbl.querySelectorAll("tr.total").forEach(n => n.className = "tot");
+
+  rep.innerHTML =
+      "<p class='rp-school'>Georges Vanier Secondary School &middot; Guidance &amp; Counselling</p>"
+    + "<h1>" + t("repTitle") + "</h1>"
+    + "<p class='rp-made'>" + t("repPrepared", {d: d}) + "</p>"
+
+    + "<h2>" + esc($("rProg").textContent) + "</h2>"
+    + "<p style='margin:0 0 4pt;font-size:10pt'>" + esc($("rInst").textContent) + "</p>"
+    + note
+
+    + "<h2>" + t("repChoices") + "</h2>"
+    + "<dl>" + rows.filter(r => r[1] && !/^—/.test(r[1]))
+        .map(r => "<dt>" + esc(r[0]) + "</dt><dd>" + esc(r[1]) + "</dd>").join("") + "</dl>"
+
+    + "<h2>" + t("repBreakdown") + "</h2>"
+    + "<table><thead><tr><th>" + $("thItem").textContent + "</th><th>"
+      + t("thAmount") + "</th></tr></thead><tbody>" + tbl.innerHTML + "</tbody></table>"
+
+    + "<h2>" + esc($("kTotal").textContent) + "</h2>"
+    + "<p style='margin:0;font-size:13pt;font-weight:700'>" + esc($("vTotal").textContent) + "</p>"
+    + "<p style='margin:2pt 0 0;font-size:9pt;color:#444'>" + esc($("sTotal").textContent) + "</p>"
+
+    + "<p class='rp-disc'>" + t("repDisc", {yr: DATA_YEAR}) + "</p>"
+    + (isTrade ? "" : "<p class='rp-next'>" + t("repNext") + "</p>")
+    + "<p class='rp-url'>" + window.location.href.split("?")[0] + "</p>";
+}
+
+window.addEventListener("beforeprint", buildPrintReport);
+$("printBtn").addEventListener("click", function(){
+  buildPrintReport();
+  window.print();
+});
 
 /* ==========================================================================
    EVENTS

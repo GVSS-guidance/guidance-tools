@@ -97,6 +97,37 @@
 .card p{margin:0 0 8px; font-size:.87rem; color:var(--ink-soft)}
 .card a{color:var(--maroon-light); font-weight:600; font-size:.87rem}
 
+/* ---------- print / save as PDF ----------
+   Built from the live inputs at print time. Runs entirely in the browser —
+   the figures a family types here are never uploaded anywhere. */
+.printbtn{
+  display:block; width:100%; text-align:center; cursor:pointer; font:inherit;
+  font-weight:700; font-size:.92rem; padding:11px 16px; margin-top:12px;
+  background:transparent; color:var(--maroon); border:2px solid var(--maroon); border-radius:8px;
+}
+.printbtn:hover, .printbtn:focus{background:var(--maroon); color:#fff}
+#printReport{display:none}
+
+@media print{
+  body{background:#fff}
+  body > *{display:none !important}
+  #printReport{display:block !important; color:#000}
+  #printReport h1{font-size:17pt; margin:0 0 2pt; color:#000}
+  #printReport .rp-school{font-size:9pt; letter-spacing:.08em; text-transform:uppercase; margin:0 0 10pt}
+  #printReport .rp-made{font-size:8.5pt; color:#444; margin:0 0 14pt}
+  #printReport h2{font-size:11pt; margin:14pt 0 5pt; border-bottom:1px solid #999; padding-bottom:2pt}
+  #printReport table{width:100%; border-collapse:collapse; font-size:10pt}
+  #printReport th{text-align:left; border-bottom:1px solid #999; padding:3pt 0; font-size:8.5pt;
+                  text-transform:uppercase; letter-spacing:.06em}
+  #printReport td{padding:3pt 0; border-bottom:1px solid #ddd}
+  #printReport td:last-child, #printReport th:last-child{text-align:right; white-space:nowrap}
+  #printReport tr.tot td{font-weight:700; border-top:2px solid #000; border-bottom:none; padding-top:5pt}
+  #printReport .rp-big{font-size:14pt; font-weight:700; margin:2pt 0 0}
+  #printReport .rp-disc{font-size:8.5pt; color:#333; border:1px solid #999; padding:7pt; margin-top:14pt}
+  #printReport .rp-url{font-size:8pt; color:#555; margin-top:10pt; word-break:break-all}
+  @page{margin:16mm}
+}
+
 @media (max-width:820px){
   .gapgrid{grid-template-columns:1fr}
   .srcrow{grid-template-columns:1fr 120px}
@@ -215,6 +246,7 @@
           <p class="sm" id="sGap">Enter a cost above to begin.</p>
         </div>
         <div class="callout" id="advice" hidden></div>
+        <button type="button" class="printbtn" id="printBtn">Print or save this plan</button>
       </aside>
     </div>
   </section>
@@ -371,6 +403,9 @@
   </footer>
 </main>
 
+<!-- Built at print time from whatever is currently entered. -->
+<div id="printReport" aria-hidden="true"></div>
+
 <script>
 const $ = id => document.getElementById(id);
 const money = n => "$" + Math.round(n).toLocaleString("en-CA");
@@ -462,6 +497,66 @@ function render(){
       + "used repeats each year. A first year that balances does not guarantee the next three do.";
   }
 }
+
+/* ==========================================================================
+   PRINT REPORT
+   Assembled from the live inputs at print time, so it cannot disagree with
+   what is on screen. Nothing leaves the browser.
+   ========================================================================== */
+const SOURCE_LABELS = {
+  f_grant:"OSAP — grant", f_loan:"OSAP — loan", f_schol:"Scholarships",
+  f_burs:"Bursaries", f_family:"Family, savings or RESP", f_summer:"Summer earnings",
+  f_part:"Part-time work during study"
+};
+
+function buildPrintReport(){
+  const rep = $("printReport");
+  const cost = num("costInput");
+  if(!cost){ rep.innerHTML = ""; return; }
+
+  const d = new Date().toLocaleDateString("en-CA", {year:"numeric", month:"long", day:"numeric"});
+  const funding = SOURCES.reduce((a,id) => a + num(id), 0);
+  const gap = cost - funding;
+  const label = $("costLab").textContent.replace(/ — carried over.*$/, "").trim();
+
+  const rows = SOURCES.filter(id => num(id) > 0)
+    .map(id => "<tr><td>" + SOURCE_LABELS[id] + "</td><td>" + money(num(id)) + "</td></tr>")
+    .join("") || "<tr><td colspan='2'>Nothing entered yet.</td></tr>";
+
+  rep.innerHTML =
+      "<p class='rp-school'>Georges Vanier Secondary School &middot; Guidance &amp; Counselling</p>"
+    + "<h1>Funding Plan</h1>"
+    + "<p class='rp-made'>Prepared " + d
+      + " using the Georges Vanier SS Guidance Post-Secondary Planning Tools.</p>"
+
+    + "<h2>Cost for one year</h2>"
+    + (/^No figure yet/.test(label) ? "" : "<p style='margin:0 0 3pt;font-size:10pt'>" + label + "</p>")
+    + "<p class='rp-big'>" + money(cost) + "</p>"
+
+    + "<h2>Funding</h2>"
+    + "<table><thead><tr><th>Source</th><th>Amount</th></tr></thead><tbody>"
+      + rows
+      + "<tr class='tot'><td>Total funding</td><td>" + money(funding) + "</td></tr>"
+      + "</tbody></table>"
+
+    + "<h2>" + (gap > 0 ? "Remaining gap" : "Covered, with room to spare") + "</h2>"
+    + "<p class='rp-big'>" + money(Math.abs(gap)) + "</p>"
+    + (gap > 0
+        ? "<p style='margin:2pt 0 0;font-size:9pt;color:#444'>About " + money(gap/12)
+          + " a month across the year, or " + money(gap/8)
+          + " across the eight months of study.</p>"
+        : "")
+
+    + "<p class='rp-disc'>This plan is arithmetic on figures you entered yourself. It does not "
+      + "assess, approve or guarantee any funding. OSAP eligibility and amounts are determined "
+      + "solely by the Ministry through your application; scholarship and bursary decisions rest "
+      + "with the awarding body. Costs are planning estimates. Confirm with the institution "
+      + "before making any financial decision.</p>"
+    + "<p class='rp-url'>" + window.location.href.split("?")[0] + "</p>";
+}
+
+window.addEventListener("beforeprint", buildPrintReport);
+$("printBtn").addEventListener("click", function(){ buildPrintReport(); window.print(); });
 
 ["costInput"].concat(SOURCES).forEach(id => $(id).addEventListener("input", render));
 render();
