@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Financial Planning Tools — Georges Vanier SS Guidance</title>
+<link rel="stylesheet" href="common.css">
+<style>
+/* ==========================================================================
+   Dashboard — the front door to the guidance financial planning tools.
+   Kept deliberately plain: it exists to route people, not to hold content.
+   ========================================================================== */
+.tools{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:18px; margin:4px 0 0}
+
+.tool{
+  display:flex; flex-direction:column; background:var(--paper);
+  border:1px solid var(--line); border-top:5px solid var(--maroon);
+  border-radius:var(--radius); padding:22px 24px;
+}
+.tool.two{border-top-color:var(--gold)}
+.tool .n{font-size:.7rem; font-weight:700; letter-spacing:.11em; text-transform:uppercase;
+         color:var(--ink-soft); margin:0 0 6px}
+.tool h2{margin:0 0 8px; font-size:1.22rem; font-weight:700; color:var(--maroon)}
+.tool p{margin:0 0 14px; font-size:.93rem; color:var(--ink-soft); flex:1}
+.tool ul{margin:0 0 18px; padding-left:19px; font-size:.87rem; color:var(--ink-soft)}
+.tool li{margin-bottom:4px}
+.tool .btn{align-self:flex-start}
+
+.flow{
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:center;
+  background:var(--cream); border:1px solid var(--line); border-radius:var(--radius);
+  padding:14px 18px; margin:22px 0 0; font-size:.88rem; color:var(--ink-soft);
+}
+.flow b{color:var(--maroon); font-weight:700}
+.flow .arr{color:var(--gold); font-weight:700}
+
+.soon{border-top-color:var(--line); opacity:.72}
+.soon h2{color:var(--ink-soft)}
+.soon .tag{display:inline-block; font-size:.7rem; font-weight:700; letter-spacing:.09em;
+           text-transform:uppercase; background:var(--cream); border:1px solid var(--line);
+           color:var(--ink-soft); border-radius:99px; padding:3px 10px}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="school">Georges Vanier Secondary School &middot; Guidance &amp; Counselling</p>
+    <h1>Financial Planning Tools</h1>
+    <p>Working out what life after high school costs, and how to pay for it. Built for students
+       and families to use together.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="panel">
+    <h2>Start here</h2>
+    <p class="hint">Two tools. Most people use them in order, but either works on its own.</p>
+
+    <div class="tools">
+
+      <article class="tool">
+        <p class="n">Tool 1</p>
+        <h2>Post-Secondary Cost Explorer</h2>
+        <p>Pick a pathway, then a specific program, and see what one year &mdash; and the whole
+           credential &mdash; is likely to cost.</p>
+        <ul>
+          <li>University, college and skilled trades</li>
+          <li>24 institutions, around 200 programs</li>
+          <li>Living at home, residence or off-campus</li>
+          <li>Tuition figures checked against each institution&rsquo;s published fee schedule</li>
+        </ul>
+        <a class="btn" href="finance-planner.html">What will it cost?</a>
+      </article>
+
+      <article class="tool two">
+        <p class="n">Tool 2</p>
+        <h2>Closing the Gap</h2>
+        <p>Work out how much of that cost is already covered, and what is left to find.</p>
+        <ul>
+          <li>Add up OSAP, scholarships, bursaries, family support and work</li>
+          <li>See the shortfall as a monthly figure</li>
+          <li>Plain-language guide to how OSAP actually works</li>
+          <li>Where to look for scholarships, and which ones are automatic</li>
+        </ul>
+        <a class="btn" href="funding.html">How will I pay for it?</a>
+      </article>
+
+      <article class="tool soon">
+        <p class="n">Later</p>
+        <h2>Still to come <span class="tag">In development</span></h2>
+        <p>Planned additions to this set, once the first two have been used for a while:</p>
+        <ul>
+          <li>RESP withdrawal planning</li>
+          <li>Comparing two offers side by side</li>
+          <li>Repayment: what a student loan actually costs afterwards</li>
+        </ul>
+      </article>
+
+    </div>
+
+    <div class="flow">
+      <b>Find a program</b> <span class="arr">&rarr;</span>
+      <span>see the cost</span> <span class="arr">&rarr;</span>
+      <b>carry it across</b> <span class="arr">&rarr;</span>
+      <span>add your funding</span> <span class="arr">&rarr;</span>
+      <b>see the gap</b>
+    </div>
+  </section>
+
+  <div class="warnbox">
+    <strong>About the numbers.</strong> Costs shown in these tools are planning estimates for the
+    2026&ndash;27 year. Tuition has been checked against each institution&rsquo;s own published fee
+    schedule, but fees change annually and vary by campus, course load and year of study. Nothing
+    here assesses or guarantees funding of any kind. Always confirm with the institution before
+    making a financial decision, and talk to your counsellor &mdash; that is what we are here for.
+  </div>
+
+  <footer>
+    <p>Georges Vanier SS Guidance Department. Questions about any of this? Speak with your
+       counsellor, or drop by the guidance office &mdash; Mon.&ndash;Fri., 8:45 a.m.&ndash;3:30 p.m.,
+       no appointment needed.</p>
+  </footer>
+</main>
+
+<script>
+/* Embed mode, same as the other tools: tightens the banner when framed inside
+   the Evoq page, which supplies no visible heading of its own. */
+(function(){
+  const q = window.location.search;
+  let embedded;
+  try { embedded = window.self !== window.top; } catch(e){ embedded = true; }
+  if(/[?&]embed=1/.test(q)) embedded = true;
+  if(/[?&]embed=0/.test(q)) embedded = false;
+  if(embedded){
+    document.body.classList.add("embed");
+    /* Inside an iframe, tool links must open in a new tab or the tool would
+       load into the frame with no way back out. */
+    document.querySelectorAll('.tool a.btn').forEach(a => {
+      a.setAttribute("target", "_blank");
+      a.setAttribute("rel", "noopener noreferrer");
+    });
+  }
+})();
+</script>
+</body>
+</html>

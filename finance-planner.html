@@ -235,6 +235,13 @@ table.costs tr.credit td{color:var(--ok)}
 .callout{background:var(--ok-bg); border-left:4px solid var(--ok); border-radius:0 8px 8px 0;
          padding:12px 16px; margin-top:18px; font-size:.9rem}
 .callout strong{color:var(--ok)}
+/* Handoff to the funding tool. Carries the computed cost across so the family
+   does not retype it, and so the second tool never invents a figure. */
+.paylink{
+  display:block; text-align:center; text-decoration:none; font-weight:700; font-size:.95rem;
+  background:var(--maroon); color:#fff; border-radius:8px; padding:12px 16px; margin-top:16px;
+}
+.paylink:hover, .paylink:focus{background:var(--maroon-light); color:#fff}
 .disclaimer{background:#fdf6e8; border:1px solid var(--gold-light); border-radius:var(--radius);
             padding:14px 18px; font-size:.86rem; color:#6b5626; margin:22px 0}
 .disclaimer strong{color:#7a5f1f}
@@ -460,6 +467,7 @@ body.embed .wrap{padding:0 14px}
           <p class="sm" id="sTotal"></p>
         </div>
         <div class="callout" id="rCallout" hidden></div>
+        <a class="paylink" id="payLink" href="funding.html">Plan how to pay for this &#8599;</a>
       </aside>
     </div>
   </section>
@@ -1553,6 +1561,7 @@ const STRINGS = {};
 
 STRINGS.en = {};
 STRINGS.en.std = {
+  payFor:"Plan how to pay for this",
   barsHead:"Where the money goes",
   labPersonal:"Personal spending",
   persLow:"Frugal", persMid:"Moderate", persHigh:"Comfortable",
@@ -1658,6 +1667,7 @@ STRINGS.en.std = {
 
 /* Plain-language English: shorter sentences, no jargon. Same meaning. */
 STRINGS.en.plain = Object.assign({}, STRINGS.en.std, {
+  payFor:"See how to pay for this",
   barsHead:"What costs the most",
   labPersonal:"Your own spending",
   persLow:"Low", persMid:"Middle", persHigh:"Higher",
@@ -2775,11 +2785,24 @@ function renderSchool(inst, facKey, idx){
   $("vTotal").className = "v";
   $("sTotal").textContent = coop ? t("coopTuition", {s: p.terms, y: p.y}) : t("sTotal");
 
+  /* Hand the verified figure to the funding tool rather than making the family
+     retype it — and so module 2 never has to invent a cost. */
+  const payHref = "funding.html?cost=" + Math.round(yearly)
+    + "&label=" + encodeURIComponent(decode(p.n) + " at " + decode(inst.name));
+  const pl = $("payLink");
+  pl.href = payHref;
+  pl.textContent = t("payFor") + " ↗";
+  if(document.body.classList.contains("embed")){
+    pl.setAttribute("target", "_blank");
+    pl.setAttribute("rel", "noopener noreferrer");
+  }
+
   const co = /co-op/i.test(p.n);
   let callout = "";
   if(oop)                     callout = t("coMove");
   else if(co)                 callout = t("coCoop");
   else if(living === "home")  callout = t("coHome", {res: money(inst.res), tot: money(inst.res * p.y)});
+  $("payLink").style.display = "";
   $("rCallout").hidden = !callout;
   $("rCallout").innerHTML = callout;
 }
@@ -2840,6 +2863,7 @@ function renderTrade(sector, tradeKey, route){
   $("vTotal").className = "v pos";
   $("sTotal").textContent = t("trSGross",{j:money(jrYear), wj:money(tr.wageJ)});
 
+  $("payLink").style.display = "none";
   $("rCallout").hidden = false;
   $("rCallout").innerHTML = t("trCompare") + "<br><br><strong>" + rLabel + ".</strong> " + rNote
     + (route === "oyap" ? " " + t("oyapExtra") : "") + " " + t("grantsNote");

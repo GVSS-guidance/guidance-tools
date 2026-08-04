@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Closing the Gap — Georges Vanier SS Guidance</title>
+<link rel="stylesheet" href="common.css">
+<style>
+/* ==========================================================================
+   Closing the Gap — Module 2 of the Financial Planning Tool
+   --------------------------------------------------------------------------
+   DESIGN RULE, DELIBERATE: this tool does NOT calculate an OSAP entitlement.
+   Ontario does not publish the assessment tables — income thresholds, grant
+   and loan formulas are not public, assessment is individual, and the rules
+   changed again for programs starting 1 August 2026. Any number we produced
+   would be invented, and a family could turn down an offer or take on debt
+   because of it. So OSAP is an INPUT the student fetches from the official
+   Aid Estimator, never an output we guess.
+
+   Everything here is either (a) a cost figure verified in the cost tool or
+   (b) a number the family typed in themselves.
+   ========================================================================== */
+.gapgrid{display:grid; grid-template-columns:1.25fr 1fr; gap:22px; align-items:start}
+
+.srcrow{display:grid; grid-template-columns:1fr 150px; gap:12px; align-items:center;
+        padding:11px 0; border-bottom:1px solid #f1ece3}
+.srcrow:last-of-type{border-bottom:none}
+.srcrow .lab{font-weight:600; font-size:.94rem}
+.srcrow .lab small{display:block; font-weight:400; font-size:.79rem; color:var(--ink-soft); margin-top:2px}
+.srcrow input{
+  font:inherit; font-size:.95rem; padding:9px 11px; border:1px solid var(--line);
+  border-radius:8px; width:100%; text-align:right; font-variant-numeric:tabular-nums;
+  background:var(--paper); color:var(--ink);
+}
+.srcrow input:focus-visible{outline:3px solid var(--gold-light); outline-offset:1px; border-color:var(--maroon)}
+
+.tally{background:var(--cream); border:1px solid var(--line); border-radius:var(--radius); padding:18px}
+.tally .k{font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-soft); font-weight:700}
+.tally .v{font-size:1.9rem; font-weight:700; line-height:1.15; margin:2px 0 0; font-variant-numeric:tabular-nums}
+.tally .v.gap{color:var(--maroon)}
+.tally .v.covered{color:var(--ok)}
+.tally .sm{font-size:.85rem; color:var(--ink-soft); margin:4px 0 0}
+.tally hr{border:none; border-top:1px solid var(--line); margin:15px 0}
+
+.meter{height:14px; background:#efeae1; border-radius:99px; overflow:hidden; margin:14px 0 6px; display:flex}
+.meter span{display:block; height:14px}
+.meter .m-fund{background:var(--ok)}
+.meter .m-gap{background:var(--maroon-light)}
+.meterkey{display:flex; gap:14px; font-size:.78rem; color:var(--ink-soft); flex-wrap:wrap}
+.meterkey b{display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:5px}
+
+.costline{display:flex; gap:12px; align-items:baseline; flex-wrap:wrap;
+          padding:13px 15px; background:var(--warn-bg); border:1px solid var(--gold-light);
+          border-radius:var(--radius); margin-bottom:16px}
+.costline .cl-v{font-size:1.35rem; font-weight:700; color:var(--maroon); font-variant-numeric:tabular-nums}
+.costline .cl-l{font-size:.88rem; color:var(--warn-ink); flex:1; min-width:180px}
+
+.cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:4px}
+.card{background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:15px 17px}
+.card h3{margin:0 0 5px; font-size:.98rem; color:var(--maroon); font-weight:700}
+.card p{margin:0 0 8px; font-size:.87rem; color:var(--ink-soft)}
+.card a{color:var(--maroon-light); font-weight:600; font-size:.87rem}
+
+@media (max-width:820px){
+  .gapgrid{grid-template-columns:1fr}
+  .srcrow{grid-template-columns:1fr 120px}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="school">Georges Vanier Secondary School &middot; Guidance &amp; Counselling</p>
+    <h1>Closing the Gap</h1>
+    <p>You know roughly what a year will cost. This works out how much of it is already covered,
+       and what is left to find.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ STEP 1: THE COST ============ -->
+  <section class="panel">
+    <span class="step">Step 1</span>
+    <h2>What does it cost?</h2>
+    <p class="hint">Bring a figure over from the Cost Explorer, or type your own.</p>
+
+    <div class="costline" id="costLine">
+      <span class="cl-v" id="costVal">$0</span>
+      <span class="cl-l" id="costLab">No figure yet &mdash; work one out in the Cost Explorer, or enter it below.</span>
+      <a class="btn outline" href="finance-planner.html" id="costLink">Open the Cost Explorer &#8599;</a>
+    </div>
+
+    <div class="field" style="max-width:280px">
+      <label for="costInput">Cost for one year</label>
+      <input type="number" id="costInput" min="0" step="100" placeholder="24400" inputmode="numeric">
+      <span class="sub">Tuition, fees, housing, books, transport and personal spending.</span>
+    </div>
+  </section>
+
+  <!-- ============ STEP 2: FUNDING ============ -->
+  <section class="panel">
+    <span class="step">Step 2</span>
+    <h2>What is already covered?</h2>
+    <p class="hint">Enter what you have or expect. Leave anything blank if it does not apply.</p>
+
+    <div class="gapgrid">
+      <div>
+        <div class="srcrow">
+          <span class="lab">OSAP &mdash; grant
+            <small>Money you do <strong>not</strong> pay back. Get this from the official Aid Estimator.</small></span>
+          <input type="number" id="f_grant" min="0" step="100" placeholder="0" inputmode="numeric">
+        </div>
+        <div class="srcrow">
+          <span class="lab">OSAP &mdash; loan
+            <small>Repaid after you finish. Interest-free while studying full-time.</small></span>
+          <input type="number" id="f_loan" min="0" step="100" placeholder="0" inputmode="numeric">
+        </div>
+        <div class="srcrow">
+          <span class="lab">Scholarships
+            <small>Entrance awards, external awards, anything already won.</small></span>
+          <input type="number" id="f_schol" min="0" step="100" placeholder="0" inputmode="numeric">
+        </div>
+        <div class="srcrow">
+          <span class="lab">Bursaries
+            <small>Need-based, applied for through the school after you are admitted.</small></span>
+          <input type="number" id="f_burs" min="0" step="100" placeholder="0" inputmode="numeric">
+        </div>
+        <div class="srcrow">
+          <span class="lab">Family, savings or RESP
+            <small>What your household can contribute, plus any RESP withdrawal.</small></span>
+          <input type="number" id="f_family" min="0" step="100" placeholder="0" inputmode="numeric">
+        </div>
+        <div class="srcrow">
+          <span class="lab">Summer earnings
+            <small>Four months of full-time work often brings in $6,000&ndash;$10,000 before tax.</small></span>
+          <input type="number" id="f_summer" min="0" step="100" placeholder="0" inputmode="numeric">
+        </div>
+        <div class="srcrow">
+          <span class="lab">Part-time work during study
+            <small>Be realistic &mdash; 10&ndash;12 hours a week is what most students manage.</small></span>
+          <input type="number" id="f_part" min="0" step="100" placeholder="0" inputmode="numeric">
+        </div>
+      </div>
+
+      <aside>
+        <div class="tally">
+          <p class="k">Total funding</p>
+          <p class="v covered" id="vFund">$0</p>
+          <div class="meter" id="meter" aria-hidden="true"></div>
+          <div class="meterkey">
+            <span><b style="background:#2f6b4f"></b>Covered</span>
+            <span><b style="background:#8a2c3a"></b>Still to find</span>
+          </div>
+          <hr>
+          <p class="k" id="kGap">Remaining gap</p>
+          <p class="v gap" id="vGap">&mdash;</p>
+          <p class="sm" id="sGap">Enter a cost above to begin.</p>
+        </div>
+        <div class="callout" id="advice" hidden></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ OSAP ============ -->
+  <section class="panel">
+    <span class="step">OSAP</span>
+    <h2>Understanding OSAP before you apply</h2>
+    <p class="hint">The part most families find confusing, in plain terms.</p>
+
+    <div class="warnbox">
+      <strong>Why this tool does not calculate your OSAP.</strong>
+      Ontario does not publish the tables it uses &mdash; income thresholds and the grant/loan
+      formula are not public, and every assessment is worked out individually. Any figure we
+      produced here would be a guess, and a guess is a bad reason to accept or turn down an
+      offer. Use the official estimator below; it is the only source that reflects your actual
+      circumstances.
+      <br><br>
+      <a class="btn" href="https://osap.gov.on.ca/AidEstimatorWeb/enterapp/enter.xhtml"
+         target="_blank" rel="noopener noreferrer">Open the official OSAP Aid Estimator &#8599;</a>
+    </div>
+
+    <details class="exp">
+      <summary>Grant or loan &mdash; what is the difference?</summary>
+      <div class="body">
+        <p>An OSAP assessment usually returns both.</p>
+        <ul>
+          <li><strong>Grant</strong> &mdash; you keep it. Nothing to repay.</li>
+          <li><strong>Loan</strong> &mdash; repaid once you finish, and it does not accrue interest
+              while you are studying full-time.</li>
+        </ul>
+        <p>Enter them separately above. They are both money you can spend this year, but only one
+           of them follows you afterwards, and that matters when you compare pathways.</p>
+      </div>
+    </details>
+
+    <details class="exp">
+      <summary>Will my parents' income be counted?</summary>
+      <div class="body">
+        <p>Usually yes, if you are applying straight out of high school. OSAP treats most students
+           as <strong>dependent</strong>, which means household income forms part of the
+           assessment even if your family is not contributing anything.</p>
+        <p>You are generally assessed as <strong>independent</strong> if you have been out of high
+           school four or more years, have worked full-time for two years, are married or have
+           children of your own. The definitions are exact, so check them rather than assuming.</p>
+        <p>If your family situation is complicated &mdash; estrangement, a parent who will not
+           share income details, a recent change in circumstances &mdash; speak to a counsellor.
+           There are review processes, and they are not obvious from the website.</p>
+      </div>
+    </details>
+
+    <details class="exp">
+      <summary>When do I apply, and what will I need?</summary>
+      <div class="body">
+        <p><strong>Apply before you are admitted.</strong> You do not need an offer in hand, and
+           applying early means money arrives when tuition is due rather than months later.
+           Applications for the following school year usually open in the spring.</p>
+        <p>Have ready:</p>
+        <ul>
+          <li>Your Social Insurance Number</li>
+          <li>Your parents' or guardians' income information, if you are assessed as dependent</li>
+          <li>The school and program you are applying to (an estimate is fine; you can change it)</li>
+          <li>Your own income and savings</li>
+        </ul>
+        <p>You will need to confirm your enrolment once term starts before funds are released.</p>
+      </div>
+    </details>
+
+    <details class="exp">
+      <summary>Does OSAP cover living costs, or only tuition?</summary>
+      <div class="body">
+        <p>The assessment considers your whole cost of attendance &mdash; tuition, fees, books,
+           and living expenses &mdash; not just the tuition line. That is why the figure from the
+           Cost Explorer is a useful thing to have in front of you when you use the estimator.</p>
+        <p>What it will actually fund depends on your assessment, which is why it is an input here
+           rather than something we predict.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ SCHOLARSHIPS & BURSARIES ============ -->
+  <section class="panel">
+    <span class="step">Awards</span>
+    <h2>Scholarships and bursaries</h2>
+    <p class="hint">Two different things, applied for in two different ways.</p>
+
+    <details class="exp" open>
+      <summary>Entrance scholarships &mdash; most are automatic</summary>
+      <div class="body">
+        <p>This is the piece students most often miss. At nearly every Ontario university, the main
+           entrance scholarship is awarded <strong>automatically on your admission average</strong>
+           &mdash; there is no separate application. You are considered when you are admitted.</p>
+        <p>Thresholds vary by school and change year to year, but the shape is consistent: awards
+           typically begin somewhere in the 80s and increase in bands as the average rises. A few
+           points can be worth thousands of dollars a year.</p>
+        <p>Check the entrance-award page of each school you are applying to, because the
+           <em>renewable</em> ones matter most &mdash; some continue every year if you maintain a
+           minimum average, others are one-time only. That distinction is easy to miss and worth
+           several thousand dollars over a degree.</p>
+      </div>
+    </details>
+
+    <details class="exp">
+      <summary>External scholarships &mdash; where to look</summary>
+      <div class="body">
+        <p>These are awarded by organisations rather than schools, and they do need applications
+           and usually references, so start early.</p>
+        <ul>
+          <li><a href="https://www.scholarshipscanada.com/" target="_blank" rel="noopener noreferrer">ScholarshipsCanada</a>
+              &mdash; the largest Canadian database, searchable by profile.</li>
+          <li><a href="https://studentawards.com/" target="_blank" rel="noopener noreferrer">StudentAwards</a>
+              &mdash; similar, worth registering with both.</li>
+          <li><a href="https://loranscholar.ca/" target="_blank" rel="noopener noreferrer">Loran Award</a>
+              &mdash; among the largest in Canada, judged on character and service rather than marks
+              alone. Applications typically close in the autumn of Grade 12.</li>
+          <li><a href="https://schulichleaders.com/" target="_blank" rel="noopener noreferrer">Schulich Leader Scholarships</a>
+              &mdash; for STEM, nominated through your school, so speak to guidance early.</li>
+          <li><a href="https://www.td.com/ca/en/personal-banking/solutions/student-banking/scholarship-for-community-leadership" target="_blank" rel="noopener noreferrer">TD Scholarships for Community Leadership</a>
+              &mdash; recognises sustained community involvement.</li>
+        </ul>
+        <p><strong>Ask your counsellor about school-nominated awards.</strong> Some of the largest
+           require a nomination from Georges Vanier rather than a direct application, so they never
+           appear in a public search.</p>
+      </div>
+    </details>
+
+    <details class="exp">
+      <summary>Bursaries &mdash; for financial need</summary>
+      <div class="body">
+        <p>Bursaries are based on <strong>need, not marks</strong>, and you generally apply
+           <em>after</em> you have been admitted and registered, through the school's own financial
+           aid office. Most institutions open applications in September or October.</p>
+        <p>They are frequently under-claimed, because students assume they will not qualify or do
+           not know they exist. If money is tight, apply. Many schools also hold emergency bursary
+           funds for students whose circumstances change mid-year.</p>
+        <p>Applying for OSAP first usually helps, since many bursaries use your OSAP assessment as
+           evidence of need.</p>
+      </div>
+    </details>
+  </section>
+
+  <div class="warnbox">
+    <strong>Please read:</strong> this page does not assess, approve or guarantee any funding.
+    The only figures it produces are arithmetic on numbers you enter yourself. OSAP eligibility
+    and amounts are determined solely by the Ministry through your application, and scholarship
+    and bursary decisions rest with the awarding body. Always confirm with the institution or
+    funder before making a financial decision.
+  </div>
+
+  <footer>
+    <p>Georges Vanier SS Guidance Department &middot; Module 2 of the Financial Planning Tool.
+       Questions? Speak with your counsellor.
+       &middot; <a href="index.html">All guidance tools</a></p>
+  </footer>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const money = n => "$" + Math.round(n).toLocaleString("en-CA");
+const SOURCES = ["f_grant","f_loan","f_schol","f_burs","f_family","f_summer","f_part"];
+
+/* Embed mode: same behaviour as the cost tool, so it sits cleanly in an iframe
+   on the Evoq page. Switches on automatically when framed. */
+(function(){
+  const q = window.location.search;
+  let embedded;
+  try { embedded = window.self !== window.top; } catch(e){ embedded = true; }
+  if(/[?&]embed=1/.test(q)) embedded = true;
+  if(/[?&]embed=0/.test(q)) embedded = false;
+  if(embedded) document.body.classList.add("embed");
+})();
+
+/* A cost can be handed over from the Cost Explorer:
+   funding.html?cost=24400&label=Mechanical%20Engineering%20at%20U%20of%20T
+   Nothing is invented here — the number came from the verified cost tool. */
+(function(){
+  const q = new URLSearchParams(window.location.search);
+  const c = parseFloat(q.get("cost"));
+  const label = q.get("label");
+  if(c > 0){
+    $("costInput").value = Math.round(c);
+    if(label) $("costLab").textContent = decodeURIComponent(label) + " — carried over from the Cost Explorer.";
+  }
+  /* Preserve embed mode when linking back, so the button does not break out
+     of the iframe into an unstyled page. */
+  if(document.body.classList.contains("embed")){
+    $("costLink").setAttribute("target", "_blank");
+    $("costLink").setAttribute("rel", "noopener noreferrer");
+  }
+})();
+
+function num(id){
+  const v = parseFloat($(id).value);
+  return isFinite(v) && v > 0 ? v : 0;
+}
+
+function render(){
+  const cost = num("costInput");
+  const funding = SOURCES.reduce((a,id) => a + num(id), 0);
+  const gap = cost - funding;
+
+  $("costVal").textContent = cost ? money(cost) : "$0";
+  $("vFund").textContent = money(funding);
+
+  /* Meter shows the share of cost covered. With no cost entered there is
+     nothing meaningful to divide by, so it stays empty. */
+  const pct = cost > 0 ? Math.min(funding / cost, 1) : 0;
+  $("meter").innerHTML = cost > 0
+    ? "<span class='m-fund' style='width:" + (pct*100).toFixed(1) + "%'></span>"
+      + "<span class='m-gap' style='width:" + ((1-pct)*100).toFixed(1) + "%'></span>"
+    : "";
+
+  const adv = $("advice");
+  if(!cost){
+    $("kGap").textContent = "Remaining gap";
+    $("vGap").textContent = "—";
+    $("vGap").className = "v gap";
+    $("sGap").textContent = "Enter a cost above to begin.";
+    adv.hidden = true;
+    return;
+  }
+
+  if(gap > 0){
+    $("kGap").textContent = "Remaining gap";
+    $("vGap").textContent = money(gap);
+    $("vGap").className = "v gap";
+    $("sGap").textContent = "About " + money(gap/12) + " a month across the year, or "
+      + money(gap/8) + " across the eight months of study.";
+    adv.hidden = false;
+    adv.innerHTML = "<strong>Still short " + money(gap) + ".</strong> Worth trying, roughly in "
+      + "order of how much they move the number: living at home if that is an option, bursaries "
+      + "through the school once you are admitted, entrance scholarships you may already qualify "
+      + "for on your average, and part-time work during term. Speak to a counsellor before "
+      + "assuming the gap cannot be closed — it usually can.";
+  }else{
+    $("kGap").textContent = "Covered, with room to spare";
+    $("vGap").textContent = money(-gap);
+    $("vGap").className = "v covered";
+    $("sGap").textContent = "Your funding covers the cost with " + money(-gap) + " left over.";
+    adv.hidden = false;
+    adv.innerHTML = "<strong>This year looks covered.</strong> Two things worth checking: whether "
+      + "your scholarships are <em>renewable</em> or one-time, and whether the OSAP figure you "
+      + "used repeats each year. A first year that balances does not guarantee the next three do.";
+  }
+}
+
+["costInput"].concat(SOURCES).forEach(id => $(id).addEventListener("input", render));
+render();
+</script>
+</body>
+</html>
