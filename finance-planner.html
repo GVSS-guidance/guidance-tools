@@ -267,6 +267,13 @@ table.costs tr.credit td{color:var(--ok)}
   background:transparent; color:var(--maroon); border:2px solid var(--maroon); border-radius:8px;
 }
 .printbtn:hover, .printbtn:focus{background:var(--maroon); color:#fff}
+.fbbtn{
+  display:block; width:100%; text-align:center; text-decoration:none; font:inherit;
+  font-weight:600; font-size:.85rem; padding:9px 14px; margin-top:8px; border-radius:8px;
+  color:var(--ink-soft); border:1px dashed var(--line); background:transparent;
+}
+.fbbtn:hover, .fbbtn:focus{color:var(--maroon); border-color:var(--maroon); border-style:solid}
+.fbbtn.hide{display:none}
 #printReport{display:none}
 
 @media print{
@@ -524,6 +531,8 @@ body.embed .wrap{padding:0 14px}
         <div class="callout" id="rCallout" hidden></div>
         <a class="paylink" id="payLink" href="funding.html">Plan how to pay for this &#8599;</a>
         <button type="button" class="printbtn" id="printBtn">Print or save this estimate</button>
+        <a class="fbbtn hide" id="fbBtn" target="_blank" rel="noopener noreferrer"
+           href="#">Report a problem with this data</a>
       </aside>
     </div>
   </section>
@@ -1624,6 +1633,7 @@ const STRINGS = {};
 
 STRINGS.en = {};
 STRINGS.en.std = {
+  fbBtn:"Report a problem with this data",
   repPathway:"Pathway", repBreakdown:"Cost breakdown",
   printBtn:"Print or save this estimate",
   repTitle:"Post-Secondary Cost Estimate",
@@ -1737,6 +1747,7 @@ STRINGS.en.std = {
 
 /* Plain-language English: shorter sentences, no jargon. Same meaning. */
 STRINGS.en.plain = Object.assign({}, STRINGS.en.std, {
+  fbBtn:"Tell us something looks wrong",
   repPathway:"Path", repBreakdown:"What it costs",
   printBtn:"Print or save this",
   repTitle:"What this could cost",
@@ -2880,6 +2891,7 @@ function renderSchool(inst, facKey, idx){
   if(oop)                     callout = t("coMove");
   else if(co)                 callout = t("coCoop");
   else if(living === "home")  callout = t("coHome", {res: money(inst.res), tot: money(inst.res * p.y)});
+  updateFeedbackLink();
   $("payLink").style.display = "";
   $("rCallout").hidden = !callout;
   $("rCallout").innerHTML = callout;
@@ -2941,10 +2953,65 @@ function renderTrade(sector, tradeKey, route){
   $("vTotal").className = "v pos";
   $("sTotal").textContent = t("trSGross",{j:money(jrYear), wj:money(tr.wageJ)});
 
+  updateFeedbackLink();
   $("payLink").style.display = "none";
   $("rCallout").hidden = false;
   $("rCallout").innerHTML = t("trCompare") + "<br><br><strong>" + rLabel + ".</strong> " + rNote
     + (route === "oyap" ? " " + t("oyapExtra") : "") + " " + t("grantsNote");
+}
+
+/* ==========================================================================
+   FEEDBACK — "this figure looks wrong"
+   --------------------------------------------------------------------------
+   GitHub Pages is static: there is no server here to receive a submission. So
+   reports go to a Google Form the department owns, and land in a Sheet you
+   control. Nothing is collected by this page.
+
+   TO SWITCH IT ON:
+   1. Create a Google Form with (at least) these questions:
+        a. "What looks wrong?"           — multiple choice
+             tuition or fees figure / program missing / institution missing /
+             broken link / something else
+        b. "What did you find, and where?" — long answer
+             ask for the source, e.g. the institution's own fee page
+        c. "Where in the tool?"          — SHORT ANSWER, this one gets prefilled
+        d. "Your name and email"         — short answer, clearly OPTIONAL, only
+             if they want a reply
+   2. Click "Get pre-filled link", put any text in question (c), click "Get link".
+   3. The copied URL contains ...entry.123456789=your+text — take that number.
+   4. Paste the form's /viewform URL below as `url`, and the number as `entryContext`.
+   The button stays hidden until `url` is set, so nothing appears half-built.
+   ========================================================================== */
+const FEEDBACK = {
+  url: "",              /* e.g. "https://docs.google.com/forms/d/e/FORM_ID/viewform" */
+  entryContext: ""      /* e.g. "123456789" — the entry ID of the "where" question */
+};
+
+/* Attaches what the student was looking at, so a report arrives as
+   "Seneca Polytechnic / Community Services & Health / Practical Nursing (RPN)
+   — tuition $2,772" rather than "the nursing one looked wrong". */
+function updateFeedbackLink(){
+  const el = $("fbBtn");
+  if(!FEEDBACK.url){ el.classList.add("hide"); return; }
+
+  const bits = [];
+  const a = currentSet()[$("selA").value];
+  if(a) bits.push(decode(a.name));
+  if($("selB").value) bits.push(decode($("selB").value));
+  if($("selC").value !== "" && $("selC").selectedIndex > 0)
+    bits.push($("selC").options[$("selC").selectedIndex].text);
+  if($("results").classList.contains("on"))
+    bits.push("shown: " + $("vYear").textContent + "/yr");
+  bits.push("[" + (path === "apprenticeship" ? "trades" : path) + ", " + DATA_YEAR + "]");
+
+  let href = FEEDBACK.url;
+  if(FEEDBACK.entryContext){
+    href += (href.indexOf("?") < 0 ? "?" : "&") + "usp=pp_url&entry."
+          + FEEDBACK.entryContext + "=" + encodeURIComponent(bits.join(" / "));
+  }
+  el.href = href;
+  el.textContent = t("fbBtn");
+  el.classList.remove("hide");
 }
 
 /* ==========================================================================

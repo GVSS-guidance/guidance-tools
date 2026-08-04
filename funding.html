@@ -106,6 +106,13 @@
   background:transparent; color:var(--maroon); border:2px solid var(--maroon); border-radius:8px;
 }
 .printbtn:hover, .printbtn:focus{background:var(--maroon); color:#fff}
+.fbbtn{
+  display:block; width:100%; text-align:center; text-decoration:none; font:inherit;
+  font-weight:600; font-size:.85rem; padding:9px 14px; margin-top:8px; border-radius:8px;
+  color:var(--ink-soft); border:1px dashed var(--line);
+}
+.fbbtn:hover, .fbbtn:focus{color:var(--maroon); border-color:var(--maroon); border-style:solid}
+.fbbtn.hide{display:none}
 #printReport{display:none}
 
 @media print{
@@ -249,6 +256,8 @@
         </div>
         <div class="callout" id="advice" hidden></div>
         <button type="button" class="printbtn" id="printBtn">Print or save this plan</button>
+        <a class="fbbtn hide" id="fbBtn" target="_blank" rel="noopener noreferrer"
+           href="#">Report a problem with this page</a>
       </aside>
     </div>
   </section>
@@ -503,6 +512,28 @@ function render(){
       + "used repeats each year. A first year that balances does not guarantee the next three do.";
   }
 }
+
+/* ==========================================================================
+   FEEDBACK
+   Static hosting means there is no server here to receive a report, so these
+   go to a Google Form the department owns. Same setup as the cost tool — see
+   the FEEDBACK block in finance-planner.html for how to switch it on. The
+   button stays hidden until `url` is filled in.
+   ========================================================================== */
+const FEEDBACK = { url:"", entryContext:"" };
+
+function updateFeedbackLink(){
+  const el = $("fbBtn");
+  if(!FEEDBACK.url){ el.classList.add("hide"); return; }
+  let href = FEEDBACK.url;
+  if(FEEDBACK.entryContext){
+    href += (href.indexOf("?") < 0 ? "?" : "&") + "usp=pp_url&entry."
+          + FEEDBACK.entryContext + "=" + encodeURIComponent("Closing the Gap (module 2)");
+  }
+  el.href = href;
+  el.classList.remove("hide");
+}
+updateFeedbackLink();
 
 /* ==========================================================================
    PRINT REPORT
