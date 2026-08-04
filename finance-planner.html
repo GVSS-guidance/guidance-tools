@@ -1142,7 +1142,7 @@ const COLLEGES = {
     name: "Seneca Polytechnic", anc: 1663, res: 12800, off: 14500, intlMult: 4.0,
     fees: "https://students.senecapolytechnic.ca/spaces/71/fees-and-payments/home",
     short: "Seneca", brand: "#B01E28",
-    verified: "2026-08-01 \u2014 standard diploma/certificate tuition is provincially regulated: $2,772/yr (Seneca 2026/27, matched by Fanshawe at $2,774.94). Degrees $6,481/yr (Seneca, Bachelor of Computer Science). \u26a0 SPECIALISED HEALTH AND AVIATION PROGRAMMES ARE NOT VERIFIED and keep their earlier estimates \u2014 these carry large approved premiums (Fanshawe Dental Hygiene is $5,682.68 PER TERM, ~4\u00d7 standard). Ancillary verified for Seneca ($1,663) and Fanshawe ($821) only; other colleges' ancillary is an estimate. PRACTICAL NURSING verified 2026-08-01: Seneca shows the components separately \u2014 tuition $1,359/semester, the SAME regulated rate as any other diploma, so PN carries no tuition premium. The cost is materials: $2,950/$950/$1,040/$850 by semester, entered here as a $2,895 annual average.",
+    verified: "2026-08-01 \u2014 standard diploma/certificate tuition is provincially regulated: $2,772/yr (Seneca 2026/27, matched by Fanshawe at $2,774.94). Degrees $6,481/yr (Seneca, Bachelor of Computer Science). \u26a0 SPECIALISED HEALTH AND AVIATION PROGRAMMES ARE NOT VERIFIED and keep their earlier estimates \u2014 these carry large approved premiums (Fanshawe Dental Hygiene is $5,682.68 PER TERM, ~4\u00d7 standard). Ancillary verified for Seneca ($1,663) and Fanshawe ($821) only; other colleges' ancillary is an estimate. PRACTICAL NURSING verified 2026-08-01: Seneca shows the components separately \u2014 tuition $1,359/semester, the SAME regulated rate as any other diploma, so PN carries no tuition premium. The cost is materials: $2,950/$950/$1,040/$850 by semester, entered here as a $2,895 annual average. NURSING DEGREE verified 2026-08-03: Seneca's Honours Bachelor of Science — Nursing is $3,177/semester tuition in 2025/26 = $6,354/yr; × 1.02 gives exactly $6,481, the same 2026/27 degree rate as the Bachelor of Computer Science, which confirms college degree tuition is uniform and regulated. Books are front-loaded: $2,145 in semester 1, $290-685 in semesters 2-7, $1,000 in semester 8 — about $1,520/yr averaged over the 8-semester programme.",
     about: "Multiple GTA campuses including Newnham in North York. Career programs plus degrees; strong transfer paths to university.",
     faculties: {
       "Business": [
@@ -1158,7 +1158,9 @@ const COLLEGES = {
         {n:"Electronics Engineering Technician", t:2772, y:2}
       ],
       "Community Services &amp; Health": [
-        {n:"Practical Nursing", t:2772, y:2, books:2895},
+        {n:"Practical Nursing (RPN)", t:2772, y:2, books:2895},
+        {n:"Honours Bachelor of Science &mdash; Nursing (RN)", t:6481, y:4, books:1520,
+         note:"This is the DEGREE route to becoming a Registered Nurse (RN) — four years, eight semesters. It is a different credential from Practical Nursing, which is a two-year diploma leading to Registered Practical Nurse (RPN). Both are real nursing careers with different scopes of practice and pay; an RPN can later bridge to RN through a fast-track route. Decide which you want before applying, because the entry requirements differ."},
         {n:"Early Childhood Education", t:2772, y:2},
         {n:"Social Service Worker", t:2772, y:2},
         {n:"Police Foundations", t:2772, y:2}
@@ -1194,9 +1196,10 @@ const COLLEGES = {
         {n:"Electromechanical Engineering Technology", t:2772, y:3}
       ],
       "Health Sciences &amp; Wellness": [
-        {n:"Practical Nursing", t:2772, y:2, books:2481},
+        {n:"Practical Nursing (RPN)", t:2772, y:2, books:2481},
         {n:"Paramedic (Adv. Dip.)", t:5800, y:2},
-        {n:"Bachelor of Nursing (collaborative)", t:8600, y:4},
+        {n:"Bachelor of Nursing (collaborative) (RN)", t:8600, y:4,
+         note:"The DEGREE route to Registered Nurse (RN). Practical Nursing at the same college is a different credential — a two-year diploma leading to Registered Practical Nurse (RPN). Both are real nursing careers with different scopes of practice and pay."},
         {n:"Massage Therapy (Adv. Dip.)", t:5100, y:3}
       ],
       "Media &amp; Creative Arts": [
@@ -1228,7 +1231,7 @@ const COLLEGES = {
         {n:"Marketing (Diploma)", t:2772, y:2}
       ],
       "Centre for Health Sciences": [
-        {n:"Practical Nursing", t:2772, y:2, books:870},
+        {n:"Practical Nursing (RPN)", t:2772, y:2, books:870},
         {n:"Dental Hygiene (Adv. Dip.)", t:7900, y:3},
         {n:"Denturism (Honours Bachelor)", t:9200, y:4},
         {n:"Paramedic", t:5900, y:2}
@@ -1276,7 +1279,7 @@ const COLLEGES = {
         {n:"Auto Body Repair Techniques", t:2772, y:1}
       ],
       "Community &amp; Health Studies": [
-        {n:"Practical Nursing", t:3285, y:2},
+        {n:"Practical Nursing (RPN)", t:3285, y:2},
         {n:"Paramedic", t:5800, y:2},
         {n:"Child &amp; Youth Care (Adv. Dip.)", t:2772, y:3}
       ],
@@ -1309,8 +1312,9 @@ const COLLEGES = {
         {n:"Business &mdash; Marketing (Diploma)", t:2772, y:2}
       ],
       "Applied Health &amp; Community Studies": [
-        {n:"Practical Nursing", t:2772, y:2, books:3412},
-        {n:"Bachelor of Science in Nursing (collaborative)", t:8600, y:4},
+        {n:"Practical Nursing (RPN)", t:2772, y:2, books:3412},
+        {n:"Bachelor of Science in Nursing (collaborative) (RN)", t:8600, y:4,
+         note:"The DEGREE route to Registered Nurse (RN). Practical Nursing at the same college is a different credential — a two-year diploma leading to Registered Practical Nurse (RPN). Both are real nursing careers with different scopes of practice and pay."},
         {n:"Early Childhood Education", t:2772, y:2}
       ]
     }
@@ -1328,7 +1332,7 @@ const COLLEGES = {
         {n:"Cybersecurity (Diploma)", t:2772, y:2}
       ],
       "Health Sciences": [
-        {n:"Practical Nursing", t:2772, y:2, books:1912},
+        {n:"Practical Nursing (RPN)", t:2772, y:2, books:1912},
         {n:"Paramedic", t:5700, y:2},
         {n:"Pharmacy Technician", t:5000, y:2}
       ],
@@ -1351,7 +1355,7 @@ const COLLEGES = {
     about: "Hamilton, about an hour from Toronto on the GO train. Known for health sciences, skilled trades and technology, with living costs well below the GTA.",
     faculties: {
       "Health Sciences": [
-        {n:"Practical Nursing", t:4158, y:2, books:2643,
+        {n:"Practical Nursing (RPN)", t:4158, y:2, books:2643,
          note:"Year 1 at Mohawk runs THREE semesters, not two ($3,139.41 + $2,623.40 + $2,338.25 = $8,101.06). That makes the annual figure look high next to other colleges, but the programme finishes sooner, so compare the full-credential total rather than one year."},
         {n:"Paramedic", t:2772, y:2},
         {n:"Medical Radiation Sciences", t:2772, y:3},
@@ -1402,7 +1406,7 @@ const COLLEGES = {
         {n:"Bachelor of Commerce &mdash; Digital Marketing", t:6481, y:4}
       ],
       "Health Sciences &amp; Human Services": [
-        {n:"Practical Nursing", t:2772, y:2, books:2416},
+        {n:"Practical Nursing (RPN)", t:2772, y:2, books:2416},
         {n:"Dental Hygiene (Adv. Dip.)", t:7600, y:3},
         {n:"Massage Therapy", t:5000, y:2}
       ],
