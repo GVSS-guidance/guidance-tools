@@ -1516,6 +1516,27 @@ const FOOD_HOME  = 0;      // assumed absorbed by family when living at home
    TO ADD A LANGUAGE: add an entry to LANGS, add a matching block to STRINGS,
    and add an <option> to #selLang in the markup.
    ========================================================================== */
+/* ============================================================================
+   LANGUAGE SELECTOR VISIBILITY
+   ----------------------------------------------------------------------------
+   The translations are machine-produced and awaiting review by fluent speakers
+   (planned for September 2026). Until then the selector is HIDDEN from families
+   — but nothing is deleted: every string, the RTL handling and the reading-level
+   logic all stay live below.
+
+   TO RESTORE: set SHOW_LANGUAGES to true. That is the only change needed.
+
+   TO REVIEW WHILE HIDDEN: add ?langs=1 to the URL, e.g.
+     .../finance-planner.html?langs=1
+   That reveals the selector for that visit only, so reviewers can work through
+   each language without it being exposed on the guidance page. ?lang=fa jumps
+   straight to one language.
+
+   Once a language has been checked, set REVIEWED:true for it in LANGS; its
+   "machine translation" notice disappears on its own.
+   ========================================================================== */
+const SHOW_LANGUAGES = false;
+
 const LANGS = {
   en:     {name:"English",     dir:"ltr", htmlLang:"en",      hasLevels:true,  REVIEWED:true },
   fa:     {name:"فارسی",       dir:"rtl", htmlLang:"fa",      hasLevels:false, REVIEWED:false},
@@ -2892,6 +2913,19 @@ document.querySelectorAll(".lvl").forEach(b =>
     savedLang  = localStorage.getItem("gvCostLang")  || "en";
     savedLevel = localStorage.getItem("gvCostLevel") || "std";
   }catch(e){}
+
+  /* Hide the language selector until the translations are vetted. A stored
+     preference from earlier testing must NOT survive this, or a returning
+     visitor would be stuck in a language they can no longer switch out of. */
+  const q = window.location.search;
+  const forced = (q.match(/[?&]lang=([A-Za-z]+)/) || [])[1];
+  const langsVisible = SHOW_LANGUAGES || /[?&]langs=1/.test(q) || !!forced;
+  if(!langsVisible){
+    $("selLang").style.display = "none";
+    $("tLangLabel").style.display = "none";
+    savedLang = "en";
+  }
+  if(forced && LANGS[forced]) savedLang = forced;
   level = (savedLevel === "plain") ? "plain" : "std";
   $("lvlStd").setAttribute("aria-pressed", String(level === "std"));
   $("lvlPlain").setAttribute("aria-pressed", String(level === "plain"));
