@@ -36,6 +36,19 @@ body{
 .mhead{display:flex; gap:24px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap}
 .mhead .mtext{flex:1 1 380px; min-width:0}
 .langbar{flex:0 0 auto; display:flex; flex-direction:column; gap:8px; align-items:flex-end}
+/* Cross-tool navigation. Without this the cost tool is a dead end until a
+   program is chosen — the "plan how to pay" button only appears with results. */
+.toolnav{display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:flex-end;
+         font-size:.85rem; margin-bottom:4px}
+.toolnav a{
+  color:#f0e6e8; text-decoration:none; font-weight:600; white-space:nowrap;
+  border:1px solid rgba(255,255,255,.4); border-radius:99px; padding:5px 12px;
+}
+.toolnav a:hover, .toolnav a:focus{background:rgba(255,255,255,.14); color:#fff; border-color:#fff}
+.toolnav a.home{border-color:var(--gold-light); color:var(--gold-light)}
+.toolnav a.home:hover{background:var(--gold); border-color:var(--gold); color:#3d2a08}
+html[dir="rtl"] .toolnav{justify-content:flex-start}
+
 .langbar label{font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
                color:var(--gold-light); font-weight:700}
 .langbar select{
@@ -275,6 +288,7 @@ footer a{color:var(--maroon-light)}
   .mhead{gap:16px}
   .langbar{align-items:stretch; width:100%}
   .langbar select{width:100%}
+  .toolnav{justify-content:flex-start}
 }
 
 /* ==========================================================================
@@ -308,6 +322,10 @@ body.embed .wrap{padding:0 14px}
     <!-- Language + reading-level controls. The reading-level pair is shown only for
          English (see LANG_HAS_LEVELS in the script). -->
     <div class="langbar">
+      <nav class="toolnav" aria-label="Guidance tools">
+        <a class="home" href="index.html">&#8592; All tools</a>
+        <a href="funding.html">Closing the Gap</a>
+      </nav>
       <label for="selLang" id="tLangLabel">Language</label>
       <select id="selLang">
         <option value="en"     lang="en">English</option>
@@ -2927,7 +2945,15 @@ document.querySelectorAll(".lvl").forEach(b =>
   catch(e){ embedded = true; }
   if(/[?&]embed=1/.test(q)) embedded = true;
   if(/[?&]embed=0/.test(q)) embedded = false;
-  if(embedded) document.body.classList.add("embed");
+  if(embedded){
+    document.body.classList.add("embed");
+    /* Framed, so cross-tool links must open in a new tab — otherwise the next
+       tool loads inside the frame with no way back. */
+    document.querySelectorAll(".toolnav a").forEach(a => {
+      a.setAttribute("target", "_blank");
+      a.setAttribute("rel", "noopener noreferrer");
+    });
+  }
 })();
 
 /* Restore saved preferences, then draw. */

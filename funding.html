@@ -70,11 +70,17 @@
 <body>
 
 <header class="masthead">
-  <div class="wrap">
-    <p class="school">Georges Vanier Secondary School &middot; Guidance &amp; Counselling</p>
-    <h1>Closing the Gap</h1>
-    <p>You know roughly what a year will cost. This works out how much of it is already covered,
-       and what is left to find.</p>
+  <div class="wrap mhead">
+    <div class="mtext">
+      <p class="school">Georges Vanier Secondary School &middot; Guidance &amp; Counselling</p>
+      <h1>Closing the Gap</h1>
+      <p>You know roughly what a year will cost. This works out how much of it is already covered,
+         and what is left to find.</p>
+    </div>
+    <nav class="toolnav" aria-label="Guidance tools">
+      <a class="home" href="index.html">&#8592; All tools</a>
+      <a href="finance-planner.html">Cost Explorer</a>
+    </nav>
   </div>
 </header>
 
@@ -345,8 +351,10 @@ const SOURCES = ["f_grant","f_loan","f_schol","f_burs","f_family","f_summer","f_
   /* Preserve embed mode when linking back, so the button does not break out
      of the iframe into an unstyled page. */
   if(document.body.classList.contains("embed")){
-    $("costLink").setAttribute("target", "_blank");
-    $("costLink").setAttribute("rel", "noopener noreferrer");
+    document.querySelectorAll('#costLink, .toolnav a').forEach(a => {
+      a.setAttribute("target", "_blank");
+      a.setAttribute("rel", "noopener noreferrer");
+    });
   }
 })();
 
