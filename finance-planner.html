@@ -713,9 +713,16 @@ const UNIVERSITIES = {
   },
   "waterloo": {
     name: "University of Waterloo", commute:"far", anc: 1800, res: 15200, off: 13500, intlMult: 4.6,
+    books: 1500, coopFee: 836,
     fees: "https://uwaterloo.ca/finance/student-financial-services/tuition-fee-schedules",
     short: "Waterloo", brand: "#262626",
-    verified: "2026-08-01 \u2014 Waterloo Fall 2026 domestic Ontario schedule, per-term maximum \u00d7 2 study terms",
+    verified: "2026-08-01 \u2014 Waterloo Fall 2026 domestic Ontario schedule, per-term maximum \u00d7 2 study terms. "
+            + "2026-08-09 \u2014 re-read the same schedule for the split: Science regular incidental $874.59/term FT, "
+            + "Environment regular $852.14/term (so ~$1,700\u20131,750/yr against the $1,800 used here); co-op fee "
+            + "$836.00/academic term 2026/27, capped at 6 terms for Accounting/Arts/Health/Environment/Science and "
+            + "8 for the rest; books $1,500 per the ACL. Aviation tuition is BACKED OUT of Waterloo's own all-in "
+            + "$9,000/yr figure (uwaterloo.ca/aviation/fees) using those incidentals \u2014 the TOTAL is exact, the split "
+            + "is derived.",
     about: "About 90 minutes west of Toronto. Famous for co-op — most students alternate study terms with paid work terms.",
     faculties: {
       "Mathematics": [
@@ -741,17 +748,21 @@ const UNIVERSITIES = {
         {n:"Kinesiology", t:6250, y:4},
         {n:"Honours Science", t:6250, y:4},
         {n:"Science &amp; Business", t:6250, y:4},
-        {n:"Science and Aviation (BSc)", t:9000, y:4, flight:25000, tIntl:49000,
+        {n:"Science and Aviation (BSc)", t:7200, y:4, flight:25000, tIntl:47200,
          note:"Flight training is delivered by the Waterloo-Wellington Flight Centre and billed "
             + "separately by WWFC, not by the university — about $100,000 across the four "
             + "years, on top of tuition. IMPORTANT: WWFC flight training CANNOT be covered by "
             + "OSAP or any other provincial student aid. Families cover it through RESPs, a bank "
             + "loan or line of credit, personal payment or scholarships. You finish with a "
             + "Commercial Pilot Licence, multi-engine and instrument ratings and 205+ flight "
-            + "hours, and 5.0 of the 20.0 course units come across as transfer credit from WWFC."}
+            + "hours, and 5.0 of the 20.0 course units come across as transfer credit from WWFC. "
+            + "Waterloo quotes about $9,000 a year for this programme as a single all-in figure; "
+            + "the tuition and fees rows here split that using Waterloo's own published "
+            + "incidental fees, so the two together come to the same total. If you add co-op, "
+            + "the co-op fee is extra."}
       ],
       "Arts": [
-        {n:"Accounting &amp; Financial Management (AFM)", t:15338, y:5, terms:8, work:4},
+        {n:"Accounting &amp; Financial Management (AFM)", t:15338, y:5, terms:8, work:4, coopTerms:6},
         {n:"Psychology", t:6250, y:4},
         {n:"Economics", t:6250, y:4},
         {n:"Global Business &amp; Digital Arts", t:6250, y:4}
@@ -764,14 +775,18 @@ const UNIVERSITIES = {
         {n:"Environment &amp; Business", t:6250, y:4},
         {n:"Planning", t:6250, y:4},
         {n:"Geomatics", t:6250, y:4},
-        {n:"Geography and Aviation (BES)", t:9000, y:4, flight:25000, tIntl:49000,
+        {n:"Geography and Aviation (BES)", t:7200, y:4, flight:25000, tIntl:47200,
          note:"Flight training is delivered by the Waterloo-Wellington Flight Centre and billed "
             + "separately by WWFC, not by the university — about $100,000 across the four "
             + "years, on top of tuition. IMPORTANT: WWFC flight training CANNOT be covered by "
             + "OSAP or any other provincial student aid. Families cover it through RESPs, a bank "
             + "loan or line of credit, personal payment or scholarships. You finish with a "
             + "Commercial Pilot Licence, multi-engine and instrument ratings and 205+ flight "
-            + "hours, and 5.0 of the 20.0 course units come across as transfer credit from WWFC."}
+            + "hours, and 5.0 of the 20.0 course units come across as transfer credit from WWFC. "
+            + "Waterloo quotes about $9,000 a year for this programme as a single all-in figure; "
+            + "the tuition and fees rows here split that using Waterloo's own published "
+            + "incidental fees, so the two together come to the same total. If you add co-op, "
+            + "the co-op fee is extra."}
       ]
     }
   },
@@ -1719,8 +1734,9 @@ STRINGS.en.std = {
   rTuition:"Tuition", rFees:"Ancillary & incidental fees",
   rRes:"Residence & meal plan", rOff:"Rent & groceries (8 months)", rHome:"Housing & food",
   rBooks:"Books & supplies", rTrans:"Transportation", rPersonal:"Personal & miscellaneous",
-  rFlight:"Flight training (paid to WWFC)",
+  rFlight:"Flight training (paid to WWFC)", rCoopFee:"Co-op fee",
   totalYear:"Total, one year",
+  nCoopFee:"{f} per academic term to run the co-op program — not a placement fee. Charged for up to {n} terms, about {tot} over the degree.",
   nTuitionDom:"Domestic Ontario rate. Assumes a standard full-time load of 5.0 credits a year (ten half-courses, five per term).",
   nTuitionIntl:"International rate — estimate only.",
   nFlight:"Billed by the Waterloo-Wellington Flight Centre, not the university. NOT covered by OSAP or any provincial student aid.",
@@ -1735,7 +1751,7 @@ STRINGS.en.std = {
   nTransResOut:"Trips home to Toronto. A local transit pass is usually bundled into the ancillary fees above.",
   nPersonal:"Phone, clothing, social life, emergencies.",
   bTuition:"Tuition", bHousing:"Housing/food", bFees:"Fees", bBooks:"Books",
-  bTrans:"Transport", bPersonal:"Personal", bFlight:"Flight training",
+  bTrans:"Transport", bPersonal:"Personal", bFlight:"Flight training", bCoopFee:"Co-op fee",
   bEarn:"Earnings", bTools:"Tools", bPre:"Pre-trades",
   kYear:"Estimated cost — one year", sYear:"About {m} a month across 12 months.",
   kTotal:"Full credential ({y} years)",
@@ -1835,7 +1851,9 @@ STRINGS.en.plain = Object.assign({}, STRINGS.en.std, {
   rFees:"School fees", rRes:"Room and food at school", rOff:"Rent and food",
   rHome:"Home and food", rBooks:"Books and supplies", rTrans:"Getting around",
   rPersonal:"Other things", rFlight:"Flight training (paid to the flight school)",
+  rCoopFee:"Co-op fee",
   totalYear:"Total for one year",
+  nCoopFee:"{f} each school term to run the co-op program. It is not a fee for getting a job. You pay it for up to {n} terms — about {tot} in total.",
   nFlight:"You pay this to the Waterloo-Wellington Flight Centre, not to the university. OSAP cannot pay for it.",
   nTuitionDom:"Ontario price. Assumes a normal full load: 10 half-courses a year, 5 each term.",
   nTuitionIntl:"International price. A guess.",
@@ -1850,6 +1868,7 @@ STRINGS.en.plain = Object.assign({}, STRINGS.en.std, {
   nTransResOut:"Trips home to Toronto. A local bus pass is usually already inside the school fees above.",
   nPersonal:"Phone, clothes, going out, emergencies.",
   bHousing:"Home/food", bFees:"Fees", bTrans:"Travel", bPersonal:"Other", bFlight:"Flying",
+  bCoopFee:"Co-op fee",
   kYear:"What one year could cost", sYear:"About {m} each month, for 12 months.",
   kTotal:"The whole program ({y} years)",
   sTotal:"This assumes prices stay the same. In real life they go up a little each year.",
@@ -2749,7 +2768,8 @@ const DONUT_COLOURS = [
   "#3a5fa8",  /* steel blue              */
   "#8e4a9e",  /* plum                    */
   "#6f6a63",  /* warm grey               */
-  "#10707d"   /* deep teal               */
+  "#10707d",  /* deep teal               */
+  "#a8562a"   /* burnt orange            */
 ];
 /* SEVEN colours because the aviation programmes add a "flight training" slice.
    With six, the seventh segment wrapped to index 0 and rendered in the same
@@ -2868,8 +2888,20 @@ function renderSchool(inst, facKey, idx){
   const flight = p.flight || 0;
   /* Some programmes carry equipment costs far above the flat default — Seneca
      Practical Nursing is $2,950 of books/kit in semester 1 alone. p.books
-     overrides the default where a real figure is known. */
-  const books   = p.books || (path === "university" ? BOOKS_UNI : BOOKS_COL);
+     overrides the default where a real figure is known; inst.books does the
+     same where an institution publishes its own estimate for everyone. */
+  const books   = p.books || inst.books || (path === "university" ? BOOKS_UNI : BOOKS_COL);
+
+  /* CO-OP FEE. Waterloo charges $836 per ACADEMIC term (2026/27) to run the
+     co-op programme — it is not a placement fee and is not tied to work terms.
+     It is capped at a set number of academic terms that varies by faculty:
+     Accounting, Arts, Health, Environment and Science stop at 6, most others
+     at 8. `coopTerms` carries that cap where it differs from the study-term
+     count. Left out entirely it is nearly $6,700 missing from an engineering
+     or maths degree. */
+  const coopFeeTerm  = (p.terms && inst.coopFee) ? inst.coopFee : 0;
+  const coopFeeYear  = coopFeeTerm * 2;                      /* two academic terms a year */
+  const coopFeeTotal = coopFeeTerm * (p.coopTerms || p.terms || 0);
   const housing = living === "res" ? inst.res : living === "off" ? inst.off : FOOD_HOME;
   /* Transportation is NOT one number. The tool originally charged a TTC
      post-secondary pass to every commuter, which is only right for the Toronto
@@ -2892,7 +2924,7 @@ function renderSchool(inst, facKey, idx){
     : living === "home" ? (cm === "ttc" ? "nTrans" : cm === "go" ? "nTransGo" : "nTransLocal")
     : (cm === "ttc" ? "nTransRes" : "nTransResOut");
   const personal = Number($("selPersonal").value) || PERSONAL;
-  const yearly  = tuition + flight + inst.anc + housing + books + transit + personal;
+  const yearly  = tuition + flight + coopFeeYear + inst.anc + housing + books + transit + personal;
 
   setFeeLink(inst.fees, t("feeSchool", {inst: decode(inst.name)}), t("estSchool", {yr: DATA_YEAR}));
 
@@ -2908,6 +2940,9 @@ function renderSchool(inst, facKey, idx){
   $("rBody").innerHTML =
       row(t("rTuition"), t(intl ? "nTuitionIntl" : "nTuitionDom"), ltr(money(tuition)))
     + (flight ? row(t("rFlight"), t("nFlight"), ltr(money(flight))) : "")
+    + (coopFeeYear ? row(t("rCoopFee"),
+        t("nCoopFee", {f: money(coopFeeTerm), n: (p.coopTerms || p.terms), tot: money(coopFeeTotal)}),
+        ltr(money(coopFeeYear))) : "")
     + row(t("rFees"), t("nFees"), ltr(money(inst.anc)))
     + row(t(living === "res" ? "rRes" : living === "off" ? "rOff" : "rHome"),
           t(living === "res" ? "nRes" : living === "off" ? "nOff" : "nHome"), ltr(money(housing)))
@@ -2920,6 +2955,7 @@ function renderSchool(inst, facKey, idx){
   $("rBars").innerHTML = donut(
     [[t("bTuition"),tuition]]
     .concat(flight ? [[t("bFlight"),flight]] : [])
+    .concat(coopFeeYear ? [[t("bCoopFee"),coopFeeYear]] : [])
     .concat([[t("bHousing"),housing],[t("bFees"),inst.anc],
              [t("bBooks"),books],[t("bTrans"),transit],[t("bPersonal"),personal]])
   );
@@ -2933,9 +2969,12 @@ function renderSchool(inst, facKey, idx){
   /* Co-op programs bill per STUDY TERM. Counting tuition for every calendar
      year overstates the credential, because work terms carry no tuition. */
   const coop = !!p.terms;
-  const nonTuition = yearly - tuition;
+  /* The co-op fee comes out of nonTuition before it gets multiplied by the
+     calendar years, because it is capped at a fixed number of terms — billing
+     it every year of a five-year programme would overstate it. */
+  const nonTuition = yearly - tuition - coopFeeYear;
   const credential = coop
-    ? (tuition / 2) * p.terms + nonTuition * p.y
+    ? (tuition / 2) * p.terms + nonTuition * p.y + coopFeeTotal
     : yearly * p.y;
 
   $("kYear").textContent = t("kYear");
