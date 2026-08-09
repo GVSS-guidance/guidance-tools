@@ -18,6 +18,11 @@
   border-radius:var(--radius); padding:22px 24px;
 }
 .tool.two{border-top-color:var(--gold)}
+/* The readiness tool comes first in the intended order, so it gets the
+   heavier treatment — students landing here should start there. */
+.tool.zero{border-top-color:var(--maroon); box-shadow:0 2px 14px rgba(107,31,42,.09)}
+.tool.zero .n{color:var(--maroon); background:var(--cream); border:1px solid var(--line);
+              border-radius:99px; padding:3px 10px; display:inline-block}
 .tool .n{font-size:.7rem; font-weight:700; letter-spacing:.11em; text-transform:uppercase;
          color:var(--ink-soft); margin:0 0 6px}
 .tool h2{margin:0 0 8px; font-size:1.22rem; font-weight:700; color:var(--maroon)}
@@ -56,12 +61,26 @@
 
   <section class="panel">
     <h2>Start here</h2>
-    <p class="hint">Two tools. Most people use them in order, but either works on its own.</p>
+    <p class="hint">Three tools. Most people use them in order, but each works on its own.</p>
 
     <div class="tools">
 
+      <article class="tool zero">
+        <p class="n">Start here</p>
+        <h2>Where Am I Headed?</h2>
+        <p>Work out how far along you are in figuring out your direction &mdash; and what is
+           worth doing next.</p>
+        <ul>
+          <li>A checklist of what actually helps, drawn from OECD research</li>
+          <li>Bring your myBlueprint <em>Who Am I</em> results together in one place</li>
+          <li>Next steps matched to your grade</li>
+          <li><strong>No score, no ranking</strong> &mdash; just a plan</li>
+        </ul>
+        <a class="btn" href="career.html">Where am I headed?</a>
+      </article>
+
       <article class="tool">
-        <p class="n">Tool 1</p>
+        <p class="n">Then</p>
         <h2>Post-Secondary Cost Explorer</h2>
         <p>Pick a pathway, then a specific program, and see what one year &mdash; and the whole
            credential &mdash; is likely to cost.</p>
@@ -75,7 +94,7 @@
       </article>
 
       <article class="tool two">
-        <p class="n">Tool 2</p>
+        <p class="n">Finally</p>
         <h2>Closing the Gap</h2>
         <p>Work out how much of that cost is already covered, and what is left to find.</p>
         <ul>
@@ -90,7 +109,7 @@
       <article class="tool soon">
         <p class="n">Later</p>
         <h2>Still to come <span class="tag">In development</span></h2>
-        <p>Planned additions to this set, once the first two have been used for a while:</p>
+        <p>Planned additions to this set, once the first three have been used for a while:</p>
         <ul>
           <li>RESP withdrawal planning</li>
           <li>Comparing two offers side by side</li>
@@ -101,9 +120,9 @@
     </div>
 
     <div class="flow">
-      <b>Find a program</b> <span class="arr">&rarr;</span>
-      <span>see the cost</span> <span class="arr">&rarr;</span>
-      <b>carry it across</b> <span class="arr">&rarr;</span>
+      <b>Work out your direction</b> <span class="arr">&rarr;</span>
+      <span>find a program</span> <span class="arr">&rarr;</span>
+      <b>see the cost</b> <span class="arr">&rarr;</span>
       <span>add your funding</span> <span class="arr">&rarr;</span>
       <b>see the gap</b>
     </div>

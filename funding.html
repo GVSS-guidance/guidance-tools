@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="common.css">
 <style>
 /* ==========================================================================
-   Closing the Gap — Module 2 of the Financial Planning Tool
+   Closing the Gap — the funding half of the Post-Secondary Planning Tools
    --------------------------------------------------------------------------
    DESIGN RULE, DELIBERATE: this tool does NOT calculate an OSAP entitlement.
    Ontario does not publish the assessment tables — income thresholds, grant
@@ -153,6 +153,7 @@
     </div>
     <nav class="toolnav" aria-label="Guidance tools">
       <a class="home" href="index.html">&#8592; All tools</a>
+      <a href="career.html">Where Am I Headed?</a>
       <a href="finance-planner.html">Cost Explorer</a>
     </nav>
   </div>
@@ -417,7 +418,7 @@
   </div>
 
   <footer>
-    <p>Georges Vanier SS Guidance Department &middot; Module 2 of the Financial Planning Tool.
+    <p>Georges Vanier SS Guidance Department &middot; Post-Secondary Planning Tools.
        Questions? Speak with your counsellor.
        &middot; <a href="index.html">All guidance tools</a></p>
   </footer>
@@ -533,7 +534,7 @@ function updateFeedbackLink(){
   let href = FEEDBACK.url;
   if(FEEDBACK.entryContext){
     href += (href.indexOf("?") < 0 ? "?" : "&") + "usp=pp_url&entry."
-          + FEEDBACK.entryContext + "=" + encodeURIComponent("Closing the Gap (module 2)");
+          + FEEDBACK.entryContext + "=" + encodeURIComponent("Closing the Gap (funding)");
   }
   el.href = href;
   el.classList.remove("hide");
