@@ -454,6 +454,28 @@ const SOURCES = ["f_grant","f_loan","f_schol","f_burs","f_family","f_summer","f_
     $("costInput").value = Math.round(c);
     if(label) $("costLab").textContent = decodeURIComponent(label) + " — carried over from the Cost Explorer.";
   }
+
+  /* Some programmes carry a large cost that provincial student aid cannot touch
+     — Waterloo's aviation degrees bill about $100,000 of flight training through
+     the Waterloo-Wellington Flight Centre, and OSAP will not fund a cent of it.
+     A family working through this page would otherwise enter an OSAP figure and
+     believe the gap was closed. The cost tool passes the ineligible amount as
+     `nofund`; this surfaces it before they reach the OSAP fields. */
+  const nf = parseFloat(q.get("nofund"));
+  if(nf > 0){
+    const box = document.createElement("div");
+    box.className = "warnbox";
+    box.style.margin = "0 0 16px";
+    box.innerHTML = "<strong>Careful with this one — OSAP cannot cover all of it.</strong> "
+      + "About <strong>$" + Math.round(nf).toLocaleString("en-CA") + " a year</strong> of the "
+      + "figure above is flight training billed by the flight centre rather than the university, "
+      + "and <strong>provincial student aid will not fund any part of it</strong>. Whatever OSAP "
+      + "assesses, that portion still has to come from somewhere else — RESP, family, a bank loan "
+      + "or line of credit, or scholarships. Enter your OSAP figures below as normal, but read the "
+      + "remaining gap as the real one.";
+    const step2 = $("f_grant").closest(".panel");
+    step2.insertBefore(box, step2.querySelector(".gapgrid"));
+  }
   /* Preserve embed mode when linking back, so the button does not break out
      of the iframe into an unstyled page. */
   if(document.body.classList.contains("embed")){

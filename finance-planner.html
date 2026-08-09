@@ -584,7 +584,7 @@ const DATA_YEAR = "2026–27";
 
 const UNIVERSITIES = {
   "uoft": {
-    name: "University of Toronto", anc: 2100, res: 17500, off: 15500, intlMult: 6.5,
+    name: "University of Toronto", commute:"ttc", anc: 2100, res: 17500, off: 15500, intlMult: 6.5,
     fees: "https://www.registrar.utoronto.ca/fees-payments/tuition-fee-schedules/",
     short: "U of T", brand: "#002A5C",
     verified: "2026-08-01 \u2014 Tuition Explorer, 2026/27 domestic Ontario, St. George, full-time program fees",
@@ -621,7 +621,7 @@ const UNIVERSITIES = {
     }
   },
   "york": {
-    name: "York University", anc: 1330, res: 15500, off: 14500, intlMult: 4.2,
+    name: "York University", commute:"ttc", anc: 1330, res: 15500, off: 14500, intlMult: 4.2,
     fees: "https://students.yorku.ca/sfs/course-and-program-fees",
     short: "York", brand: "#E31837",
     verified: "2026-08-01 \u2014 York SFS fee pages, FW26 domestic Ontario, per credit \u00d7 30-credit full-time year",
@@ -667,7 +667,7 @@ const UNIVERSITIES = {
     }
   },
   "tmu": {
-    name: "Toronto Metropolitan University", anc: 1000, res: 15800, off: 16000, intlMult: 3.9,
+    name: "Toronto Metropolitan University", commute:"ttc", anc: 1000, res: 15800, off: 16000, intlMult: 3.9,
     fees: "https://www.torontomu.ca/current-students/tuition-fees/undergraduate/",
     short: "TMU", brand: "#004C9D",
     verified: "2026-08-01 \u2014 TMU undergraduate fees, 2026-27 domestic, flat annual fee for a 5.00-7.00 billing-unit load",
@@ -712,7 +712,7 @@ const UNIVERSITIES = {
     }
   },
   "waterloo": {
-    name: "University of Waterloo", anc: 1800, res: 15200, off: 13500, intlMult: 4.6,
+    name: "University of Waterloo", commute:"far", anc: 1800, res: 15200, off: 13500, intlMult: 4.6,
     fees: "https://uwaterloo.ca/finance/student-financial-services/tuition-fee-schedules",
     short: "Waterloo", brand: "#262626",
     verified: "2026-08-01 \u2014 Waterloo Fall 2026 domestic Ontario schedule, per-term maximum \u00d7 2 study terms",
@@ -740,7 +740,15 @@ const UNIVERSITIES = {
         {n:"Materials &amp; Nanosciences", t:6250, y:4},
         {n:"Kinesiology", t:6250, y:4},
         {n:"Honours Science", t:6250, y:4},
-        {n:"Science &amp; Business", t:6250, y:4}
+        {n:"Science &amp; Business", t:6250, y:4},
+        {n:"Science and Aviation (BSc)", t:9000, y:4, flight:25000, tIntl:49000,
+         note:"Flight training is delivered by the Waterloo-Wellington Flight Centre and billed "
+            + "separately by WWFC, not by the university — about $100,000 across the four "
+            + "years, on top of tuition. IMPORTANT: WWFC flight training CANNOT be covered by "
+            + "OSAP or any other provincial student aid. Families cover it through RESPs, a bank "
+            + "loan or line of credit, personal payment or scholarships. You finish with a "
+            + "Commercial Pilot Licence, multi-engine and instrument ratings and 205+ flight "
+            + "hours, and 5.0 of the 20.0 course units come across as transfer credit from WWFC."}
       ],
       "Arts": [
         {n:"Accounting &amp; Financial Management (AFM)", t:15338, y:5, terms:8, work:4},
@@ -755,12 +763,20 @@ const UNIVERSITIES = {
       "Environment": [
         {n:"Environment &amp; Business", t:6250, y:4},
         {n:"Planning", t:6250, y:4},
-        {n:"Geomatics", t:6250, y:4}
+        {n:"Geomatics", t:6250, y:4},
+        {n:"Geography and Aviation (BES)", t:9000, y:4, flight:25000, tIntl:49000,
+         note:"Flight training is delivered by the Waterloo-Wellington Flight Centre and billed "
+            + "separately by WWFC, not by the university — about $100,000 across the four "
+            + "years, on top of tuition. IMPORTANT: WWFC flight training CANNOT be covered by "
+            + "OSAP or any other provincial student aid. Families cover it through RESPs, a bank "
+            + "loan or line of credit, personal payment or scholarships. You finish with a "
+            + "Commercial Pilot Licence, multi-engine and instrument ratings and 205+ flight "
+            + "hours, and 5.0 of the 20.0 course units come across as transfer credit from WWFC."}
       ]
     }
   },
   "western": {
-    name: "Western University", anc: 1880, res: 16800, off: 12500, intlMult: 4.4,
+    name: "Western University", commute:"far", anc: 1880, res: 16800, off: 12500, intlMult: 4.4,
     fees: "https://registrar.uwo.ca/student_finances/fees_refunds/fee_schedules.html",
     short: "Western", brand: "#4F2683",
     verified: "2026-08-01 \u2014 Western 2026-27 UGRD FT domestic schedule (marked DRAFT); tuition column, upper years",
@@ -800,7 +816,7 @@ const UNIVERSITIES = {
     }
   },
   "mac": {
-    name: "McMaster University", anc: 1400, res: 15400, off: 12000, intlMult: 4.5,
+    name: "McMaster University", commute:"go", anc: 1400, res: 15400, off: 12000, intlMult: 4.5,
     fees: "https://registrar.mcmaster.ca/fees/",
     short: "Mac", brand: "#7A003C",
     verified: "2026-08-01 \u2014 McMaster 2025-26 undergraduate fees (2026-27 not yet published), per unit \u00d7 30 units = full-time year",
@@ -838,7 +854,7 @@ const UNIVERSITIES = {
     }
   },
   "queens": {
-    name: "Queen's University", anc: 1500, res: 17200, off: 11500, intlMult: 4.8,
+    name: "Queen's University", commute:"far", anc: 1500, res: 17200, off: 11500, intlMult: 4.8,
     fees: "https://www.queensu.ca/registrar/tuition-fees",
     short: "Queen's", brand: "#11335D",
     verified: "2026-08-01 \u2014 Queen's 2026/27 undergraduate tuition, Ontario students, per year",
@@ -866,7 +882,7 @@ const UNIVERSITIES = {
     }
   },
   "guelph": {
-    name: "University of Guelph", anc: 1500, res: 14400, off: 11000, intlMult: 4.0,
+    name: "University of Guelph", commute:"far", anc: 1500, res: 14400, off: 11000, intlMult: 4.0,
     fees: "https://www.uoguelph.ca/registrar/finances-fees/tuition-fees",
     short: "Guelph", brand: "#C20430",
     verified: "2026-08-01 \u2014 Guelph 2026-2027 schedule, Ontario residents, annual (two semesters)",
@@ -899,7 +915,7 @@ const UNIVERSITIES = {
     }
   },
   "ottawa": {
-    name: "University of Ottawa", anc: 1375, res: 15000, off: 12000, intlMult: 4.3,
+    name: "University of Ottawa", commute:"far", anc: 1375, res: 15000, off: 12000, intlMult: 4.3,
     fees: "https://www.uottawa.ca/study/fees-financial-support/university-fees/tuition-canadians-ontario",
     short: "uOttawa", brand: "#8A1538",
     verified: "2026-08-01 — uOttawa flat full-time rates, confirmed with the department: $3,104.96/term × 2 = $6,210 for BSc, Arts, Education, Health Sciences (incl. Nursing) and Social Sciences; Engineering $5,721.69/term = $11,443; Telfer Commerce $5,036.46/term = $10,073. Ancillary ~$1,375/yr from uOttawa's worked example. Rates DROP once you pass 132 units of study, so upper years cost less than the figure shown.",
@@ -934,7 +950,7 @@ const UNIVERSITIES = {
     }
   },
   "laurier": {
-    name: "Wilfrid Laurier University", anc: 1600, res: 14200, off: 11500, intlMult: 4.3,
+    name: "Wilfrid Laurier University", commute:"far", anc: 1600, res: 14200, off: 11500, intlMult: 4.3,
     fees: "https://www.wlu.ca/future-students/undergraduate/tuition-finances/index.html",
     short: "Laurier", brand: "#642667",
     verified: "2026-08-01 \u2014 Laurier 2026/27 tuition tables, domestic Ontario. Tiered per term and PLATEAUS at 2.25-2.50 credits; a full-time term is 2.50 credits, so year = 2 \u00d7 the 2.50 tier",
@@ -968,7 +984,7 @@ const UNIVERSITIES = {
     }
   },
   "carleton": {
-    name: "Carleton University", anc: 1400, res: 14000, off: 12000, intlMult: 4.2,
+    name: "Carleton University", commute:"far", anc: 1400, res: 14000, off: 12000, intlMult: 4.2,
     fees: "https://carleton.ca/studentaccounts/tuition-fees/",
     short: "Carleton", brand: "#C8102E",
     verified: "2026-08-01 \u2014 Carleton F26/W27 Ontario undergraduate table. Published figures are ALL-IN (tuition + compulsory fees); split here using a $1,400/yr compulsory estimate, so the split is approximate but the all-in totals are exact",
@@ -1003,7 +1019,7 @@ const UNIVERSITIES = {
     }
   },
   "ontariotech": {
-    name: "Ontario Tech University", anc: 1500, res: 12800, off: 11000, intlMult: 4.2,
+    name: "Ontario Tech University", commute:"go", anc: 1500, res: 12800, off: 11000, intlMult: 4.2,
     fees: "https://registrar.ontariotechu.ca/fees-and-payment/domestic-student-tuition/undergraduate-domestic-tuition-2026-2027.php",
     short: "Ont Tech", brand: "#003C71",
     verified: "2026-08-01 \u2014 Ontario Tech 2026-2027 domestic undergraduate tuition, per year (10 courses / 30 credit hours)",
@@ -1190,7 +1206,7 @@ const UNIVERSITIES = {
 
 const COLLEGES = {
   "seneca": {
-    name: "Seneca Polytechnic", anc: 1663, res: 12800, off: 14500, intlMult: 4.0,
+    name: "Seneca Polytechnic", commute:"ttc", anc: 1663, res: 12800, off: 14500, intlMult: 4.0,
     fees: "https://students.senecapolytechnic.ca/spaces/71/fees-and-payments/home",
     short: "Seneca", brand: "#B01E28",
     verified: "2026-08-01 \u2014 standard diploma/certificate tuition is provincially regulated: $2,772/yr (Seneca 2026/27, matched by Fanshawe at $2,774.94). Degrees $6,481/yr (Seneca, Bachelor of Computer Science). \u26a0 SPECIALISED HEALTH AND AVIATION PROGRAMMES ARE NOT VERIFIED and keep their earlier estimates \u2014 these carry large approved premiums (Fanshawe Dental Hygiene is $5,682.68 PER TERM, ~4\u00d7 standard). Ancillary verified for Seneca ($1,663) and Fanshawe ($821) only; other colleges' ancillary is an estimate. PRACTICAL NURSING verified 2026-08-01: Seneca shows the components separately \u2014 tuition $1,359/semester, the SAME regulated rate as any other diploma, so PN carries no tuition premium. The cost is materials: $2,950/$950/$1,040/$850 by semester, entered here as a $2,895 annual average. NURSING DEGREE verified 2026-08-03: Seneca's Honours Bachelor of Science — Nursing is $3,177/semester tuition in 2025/26 = $6,354/yr; × 1.02 gives exactly $6,481, the same 2026/27 degree rate as the Bachelor of Computer Science, which confirms college degree tuition is uniform and regulated. Books are front-loaded: $2,145 in semester 1, $290-685 in semesters 2-7, $1,000 in semester 8 — about $1,520/yr averaged over the 8-semester programme.",
@@ -1228,7 +1244,7 @@ const COLLEGES = {
     }
   },
   "humber": {
-    name: "Humber Polytechnic", anc: 1350, res: 13500, off: 15000, intlMult: 4.1,
+    name: "Humber Polytechnic", commute:"ttc", anc: 1350, res: 13500, off: 15000, intlMult: 4.1,
     fees: "https://humber.ca/explore-programs/tuition-fee-schedule",
     short: "Humber", brand: "#00539B",
     verified: "2026-08-01 \u2014 standard diploma/certificate tuition is provincially regulated: $2,772/yr (Seneca 2026/27, matched by Fanshawe at $2,774.94). Degrees $6,481/yr (Seneca, Bachelor of Computer Science). \u26a0 SPECIALISED HEALTH AND AVIATION PROGRAMMES ARE NOT VERIFIED and keep their earlier estimates \u2014 these carry large approved premiums (Fanshawe Dental Hygiene is $5,682.68 PER TERM, ~4\u00d7 standard). Ancillary verified for Seneca ($1,663) and Fanshawe ($821) only; other colleges' ancillary is an estimate. PRACTICAL NURSING verified 2026-08-01: Humber publishes $6,603.27 all-in for two semesters (year 1). Tuition set to the regulated rate, materials derived as the remainder. ⚠ The tuition/materials SPLIT here assumes the regulated $2,772 rate; Centennial is now known to charge above it for PN, so this college may too. The published all-in total is exact either way.",
@@ -1270,7 +1286,7 @@ const COLLEGES = {
     }
   },
   "gbc": {
-    name: "George Brown College", anc: 1300, res: 14200, off: 16000, intlMult: 4.2,
+    name: "George Brown College", commute:"ttc", anc: 1300, res: 14200, off: 16000, intlMult: 4.2,
     fees: "https://www.georgebrown.ca/apply/tuition-fees-and-costs",
     short: "GBC", brand: "#005EB8",
     verified: "2026-08-01 \u2014 standard diploma/certificate tuition is provincially regulated: $2,772/yr (Seneca 2026/27, matched by Fanshawe at $2,774.94). Degrees $6,481/yr (Seneca, Bachelor of Computer Science). \u26a0 SPECIALISED HEALTH AND AVIATION PROGRAMMES ARE NOT VERIFIED and keep their earlier estimates \u2014 these carry large approved premiums (Fanshawe Dental Hygiene is $5,682.68 PER TERM, ~4\u00d7 standard). Ancillary verified for Seneca ($1,663) and Fanshawe ($821) only; other colleges' ancillary is an estimate. PRACTICAL NURSING verified 2026-08-01: George Brown publishes $4,942.00 all-in for the first two semesters (tuition + materials + ancillary). Tuition set to the regulated rate and materials derived as the remainder, so the all-in total is right while the split depends on this college's unverified ancillary figure. ⚠ The tuition/materials SPLIT here assumes the regulated $2,772 rate; Centennial is now known to charge above it for PN, so this college may too. The published all-in total is exact either way.",
@@ -1309,7 +1325,7 @@ const COLLEGES = {
     }
   },
   "centennial": {
-    name: "Centennial College", anc: 1250, res: 12500, off: 14500, intlMult: 4.0,
+    name: "Centennial College", commute:"ttc", anc: 1250, res: 12500, off: 14500, intlMult: 4.0,
     fees: "https://www.centennialcollege.ca/admissions/tuition-and-fees/",
     short: "Centennial", brand: "#005596",
     verified: "2026-08-01 \u2014 standard diploma/certificate tuition is provincially regulated: $2,772/yr (Seneca 2026/27, matched by Fanshawe at $2,774.94). Degrees $6,481/yr (Seneca, Bachelor of Computer Science). \u26a0 SPECIALISED HEALTH AND AVIATION PROGRAMMES ARE NOT VERIFIED and keep their earlier estimates \u2014 these carry large approved premiums (Fanshawe Dental Hygiene is $5,682.68 PER TERM, ~4\u00d7 standard). Ancillary verified for Seneca ($1,663) and Fanshawe ($821) only; other colleges' ancillary is an estimate. PRACTICAL NURSING verified 2026-08-03: Centennial lists PN under “programs with non-average tuition” at $3,285.00 per YEAR (the columns are First Year / Second Year, each covering two semesters), tuition only, 2025-26. That is ~18% ABOVE the regulated $2,772, so PN tuition is NOT uniformly standard across colleges. Materials are unknown and left at the $1,200 default.",
@@ -1341,7 +1357,7 @@ const COLLEGES = {
     }
   },
   "sheridan": {
-    name: "Sheridan College", anc: 1300, res: 13200, off: 13500, intlMult: 4.1,
+    name: "Sheridan College", commute:"go", anc: 1300, res: 13200, off: 13500, intlMult: 4.1,
     fees: "https://www.sheridancollege.ca/admissions/fees-and-finances/academic-fees/full-time-fees",
     short: "Sheridan", brand: "#0033A0",
     verified: "2026-08-01 \u2014 standard diploma/certificate tuition is provincially regulated: $2,772/yr (Seneca 2026/27, matched by Fanshawe at $2,774.94). Degrees $6,481/yr (Seneca, Bachelor of Computer Science). \u26a0 SPECIALISED HEALTH AND AVIATION PROGRAMMES ARE NOT VERIFIED and keep their earlier estimates \u2014 these carry large approved premiums (Fanshawe Dental Hygiene is $5,682.68 PER TERM, ~4\u00d7 standard). Ancillary verified for Seneca ($1,663) and Fanshawe ($821) only; other colleges' ancillary is an estimate. PRACTICAL NURSING verified 2026-08-01: Sheridan publishes $7,484.46 covering the first two academic semesters, including tuition, health insurance and ancillary. Tuition set to the regulated rate, materials derived as the remainder. ⚠ The tuition/materials SPLIT here assumes the regulated $2,772 rate; Centennial is now known to charge above it for PN, so this college may too. The published all-in total is exact either way.",
@@ -1371,7 +1387,7 @@ const COLLEGES = {
     }
   },
   "durham": {
-    name: "Durham College", anc: 1250, res: 12000, off: 12500, intlMult: 3.9,
+    name: "Durham College", commute:"go", anc: 1250, res: 12000, off: 12500, intlMult: 3.9,
     fees: "https://durhamcollege.ca/financial-info/tuition-and-fees/tuition-fees",
     short: "Durham", brand: "#00573F",
     verified: "2026-08-01 \u2014 standard diploma/certificate tuition is provincially regulated: $2,772/yr (Seneca 2026/27, matched by Fanshawe at $2,774.94). Degrees $6,481/yr (Seneca, Bachelor of Computer Science). \u26a0 SPECIALISED HEALTH AND AVIATION PROGRAMMES ARE NOT VERIFIED and keep their earlier estimates \u2014 these carry large approved premiums (Fanshawe Dental Hygiene is $5,682.68 PER TERM, ~4\u00d7 standard). Ancillary verified for Seneca ($1,663) and Fanshawe ($821) only; other colleges' ancillary is an estimate. PRACTICAL NURSING verified 2026-08-01: Durham publishes semester 1 $3,244.31 and semester 2 $2,689.77 ($5,934.08 for year 1), all-in including tuition, program and ancillary fees. Tuition set to the regulated rate and materials derived as the remainder; the all-in total is right, the split is approximate. ⚠ The tuition/materials SPLIT here assumes the regulated $2,772 rate; Centennial is now known to charge above it for PN, so this college may too. The published all-in total is exact either way.",
@@ -1399,7 +1415,7 @@ const COLLEGES = {
     }
   },
   "mohawk": {
-    name: "Mohawk College", anc: 1300, res: 11500, off: 10000, intlMult: 4.0,
+    name: "Mohawk College", commute:"go", anc: 1300, res: 11500, off: 10000, intlMult: 4.0,
     fees: "https://www.mohawkcollege.ca/tuition-and-fees",
     short: "Mohawk", brand: "#8C3A2B",
     verified: "2026-08-03 \u2014 standard diploma tuition is the provincially regulated $2,772/yr, verified at Seneca and Fanshawe and applied here. PRACTICAL NURSING verified from Mohawk's published semester fees: year 1 is THREE semesters totalling $8,101.06 all-in, so its tuition line carries 3 \u00d7 $1,386 and the remainder is materials. \u26a0 Ancillary ($1,300) is an ESTIMATE, and the specialised programmes here (paramedic, aviation, medical radiation) are shown at the standard rate \u2014 they likely carry materials or premium costs not yet reflected. ⚠ The tuition/materials SPLIT here assumes the regulated $2,772 rate; Centennial is now known to charge above it for PN, so this college may too. The published all-in total is exact either way.",
@@ -1446,7 +1462,7 @@ const COLLEGES = {
     }
   },
   "fanshawe": {
-    name: "Fanshawe College", anc: 821, res: 11800, off: 11000, intlMult: 3.9,
+    name: "Fanshawe College", commute:"far", anc: 821, res: 11800, off: 11000, intlMult: 3.9,
     fees: "https://www.fanshawec.ca/admission-finance/tuition/fees",
     short: "Fanshawe", brand: "#A6192E",
     verified: "2026-08-01 \u2014 standard diploma/certificate tuition is provincially regulated: $2,772/yr (Seneca 2026/27, matched by Fanshawe at $2,774.94). Degrees $6,481/yr (Seneca, Bachelor of Computer Science). \u26a0 SPECIALISED HEALTH AND AVIATION PROGRAMMES ARE NOT VERIFIED and keep their earlier estimates \u2014 these carry large approved premiums (Fanshawe Dental Hygiene is $5,682.68 PER TERM, ~4\u00d7 standard). Ancillary verified for Seneca ($1,663) and Fanshawe ($821) only; other colleges' ancillary is an estimate. PRACTICAL NURSING verified 2026-08-01: Fanshawe publishes $10,376.90 as a TOTAL PROGRAMME cost (5 levels, London campus; Woodstock and Simcoe are $9,884.53) and it EXCLUDES health/dental and bus pass. Halved to a yearly figure; the tool adds ancillary on top rather than it being inside that total. ⚠ The tuition/materials SPLIT here assumes the regulated $2,772 rate; Centennial is now known to charge above it for PN, so this college may too. The published all-in total is exact either way.",
@@ -1569,7 +1585,13 @@ const TRADES = {
 /* Shared, pathway-independent costs (per year, estimates) */
 const BOOKS_UNI  = 1400;
 const BOOKS_COL  = 1200;
-const TRANSIT    = 1300;   // TTC post-secondary pass, ~10 months
+const TRANSIT       = 1300;   // TTC post-secondary pass, ~10 months
+const TRANSIT_GO    = 2900;   // GO Transit + local connection, ~10 months — commuting
+                              // from Toronto to Oakville/Oshawa/Hamilton costs
+                              // roughly double a TTC pass, so charging TTC here
+                              // understated it badly
+const TRANSIT_LOCAL = 800;    // a city transit student pass outside the GTA, for a
+                              // family that already lives in that city
 const PERSONAL   = 2400;   // phone, clothing, personal, some entertainment
 const FOOD_HOME  = 0;      // assumed absorbed by family when living at home
 
@@ -1697,18 +1719,23 @@ STRINGS.en.std = {
   rTuition:"Tuition", rFees:"Ancillary & incidental fees",
   rRes:"Residence & meal plan", rOff:"Rent & groceries (8 months)", rHome:"Housing & food",
   rBooks:"Books & supplies", rTrans:"Transportation", rPersonal:"Personal & miscellaneous",
+  rFlight:"Flight training (paid to WWFC)",
   totalYear:"Total, one year",
   nTuitionDom:"Domestic Ontario rate. Assumes a standard full-time load of 5.0 credits a year (ten half-courses, five per term).",
   nTuitionIntl:"International rate — estimate only.",
+  nFlight:"Billed by the Waterloo-Wellington Flight Centre, not the university. NOT covered by OSAP or any provincial student aid.",
   nFees:"Student union, athletics, health plan, U-Pass, technology.",
   nRes:"Standard room plus a mid-tier meal plan.",
   nOff:"Shared apartment near campus, plus food.",
   nHome:"Assumed covered at home — the single biggest saving available.",
   nBooks:"Textbooks, lab kits, software, a working laptop amortised.",
   nTrans:"TTC post-secondary pass, ~10 months.", nTransRes:"Occasional travel home.",
+  nTransGo:"GO Transit plus a local connection, ~10 months. Commuting out of Toronto costs roughly double a TTC pass.",
+  nTransLocal:"A local transit pass in that city, ~10 months. Assumes your family already lives there — this is not a daily commute from Toronto.",
+  nTransResOut:"Trips home to Toronto. A local transit pass is usually bundled into the ancillary fees above.",
   nPersonal:"Phone, clothing, social life, emergencies.",
   bTuition:"Tuition", bHousing:"Housing/food", bFees:"Fees", bBooks:"Books",
-  bTrans:"Transport", bPersonal:"Personal",
+  bTrans:"Transport", bPersonal:"Personal", bFlight:"Flight training",
   bEarn:"Earnings", bTools:"Tools", bPre:"Pre-trades",
   kYear:"Estimated cost — one year", sYear:"About {m} a month across 12 months.",
   kTotal:"Full credential ({y} years)",
@@ -1807,8 +1834,9 @@ STRINGS.en.plain = Object.assign({}, STRINGS.en.std, {
   thCost:"Cost each year (estimates)", thMoney:"Money in and out (estimates)", thAmount:"How much",
   rFees:"School fees", rRes:"Room and food at school", rOff:"Rent and food",
   rHome:"Home and food", rBooks:"Books and supplies", rTrans:"Getting around",
-  rPersonal:"Other things",
+  rPersonal:"Other things", rFlight:"Flight training (paid to the flight school)",
   totalYear:"Total for one year",
+  nFlight:"You pay this to the Waterloo-Wellington Flight Centre, not to the university. OSAP cannot pay for it.",
   nTuitionDom:"Ontario price. Assumes a normal full load: 10 half-courses a year, 5 each term.",
   nTuitionIntl:"International price. A guess.",
   nFees:"Student groups, sports, health plan, bus pass, computers.",
@@ -1817,8 +1845,11 @@ STRINGS.en.plain = Object.assign({}, STRINGS.en.std, {
   nHome:"We count this as $0. Living at home saves the most money.",
   nBooks:"Books, lab kits, and a laptop.",
   nTrans:"TTC pass for about 10 months.", nTransRes:"Trips home now and then.",
+  nTransGo:"GO Train or bus, plus a local bus, for about 10 months. Going outside Toronto every day costs about twice a TTC pass.",
+  nTransLocal:"A bus pass in that city, for about 10 months. This assumes your family already lives there. You cannot travel there from Toronto every day.",
+  nTransResOut:"Trips home to Toronto. A local bus pass is usually already inside the school fees above.",
   nPersonal:"Phone, clothes, going out, emergencies.",
-  bHousing:"Home/food", bFees:"Fees", bTrans:"Travel", bPersonal:"Other",
+  bHousing:"Home/food", bFees:"Fees", bTrans:"Travel", bPersonal:"Other", bFlight:"Flying",
   kYear:"What one year could cost", sYear:"About {m} each month, for 12 months.",
   kTotal:"The whole program ({y} years)",
   sTotal:"This assumes prices stay the same. In real life they go up a little each year.",
@@ -2717,8 +2748,14 @@ const DONUT_COLOURS = [
   "#2f6b4f",  /* forest green            */
   "#3a5fa8",  /* steel blue              */
   "#8e4a9e",  /* plum                    */
-  "#6f6a63"   /* warm grey               */
+  "#6f6a63",  /* warm grey               */
+  "#10707d"   /* deep teal               */
 ];
+/* SEVEN colours because the aviation programmes add a "flight training" slice.
+   With six, the seventh segment wrapped to index 0 and rendered in the same
+   maroon as Tuition — the exact confusion that got the original same-hue pairs
+   replaced. If an eighth cost row is ever added, add an eighth colour; do not
+   let the palette wrap. */
 
 function donut(items){
   const shown = items.filter(i => i[1] > 0);
@@ -2815,15 +2852,47 @@ function renderSchool(inst, facKey, idx){
   let living = $("selLiving").value;
   if(oop && living === "home"){ living = "res"; $("selLiving").value = "res"; }
 
-  const tuition = intl ? Math.round(p.t * inst.intlMult / 100) * 100 : p.t;
+  /* p.tIntl is a PUBLISHED international rate and beats the blanket intlMult,
+     which is a rough estimate and has never been verified. Waterloo publishes
+     $48,000-$50,000/yr for the aviation degrees against 9000 x 4.6 = $41,400,
+     so the multiplier understated it by roughly $8,000 a year. */
+  const tuition = intl ? (p.tIntl || Math.round(p.t * inst.intlMult / 100) * 100) : p.t;
+
+  /* Flight training (Waterloo's aviation degrees) is a THIRD-PARTY cost billed
+     by the Waterloo-Wellington Flight Centre, not the university. It gets its
+     own row rather than being folded into books/supplies, because it is roughly
+     $100,000 across the degree — three times the tuition — and because it is
+     NOT OSAP-eligible, which changes how a family has to plan for it. It is the
+     same price for domestic and international students, so intlMult must not
+     touch it. */
+  const flight = p.flight || 0;
   /* Some programmes carry equipment costs far above the flat default — Seneca
      Practical Nursing is $2,950 of books/kit in semester 1 alone. p.books
      overrides the default where a real figure is known. */
   const books   = p.books || (path === "university" ? BOOKS_UNI : BOOKS_COL);
   const housing = living === "res" ? inst.res : living === "off" ? inst.off : FOOD_HOME;
-  const transit = oop ? inst.travel : (living === "res" ? 400 : TRANSIT);
+  /* Transportation is NOT one number. The tool originally charged a TTC
+     post-secondary pass to every commuter, which is only right for the Toronto
+     campuses — a student living at home and travelling to Sheridan or Ontario
+     Tech is buying GO Transit, and one at Waterloo or Western is not on the TTC
+     at all. `commute` on each institution says which case applies:
+       ttc — Toronto campus, TTC pass covers the commute
+       go  — GTA-adjacent (Oakville, Oshawa, Hamilton); GO plus local transit,
+             which costs MORE than a TTC pass, not less
+       far — rest of Ontario. Living at home here assumes the family already
+             lives in that city; it is not a daily commute from Toronto.
+     Students in residence or off-campus outside Toronto mostly get a local
+     transit pass bundled into the ancillary fees already counted above, so
+     their line is trips home rather than a second pass. */
+  const cm = inst.commute || "ttc";
+  const transit = oop ? inst.travel
+    : living === "home" ? (cm === "ttc" ? TRANSIT : cm === "go" ? TRANSIT_GO : TRANSIT_LOCAL)
+    : (cm === "ttc" ? 400 : 500);
+  const transitNote = oop ? "nTravel"
+    : living === "home" ? (cm === "ttc" ? "nTrans" : cm === "go" ? "nTransGo" : "nTransLocal")
+    : (cm === "ttc" ? "nTransRes" : "nTransResOut");
   const personal = Number($("selPersonal").value) || PERSONAL;
-  const yearly  = tuition + inst.anc + housing + books + transit + personal;
+  const yearly  = tuition + flight + inst.anc + housing + books + transit + personal;
 
   setFeeLink(inst.fees, t("feeSchool", {inst: decode(inst.name)}), t("estSchool", {yr: DATA_YEAR}));
 
@@ -2838,19 +2907,22 @@ function renderSchool(inst, facKey, idx){
   $("thItem").textContent = t("thCost");
   $("rBody").innerHTML =
       row(t("rTuition"), t(intl ? "nTuitionIntl" : "nTuitionDom"), ltr(money(tuition)))
+    + (flight ? row(t("rFlight"), t("nFlight"), ltr(money(flight))) : "")
     + row(t("rFees"), t("nFees"), ltr(money(inst.anc)))
     + row(t(living === "res" ? "rRes" : living === "off" ? "rOff" : "rHome"),
           t(living === "res" ? "nRes" : living === "off" ? "nOff" : "nHome"), ltr(money(housing)))
     + row(t("rBooks"), t("nBooks"), ltr(money(books)))
-    + row(t("rTrans"), t(oop ? "nTravel" : (living === "res" ? "nTransRes" : "nTrans")), ltr(money(transit)))
+    + row(t("rTrans"), t(transitNote), ltr(money(transit)))
     + row(t("rPersonal"), t("nPersonalPick"), ltr(money(personal)))
     + "<tr class='total'><td>" + t("totalYear") + "</td><td class='num'>" + ltr(money(yearly)) + "</td></tr>"
     + (p.terms ? row(t("coopEarnRow"), t("coopEarnNote", {w: p.work}), "", "credit") : "");
 
-  $("rBars").innerHTML = donut([
-    [t("bTuition"),tuition],[t("bHousing"),housing],[t("bFees"),inst.anc],
-    [t("bBooks"),books],[t("bTrans"),transit],[t("bPersonal"),personal]
-  ]);
+  $("rBars").innerHTML = donut(
+    [[t("bTuition"),tuition]]
+    .concat(flight ? [[t("bFlight"),flight]] : [])
+    .concat([[t("bHousing"),housing],[t("bFees"),inst.anc],
+             [t("bBooks"),books],[t("bTrans"),transit],[t("bPersonal"),personal]])
+  );
 
   /* Program note (e.g. 2+2 business programs where the headline rate applies
      to the last two years only). Authored in English; marked lang="en". */
@@ -2877,7 +2949,12 @@ function renderSchool(inst, facKey, idx){
 
   /* Hand the verified figure to the funding tool rather than making the family
      retype it — and so module 2 never has to invent a cost. */
+  /* nofund carries the slice of the cost that provincial aid CANNOT touch, so
+     module 2 can warn instead of letting a family assume OSAP covers the lot.
+     Without it the handoff would hand over a $130k figure with no hint that
+     three quarters of it is ineligible. */
   const payHref = "funding.html?cost=" + Math.round(yearly)
+    + (flight ? "&nofund=" + Math.round(flight) : "")
     + "&label=" + encodeURIComponent(decode(p.n) + " at " + decode(inst.name));
   const pl = $("payLink");
   pl.href = payHref;
