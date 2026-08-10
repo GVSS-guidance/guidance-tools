@@ -81,6 +81,28 @@
         line-height:1.4}
 .act:has(input:checked){background:#f4f8f5; border-color:#bcd8c9}
 
+/* ---------- "usually later" ----------
+   An unticked box reads as a gap. For a Grade 9 looking at "Experiencing real
+   work", three empty boxes in a row read as three failures — when in fact a
+   part-time job, a placement and an internship all normally come later. This
+   marks items that are ahead of the student's grade so an empty box reads as
+   "not yet due" instead of "missed". It is the same principle as refusing to
+   score: never show a student a deficit that is really just their age.
+   Only appears once a grade is chosen, and NEVER on a ticked item — a Grade 9
+   who has done it should get the credit, not a label saying they were early. */
+.act .lt{display:none}
+.act.later .lt{
+  display:inline-block; margin-left:7px; font-size:.63rem; font-weight:700;
+  letter-spacing:.06em; text-transform:uppercase; white-space:nowrap;
+  color:var(--ink-soft); background:var(--cream); border:1px solid var(--line);
+  border-radius:99px; padding:1px 7px; vertical-align:middle;
+}
+.act.later{background:#fcfaf6; border-style:dashed}
+.act.later .t{color:var(--ink-soft)}
+.act.later:has(input:checked){background:#f4f8f5; border-style:solid; border-color:#bcd8c9}
+.act.later:has(input:checked) .lt{display:none}
+.act.later:has(input:checked) .t{color:var(--ink)}
+
 /* ---------- self-knowledge (step 3) ---------- */
 .pickgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(178px,1fr)); gap:8px; margin:0 0 4px}
 .pick{
@@ -346,7 +368,7 @@
 
     <div class="actgroup">
       <h3>Experiencing real work</h3>
-      <p class="gd">A weekend job counts.</p>
+      <p class="gd" id="expNote">A weekend job counts.</p>
       <div id="grpExperience"></div>
     </div>
   </section>
@@ -771,7 +793,12 @@ const ACTS = [
       + "that is the difference between a useful placement and a lost week.",
    link:"", linkText:""},
 
-  {id:"survey", g:"experience", ev:"partial", from:9, pri:1,
+  /* Grouped with EXPLORING, not with experiencing work. It sat in the work group
+     for column balance, which mislabelled it — and it padded that group out so a
+     Grade 9 saw four items where there are really only three, two of which they
+     are too young for. Categorise honestly; let the "usually later" tags and the
+     group note do the reassuring. */
+  {id:"survey", g:"explore", ev:"partial", from:9, pri:1,
    t:"Completed the myBlueprint Who Am I surveys",
    w:"Interests, motivations, knowledge and the rest.",
    nt:"Do the myBlueprint Who Am I surveys",
@@ -784,6 +811,7 @@ function renderActs(){
       '<label class="act">'
     +   '<input type="checkbox" id="a_' + a.id + '">'
     +   '<span class="t">' + a.t
+    +     '<span class="lt">usually later</span>'
     +     (a.w ? '<span class="w">' + a.w + '</span>' : '')
     +   '</span>'
     + '</label>').join("") + '</div>';
@@ -974,6 +1002,24 @@ function render(){
   $("gradeSub").textContent = grade
     ? "Your next steps below are the ones that matter most in Grade " + grade + "."
     : "Pick a grade to tailor your next steps.";
+
+  /* Mark anything that is ahead of this student's grade, so empty boxes read as
+     "not yet" rather than "behind". See the .later CSS for why this matters. */
+  ACTS.forEach(a => {
+    const box = $("a_" + a.id).closest(".act");
+    box.classList.toggle("later", !!grade && a.from > grade);
+  });
+
+  /* The work group is where a Grade 9 is most likely to feel a deficit, so it
+     gets an explicit reassurance rather than relying on the tags alone. */
+  $("expNote").innerHTML = grade === 9
+    ? "Most of this comes later &mdash; almost nobody has ticked these in Grade 9, and that is "
+      + "exactly as it should be. <strong>Volunteering is the one that is open to you now</strong>, "
+      + "and your 40 diploma hours count. If you do want paid work, Ontario lets you work at 14 in "
+      + "a shop, an office or an arena, and at 15 in food prep &mdash; outside school hours."
+    : grade === 10
+      ? "A weekend job counts. So does a family business, and babysitting."
+      : "A weekend job counts.";
 
   /* --- what's done: a count, with no denominator anywhere near it --- */
   const done = ACTS.filter(a => $("a_" + a.id).checked);
